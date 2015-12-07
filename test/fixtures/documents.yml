@@ -1,0 +1,11 @@
+khan_intro_algebra:
+  url: khan_intro_algebra
+  title: Khan Intro To Algebra
+  repository: khan
+  document_status: published
+
+published_blank_slate:
+  url: google
+  title: Blank Slate
+  repository: blank_slates
+  document_status: published

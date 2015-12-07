@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Csv Document Imports</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th><%= t('ui.file') %></th>
+      <th><%= t('ui.repository') %></th>
+      <th><%= t('ui.jid') %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @document_imports.each do |document_import| %>
+      <tr>
+        <td><%= document_import.file %></td>
+        <td><%= document_import.repository.name %></td>
+        <td><%= document_import.jid %></td>
+        <td><%= link_to 'Show', document_import %></td>
+        <td><%= link_to 'Edit', edit_document_import_path(document_import) %></td>
+        <td><%= link_to 'Destroy', document_import, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Csv document import', new_document_import_path %>

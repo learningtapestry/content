@@ -1,0 +1,3 @@
+lt_admin:
+  name: admin
+  resource: lt (Organization)

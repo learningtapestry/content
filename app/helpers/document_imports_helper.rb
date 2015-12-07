@@ -1,0 +1,2 @@
+module DocumentImportsHelper
+end

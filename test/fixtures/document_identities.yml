@@ -1,0 +1,9 @@
+khan_intro_algebra_publisher:
+  document: khan_intro_algebra
+  identity: khan
+  identity_type: publisher
+
+khan_intro_algebra_submitter:
+  document: khan_intro_algebra
+  identity: jason
+  identity_type: submitter

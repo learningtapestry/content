@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        document_import:
+          attributes:
+            file:
+              headers: Headers should be %{headers}.
+              malformed_csv: There's a problem with the CSV.
+              not_csv: File doesn't appear to be a valid CSV.

@@ -1,0 +1,7 @@
+en:
+  ui:
+    login: Log In
+    file: File
+    repository: Repository
+    jid: Job ID
+    upload: Upload

@@ -1,0 +1,4 @@
+lt:
+  email: admin@learningtapestry.com
+  encrypted_password: <%= User.new.send(:password_digest, 'admin123') %>
+  roles: lt_admin
