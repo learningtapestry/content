@@ -1,4 +1,4 @@
-class DocumentPrepareImportWorker
+class DocumentImportPrepareWorker
   include Sidekiq::Worker
 
   def perform(document_import_id)

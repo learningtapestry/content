@@ -21,7 +21,7 @@ class DocumentImportsController < ApplicationController
 
     respond_to do |format|
       if @document_import.save
-        DocumentPrepareImportWorker.perform_async(@document_import.id)
+        DocumentImportPrepareWorker.perform_async(@document_import.id)
         format.html { redirect_to @document_import, notice: 'Csv document import was successfully created.' }
         format.json { render :show, status: :created, location: @document_import }
       else
