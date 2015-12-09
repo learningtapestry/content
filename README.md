@@ -22,5 +22,5 @@ This is a standard Rails app:
 
 ## Copyright
 
-(c) 2015/2016 - Learning Tapestry is a proprietary project and jointly owned by
-Hoekstra/Midgley
+(c) 2015/2016 - Learning Tapestry 
+Released under Apache 2.0 license, http://www.apache.org/licenses/LICENSE-2.0
