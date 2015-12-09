@@ -21,8 +21,7 @@ class Document < ActiveRecord::Base
   validates :title, presence: true
 
   def self.find_by_url(url)
-    url = Url.find_root(url)
-    where(url: url).first
+    where(url: Url.find_by(url: url)).first
   end
 
   def add_identity(identity, idt_type_val)

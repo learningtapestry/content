@@ -7,6 +7,11 @@ class DocumentTest < ActiveSupport::TestCase
     @jason       = identities(:jason)
   end
 
+  test '.find_by_url' do
+    khan_url = 'https://www.khanacademy.org/math/algebra/introduction-to-algebra'
+    assert_equal documents(:khan_intro_algebra), Document.find_by_url(khan_url)
+  end
+
   test '#add_identity' do
     @blank_slate.add_identity(@jason, :submitter)
     @blank_slate.save!
