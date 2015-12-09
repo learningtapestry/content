@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209083932) do
+ActiveRecord::Schema.define(version: 20151209092125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,12 +54,12 @@ ActiveRecord::Schema.define(version: 20151209083932) do
   create_table "document_imports", force: :cascade do |t|
     t.integer  "prepare_jid"
     t.integer  "import_jid"
-    t.boolean  "prepared",      default: false, null: false
-    t.boolean  "completed",     default: false, null: false
-    t.string   "file",                          null: false
-    t.integer  "repository_id",                 null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.string   "file",          null: false
+    t.integer  "repository_id", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.datetime "prepared_at"
+    t.datetime "imported_at"
   end
 
   add_index "document_imports", ["repository_id"], name: "index_document_imports_on_repository_id", using: :btree

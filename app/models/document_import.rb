@@ -50,6 +50,8 @@ class DocumentImport < ActiveRecord::Base
       row.parse_csv_content(csv_row)
       row.save
     end
+
+    touch(:prepared_at)
   end
 
   #
@@ -65,5 +67,7 @@ class DocumentImport < ActiveRecord::Base
         row.save
       end
     end
+
+    touch(:imported_at)
   end
 end

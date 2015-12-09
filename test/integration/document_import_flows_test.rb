@@ -79,7 +79,7 @@ class DocumentImportFlowsTest < ActionDispatch::IntegrationTest
     assert_equal 'http://nmaahc.si.edu/exhibitions/motto',  doc_import.rows.last.content['url']
     assert_equal 9, doc_import.rows.count
     refute_nil   doc_import.prepare_jid
-    assert       doc_import.prepared
+    refute_nil   doc_import.prepared_at
   end
 
 end

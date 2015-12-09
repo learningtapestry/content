@@ -5,6 +5,5 @@ class DocumentPrepareImportWorker
     document_import = DocumentImport.find(document_import_id)
     document_import.update_attributes(prepare_jid: jid)
     document_import.prepare_import
-    document_import.update_attributes(prepared: true)
   end
 end
