@@ -76,7 +76,7 @@ class DocumentImportFlowsTest < ActionDispatch::IntegrationTest
 
     doc_import = DocumentImport.last
     assert_equal "/document_imports/#{doc_import.id}/rows", current_path
-    assert_equal 'http://nmaahc.si.edu/exhibitions/motto',  doc_import.rows.last.content['url']['value']
+    assert_equal 'http://nmaahc.si.edu/exhibitions/motto',  doc_import.rows.last.content['url']
     assert_equal 9, doc_import.rows.count
     refute_nil   doc_import.prepare_jid
     assert       doc_import.prepared

@@ -26,13 +26,8 @@ class DocumentImportRow < ActiveRecord::Base
   # CSV parsing methods
   #
 
-  def each_array_column(column)
-    vals = column.present? && column.to_s.split(',')
-    if vals
-      vals.map do |val|
-        yield val
-      end
-    end
+  def parse_array_column(column)
+    column.present? && column.to_s.split(',')
   end
 
   def parse_csv_content(row)
@@ -43,58 +38,69 @@ class DocumentImportRow < ActiveRecord::Base
 
       description: row['description'],
 
-      grades: each_array_column(row['grades']) { |v| find_grades(v) },
+      grades: parse_array_column(row['grades']),
 
-      languages: each_array_column(row['languages']) { |v| find_languages(v) },
+      languages: parse_array_column(row['languages']),
 
-      publishers: each_array_column(row['publishers']) { |v| find_publishers(v) },
+      publishers: parse_array_column(row['publishers']),
 
-      resource_types: each_array_column(row['resource_types']) { |v| find_resource_types(v) },
+      resource_types: parse_array_column(row['resource_types']),
 
-      subjects: each_array_column(row['subjects']) { |v| find_subjects(v) },
+      subjects: parse_array_column(row['subjects']),
 
-      standards: each_array_column(row['standards']) { |v| find_standards(v) },
+      standards: parse_array_column(row['standards']),
 
-      url: find_urls(row['url'])
+      url: row['url']
     }
   end
 
   #
-  # Content finder methods
+  # Mapping methods
   #
 
-  def build_field_hash(value, candidate_ids)
-    {
-      value: value,
-      candidate_ids: candidate_ids
+  def map_content
+    self.mappings = {
+      grades: find_grades(content['grades']),
+
+      languages: find_languages(content['languages']),
+
+      publishers: find_publishers(content['publishers']),
+
+      resource_types: find_resource_types(content['resource_types']),
+
+      subjects: find_subjects(content['subjects']),
+
+      standards: find_standards(content['standards']),
+
+      url: find_urls(content['url'])
     }
   end
 
-  def find_grades(grade_val)
-    build_field_hash(grade_val, [])
+  def find_grades(grades)
+    # nop
   end
 
-  def find_publishers(publisher_val)
-    build_field_hash(publisher_val, [])
+  def find_publishers(publishers)
+    # nop
   end
 
-  def find_languages(language_val)
-    build_field_hash(language_val, [])
+  def find_languages(languages)
+    # nop
   end
 
-  def find_resource_types(resource_type_val)
-    build_field_hash(resource_type_val, [])
+  def find_resource_types(resource_types)
+    # nop
   end
 
-  def find_subjects(subject_val)
-    build_field_hash(subject_val, [])
+  def find_subjects(subjects)
+    # nop
   end
 
-  def find_standards(standard_val)
-    build_field_hash(standard_val, [])
+  def find_standards(standards)
+    # nop
   end
 
-  def find_urls(url_val)
-    build_field_hash(url_val, [])
+  def find_urls(urls)
+    # nop
   end
 end
