@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151210131816) do
+ActiveRecord::Schema.define(version: 20151210225719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 20151210131816) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.jsonb    "mappings"
+    t.jsonb    "prepare_errors"
+    t.jsonb    "mapping_errors"
   end
 
   add_index "document_import_rows", ["document_import_id"], name: "index_document_import_rows_on_document_import_id", using: :btree
