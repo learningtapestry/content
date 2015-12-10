@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209175258) do
+ActiveRecord::Schema.define(version: 20151210131816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,21 +144,25 @@ ActiveRecord::Schema.define(version: 20151209175258) do
   add_index "grade_hierarchies", ["descendant_id"], name: "grade_desc_idx", using: :btree
 
   create_table "grades", force: :cascade do |t|
-    t.string   "value",      null: false
+    t.string   "value",            null: false
     t.integer  "parent_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "review_status_id", null: false
   end
 
+  add_index "grades", ["review_status_id"], name: "index_grades_on_review_status_id", using: :btree
   add_index "grades", ["value", "parent_id"], name: "index_grades_on_value_and_parent_id", unique: true, using: :btree
 
   create_table "identities", force: :cascade do |t|
-    t.string   "value",      null: false
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "value",            null: false
+    t.string   "name",             null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "review_status_id", null: false
   end
 
+  add_index "identities", ["review_status_id"], name: "index_identities_on_review_status_id", using: :btree
   add_index "identities", ["value"], name: "index_identities_on_value", unique: true, using: :btree
 
   create_table "identity_types", force: :cascade do |t|
@@ -170,11 +174,13 @@ ActiveRecord::Schema.define(version: 20151209175258) do
   add_index "identity_types", ["value"], name: "index_identity_types_on_value", unique: true, using: :btree
 
   create_table "languages", force: :cascade do |t|
-    t.string   "value",      null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "value",            null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "review_status_id", null: false
   end
 
+  add_index "languages", ["review_status_id"], name: "index_languages_on_review_status_id", using: :btree
   add_index "languages", ["value"], name: "index_languages_on_value", unique: true, using: :btree
 
   create_table "organizations", force: :cascade do |t|
@@ -209,13 +215,22 @@ ActiveRecord::Schema.define(version: 20151209175258) do
   add_index "resource_type_hierarchies", ["descendant_id"], name: "resource_type_desc_idx", using: :btree
 
   create_table "resource_types", force: :cascade do |t|
-    t.string   "value",      null: false
+    t.string   "value",            null: false
     t.integer  "parent_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "review_status_id", null: false
   end
 
+  add_index "resource_types", ["review_status_id"], name: "index_resource_types_on_review_status_id", using: :btree
   add_index "resource_types", ["value", "parent_id"], name: "index_resource_types_on_value_and_parent_id", unique: true, using: :btree
+
+  create_table "review_statuses", force: :cascade do |t|
+    t.string "value",       null: false
+    t.string "description"
+  end
+
+  add_index "review_statuses", ["value"], name: "index_review_statuses_on_value", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name"
@@ -254,8 +269,10 @@ ActiveRecord::Schema.define(version: 20151209175258) do
     t.string   "url"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+    t.integer  "review_status_id",      null: false
   end
 
+  add_index "standards", ["review_status_id"], name: "index_standards_on_review_status_id", using: :btree
   add_index "standards", ["standard_framework_id"], name: "index_standards_on_standard_framework_id", using: :btree
   add_index "standards", ["value", "parent_id"], name: "index_standards_on_value_and_parent_id", unique: true, using: :btree
 
@@ -269,12 +286,14 @@ ActiveRecord::Schema.define(version: 20151209175258) do
   add_index "subject_hierarchies", ["descendant_id"], name: "subject_desc_idx", using: :btree
 
   create_table "subjects", force: :cascade do |t|
-    t.string   "value",      null: false
+    t.string   "value",            null: false
     t.integer  "parent_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "review_status_id", null: false
   end
 
+  add_index "subjects", ["review_status_id"], name: "index_subjects_on_review_status_id", using: :btree
   add_index "subjects", ["value", "parent_id"], name: "index_subjects_on_value_and_parent_id", unique: true, using: :btree
 
   create_table "url_hierarchies", id: false, force: :cascade do |t|
@@ -342,10 +361,16 @@ ActiveRecord::Schema.define(version: 20151209175258) do
   add_foreign_key "documents", "repositories"
   add_foreign_key "documents", "urls"
   add_foreign_key "grades", "grades", column: "parent_id"
+  add_foreign_key "grades", "review_statuses"
+  add_foreign_key "identities", "review_statuses"
+  add_foreign_key "languages", "review_statuses"
   add_foreign_key "repositories", "organizations"
   add_foreign_key "resource_types", "resource_types", column: "parent_id"
+  add_foreign_key "resource_types", "review_statuses"
+  add_foreign_key "standards", "review_statuses"
   add_foreign_key "standards", "standard_frameworks"
   add_foreign_key "standards", "standards", column: "parent_id"
+  add_foreign_key "subjects", "review_statuses"
   add_foreign_key "subjects", "subjects", column: "parent_id"
   add_foreign_key "urls", "urls", column: "parent_id"
 end

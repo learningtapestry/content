@@ -1,0 +1,8 @@
+system:
+  value: system
+
+reviewed:
+  value: reviewed
+
+not_reviewed:
+  value: not_reviewed
