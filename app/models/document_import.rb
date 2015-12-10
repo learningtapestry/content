@@ -55,11 +55,24 @@ class DocumentImport < ActiveRecord::Base
   end
 
   #
+  # Creates mappings between row fields and entities in the database.
+  # Those mappings will be used when the row is converted to a Document.
+  #
+  def create_mappings
+    rows.find_each do |row|
+      row.map_content
+      row.save
+    end
+
+    touch(:mapped_at)
+  end
+
+  #
   # Imports rows extracted from a CSV. Each valid row in the document_import_rows
   # table is converted into a full-blown Document.
   # 
   def import
-    DocumentImportRow.where(document_import: self).find_each do |row|
+    rows.find_each do |row|
       doc = row.find_document || Document.new
       doc.initialize_from_import(row)
       if !doc.save

@@ -80,6 +80,8 @@ class DocumentImportFlowsTest < ActionDispatch::IntegrationTest
     assert_equal 9, doc_import.rows.count
     refute_nil   doc_import.prepare_jid
     refute_nil   doc_import.prepared_at
+    refute_nil   doc_import.mappings_jid
+    refute_nil   doc_import.mapped_at
   end
 
 end

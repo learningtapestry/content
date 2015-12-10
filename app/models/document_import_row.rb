@@ -60,47 +60,57 @@ class DocumentImportRow < ActiveRecord::Base
 
   def map_content
     self.mappings = {
-      grades: find_grades(content['grades']),
+      grades: candidates_hash(content['grades'], :find_grades),
 
-      languages: find_languages(content['languages']),
+      languages: candidates_hash(content['languages'], :find_languages),
 
-      publishers: find_publishers(content['publishers']),
+      publishers: candidates_hash(content['publishers'], :find_publishers),
 
-      resource_types: find_resource_types(content['resource_types']),
+      resource_types: candidates_hash(content['resource_types'], :find_resource_types),
 
-      subjects: find_subjects(content['subjects']),
+      subjects: candidates_hash(content['subjects'], :find_subjects),
 
-      standards: find_standards(content['standards']),
+      standards: candidates_hash(content['standards'], :find_standards),
 
-      url: find_urls(content['url'])
+      url: candidates_hash(content['url'], :find_urls)
     }
   end
 
-  def find_grades(grades)
-    # nop
+  def candidates_hash(column, finder_method)
+    column = Array.wrap(column)
+    h = {}
+    column.each do |val|
+      candidates = send(finder_method, val)
+      h[val] = candidates if candidates.any?
+    end
+    h
   end
 
-  def find_publishers(publishers)
-    # nop
+  def find_grades(grade)
+    Grade.where(value: grade)
   end
 
-  def find_languages(languages)
-    # nop
+  def find_publishers(publisher)
+    Identity.where(name: publisher)
   end
 
-  def find_resource_types(resource_types)
-    # nop
+  def find_languages(language)
+    Language.where(value: language)
   end
 
-  def find_subjects(subjects)
-    # nop
+  def find_resource_types(resource_type)
+    ResourceType.where(value: resource_type)
   end
 
-  def find_standards(standards)
-    # nop
+  def find_subjects(subject)
+    Subject.where(value: subject)
   end
 
-  def find_urls(urls)
-    # nop
+  def find_standards(standard)
+    Standard.where(value: standard)
+  end
+
+  def find_urls(url)
+    Url.where(url: url)
   end
 end
