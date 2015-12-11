@@ -1,6 +1,71 @@
 class DocumentImportRow < ActiveRecord::Base
   belongs_to :document_import
 
+  # CSV parsing
+
+  def parse_csv_content(row)
+    self.content = {
+      id: prepare_content(row['id']),
+
+      title: prepare_content(row['title']),
+
+      description: prepare_content(row['description']),
+
+      grades: parse_array_column(row['grades']),
+
+      languages: parse_array_column(row['languages']),
+
+      publishers: parse_array_column(row['publishers']),
+
+      resource_types: parse_array_column(row['resource_types']),
+
+      subjects: parse_array_column(row['subjects']),
+
+      standards: parse_array_column(row['standards']),
+
+      url: prepare_content(row['url'])
+    }
+  end
+
+  def parse_array_column(column)
+    column.present? && column.to_s.split(',').map { |v| prepare_content(v) }
+  end
+
+  def prepare_content(val)
+    val.present? && val.strip
+  end
+
+  # Mapping
+
+  def map_content
+    self.mappings = {
+      grades: candidates_hash(content['grades'], :find_grades),
+
+      languages: candidates_hash(content['languages'], :find_languages),
+
+      publishers: candidates_hash(content['publishers'], :find_publishers),
+
+      resource_types: candidates_hash(content['resource_types'], :find_resource_types),
+
+      subjects: candidates_hash(content['subjects'], :find_subjects),
+
+      standards: candidates_hash(content['standards'], :find_standards),
+
+      url: candidates_hash(content['url'], :find_urls)
+    }
+  end
+
+  def candidates_hash(column, finder_method)
+    candidates = {}
+    mapper = EntityMapper.new
+    Array.wrap(column).each do |val|
+      candidates[val] = mapper.send(finder_method, val).map(&:id)
+    end
+    candidates
+  end
+
+  # Importing
+
   def find_document
     find_document_with_same_id || find_document_with_same_url
   end
@@ -22,95 +87,38 @@ class DocumentImportRow < ActiveRecord::Base
         .find_by_url(content['url'])
   end
 
-  #
-  # CSV parsing methods
-  #
+  def to_document
+    doc = find_document || Document.new
 
-  def parse_array_column(column)
-    column.present? && column.to_s.split(',')
-  end
+    doc.description     = content['description']
+    doc.document_status = DocumentStatus.unpublished
+    doc.repository      = document_import.repository
+    doc.title           = content['title']
+    doc.url             = Url.find(mappings['url'].first[1][0])
 
-  def parse_csv_content(row)
-    self.content = {
-      id: row['id'],
-
-      title: row['title'],
-
-      description: row['description'],
-
-      grades: parse_array_column(row['grades']),
-
-      languages: parse_array_column(row['languages']),
-
-      publishers: parse_array_column(row['publishers']),
-
-      resource_types: parse_array_column(row['resource_types']),
-
-      subjects: parse_array_column(row['subjects']),
-
-      standards: parse_array_column(row['standards']),
-
-      url: row['url']
+    import_relation('grades',         doc.document_grades,         Grade)
+    import_relation('languages',      doc.document_languages,      Language)
+    import_relation('resource_types', doc.document_resource_types, ResourceType)
+    import_relation('standards',      doc.document_standards,      Standard)
+    import_relation('subjects',       doc.document_subjects,       Subject)
+    import_relation('publishers',     doc.document_identities,     Identity) { 
+      |idt| idt.identity_type = IdentityType.publisher
     }
+
+    doc
   end
 
-  #
-  # Mapping methods
-  #
+  def import_relation(field_name, association, entity)
+    entity_assoc = entity.table_name.singularize
+    field        = mappings[field_name]
 
-  def map_content
-    self.mappings = {
-      grades: candidates_hash(content['grades'], :find_grades),
+    association.each(&:mark_for_destruction)
 
-      languages: candidates_hash(content['languages'], :find_languages),
+    field.each do |val, candidates|
+      next unless candidate = (candidates.any? && candidates[0])
 
-      publishers: candidates_hash(content['publishers'], :find_publishers),
-
-      resource_types: candidates_hash(content['resource_types'], :find_resource_types),
-
-      subjects: candidates_hash(content['subjects'], :find_subjects),
-
-      standards: candidates_hash(content['standards'], :find_standards),
-
-      url: candidates_hash(content['url'], :find_urls)
-    }
-  end
-
-  def candidates_hash(column, finder_method)
-    column = Array.wrap(column)
-    h = {}
-    column.each do |val|
-      candidates = send(finder_method, val)
-      h[val] = candidates if candidates.any?
+      imported = association.build(entity_assoc => entity.find(candidate))
+      yield imported if block_given?
     end
-    h
-  end
-
-  def find_grades(grade)
-    Grade.where(value: grade)
-  end
-
-  def find_publishers(publisher)
-    Identity.where(name: publisher)
-  end
-
-  def find_languages(language)
-    Language.where(value: language)
-  end
-
-  def find_resource_types(resource_type)
-    ResourceType.where(value: resource_type)
-  end
-
-  def find_subjects(subject)
-    Subject.where(value: subject)
-  end
-
-  def find_standards(standard)
-    Standard.where(value: standard)
-  end
-
-  def find_urls(url)
-    Url.where(url: url)
   end
 end

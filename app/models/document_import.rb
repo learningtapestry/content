@@ -15,7 +15,7 @@ class DocumentImport < ActiveRecord::Base
 
   validates :file, presence: true
   validates :repository, presence: true
-  validate :check_csv
+  validate  :check_csv
 
   def check_csv
     return unless file.try(:url)
@@ -73,10 +73,10 @@ class DocumentImport < ActiveRecord::Base
   # 
   def import
     rows.find_each do |row|
-      doc = row.find_document || Document.new
-      doc.initialize_from_import(row)
+      doc = row.to_document
       if !doc.save
-        row.import_errors = doc.errors
+        row.import_errors ||= {}
+        row.import_errors[:document_errors] = doc.errors
         row.save
       end
     end

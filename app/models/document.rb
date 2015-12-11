@@ -24,6 +24,9 @@ class Document < ActiveRecord::Base
     where(url: Url.find_by(url: url)).first
   end
 
+  #
+  # Adds an identity of a certain type
+  #
   def add_identity(identity, idt_type_val)
     document_identities.build(
       identity: identity,
@@ -33,7 +36,7 @@ class Document < ActiveRecord::Base
 
   #
   # Finds identities by identity type.
-  # 
+  #
   def identities_of(idt_type_val)
     Identity
       .joins(:document_identities)
@@ -42,10 +45,9 @@ class Document < ActiveRecord::Base
         IdentityType.find_by(value: idt_type_val).id)
   end
 
-  def initialize_from_import(import)
-    raise NotImplementedError
-  end
-
+  #
+  # Returns publisher identities
+  # 
   def publishers
     identities_of(:publisher)
   end

@@ -1,2 +1,8 @@
 published:
   value: published
+
+unpublished:
+  value: unpublished
+
+hidden:
+  value: hidden
