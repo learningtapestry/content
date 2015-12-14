@@ -3,12 +3,12 @@ class Document < ActiveRecord::Base
   belongs_to :repository
   belongs_to :url
 
-  has_many :document_grades,         autosave: true
-  has_many :document_identities,     autosave: true
-  has_many :document_languages,      autosave: true
-  has_many :document_resource_types, autosave: true
-  has_many :document_standards,      autosave: true
-  has_many :document_subjects,       autosave: true
+  has_many :document_grades,         dependent: :destroy, autosave: true
+  has_many :document_identities,     dependent: :destroy, autosave: true
+  has_many :document_languages,      dependent: :destroy, autosave: true
+  has_many :document_resource_types, dependent: :destroy, autosave: true
+  has_many :document_standards,      dependent: :destroy, autosave: true
+  has_many :document_subjects,       dependent: :destroy, autosave: true
 
   has_many :identities,     through: :document_identities
   has_many :grades,         through: :document_grades
