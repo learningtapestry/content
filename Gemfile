@@ -36,4 +36,5 @@ group :test do
   gem 'guard', '~> 2.13'
   gem 'guard-minitest', '~> 2.4', '>= 2.4.4'
   gem 'poltergeist', '~> 1.8', '>= 1.8.1'
+  gem 'shoulda', '~> 3.5'
 end

@@ -4,6 +4,8 @@ require 'database_cleaner'
 require 'rails/test_help'
 require 'capybara/rails'
 require 'sidekiq/testing'
+require 'shoulda/context'
+require 'shoulda/matchers'
 
 Capybara.javascript_driver = :poltergeist
 Warden.test_mode!
