@@ -37,4 +37,35 @@ class DocumentImportTest < ActiveSupport::TestCase
 
     refute_nil doc_import.imported_at
   end
+
+  test '#import_status returns imported for imported doc' do
+    doc_import = DocumentImport.new
+
+    doc_import.mapped_at = Time.now
+    doc_import.imported_at = Time.now
+
+    assert_equal :imported, doc_import.import_status
+  end
+
+  test '#import_status returns mapped for mapped doc' do
+    doc_import = DocumentImport.new
+
+    doc_import.prepared_at = Time.now
+    doc_import.mapped_at = Time.now
+
+    assert_equal :mapped, doc_import.import_status
+  end
+
+  test '#import_status returns prepared for prepared doc' do
+    doc_import = DocumentImport.new
+    
+    doc_import.prepared_at = Time.now
+
+    assert_equal :prepared, doc_import.import_status
+  end
+
+  test '#import_status returns waiting for non-prepared doc' do
+    doc_import = DocumentImport.new
+    assert_equal :waiting, doc_import.import_status
+  end
 end

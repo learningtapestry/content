@@ -75,13 +75,50 @@ class DocumentImportFlowsTest < ActionDispatch::IntegrationTest
     end
 
     doc_import = DocumentImport.last
-    assert_equal "/document_imports/#{doc_import.id}/rows", current_path
+    assert_equal "/document_imports/#{doc_import.id}", current_path
     assert_equal 'http://nmaahc.si.edu/exhibitions/motto',  doc_import.rows.last.content['url']
     assert_equal 9, doc_import.rows.count
     refute_nil   doc_import.prepare_jid
     refute_nil   doc_import.prepared_at
     refute_nil   doc_import.mappings_jid
     refute_nil   doc_import.mapped_at
+  end
+
+  test 'visiting a DocumentImport shows its rows' do
+    submit_csv
+
+    doc_import = DocumentImport.last
+    visit "/document_imports/#{doc_import.id}"
+
+    assert_equal 9, all('tbody > tr').count
+  end
+
+  test 'publishing a DocumentImport imports its rows' do
+    submit_csv
+
+    doc_import = DocumentImport.last
+    visit "/document_imports/#{doc_import.id}"
+
+    assert_difference 'Document.count', +9 do
+      click_link 'Publish'
+    end
+
+    doc_import.reload
+
+    refute_nil doc_import.mapped_at
+  end
+
+  def submit_csv
+    visit '/document_imports/new'
+
+    within '#new_document_import' do
+      select 'Blank Slates', from: 'Repository'
+      attach_file 'File', @valid_sample_data
+
+      assert_difference 'DocumentImport.count', +1 do
+        click_button 'Upload'
+      end
+    end
   end
 
 end

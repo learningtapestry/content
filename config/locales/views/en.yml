@@ -2,9 +2,6 @@ en:
   document_imports:
     index:
       file: File
-  document_import_rows:
-    index:
-      publish: Publish
   welcome:
     index:
       document_imports: Upload CSV

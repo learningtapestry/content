@@ -1,12 +1,11 @@
 class DocumentImportsController < ApplicationController
-  before_action :set_document_import, only: [:show, :edit, :destroy]
+  before_action :set_document_import, only: [:show, :edit, :destroy, :publish]
 
   def index
     @document_imports = DocumentImport.all
   end
 
   def show
-    redirect_to [@document_import, :document_import_rows]
   end
 
   def new
@@ -40,7 +39,11 @@ class DocumentImportsController < ApplicationController
   end
 
   def publish
-    
+    DocumentImportWorker.perform_async(@document_import.id)
+    respond_to do |format|
+      format.html { redirect_to @document_import, notice: 'Csv document import is being imported.' }
+      format.json { head :no_content }
+    end
   end
 
   private

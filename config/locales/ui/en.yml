@@ -2,6 +2,13 @@ en:
   ui:
     login: Log In
     file: File
+    publish: Publish
     repository: Repository
-    jid: Job ID
     upload: Upload
+    status: Status
+    document_import_status:
+      publish: Publish
+      imported: Imported
+      mapped: Processed
+      prepared: Analyzing
+      waiting: Submitted

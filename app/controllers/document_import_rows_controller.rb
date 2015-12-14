@@ -2,18 +2,7 @@ class DocumentImportRowsController < ApplicationController
   before_action :set_document_import_row, only: [:show, :edit, :update, :destroy]
   before_action :set_document_import
 
-  def index
-    @document_import_rows = DocumentImportRow.all
-  end
-
   def show
-  end
-
-  def new
-    @document_import_row = DocumentImportRow.new
-  end
-
-  def edit
   end
 
   def create

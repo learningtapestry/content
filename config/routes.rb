@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :document_imports, except: [:update] do
-    resources :document_import_rows, path: :rows
+    resources :document_import_rows, path: :rows, only: [:show, :create, :update, :destroy]
     post :publish, on: :member
   end
 

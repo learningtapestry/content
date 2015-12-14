@@ -83,4 +83,16 @@ class DocumentImport < ActiveRecord::Base
 
     touch(:imported_at)
   end
+
+  def import_status
+    if imported_at.present?
+      :imported
+    elsif mapped_at.present?
+      :mapped
+    elsif prepared_at.present?
+      :prepared
+    else
+      :waiting
+    end
+  end
 end
