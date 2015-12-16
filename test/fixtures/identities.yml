@@ -1,9 +1,7 @@
 khan:
-  value: khan
   name: Khan Academy
   review_status: reviewed
 
 jason:
-  value: jason
   name: Jason
   review_status: reviewed

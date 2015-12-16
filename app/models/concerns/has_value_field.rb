@@ -11,5 +11,10 @@ module HasValueField
         end
       end
     end
+
+    def self.string_to_value(str)
+      str = str.to_s
+      str.strip.gsub(/\s+/,'_').downcase
+    end
   end
 end

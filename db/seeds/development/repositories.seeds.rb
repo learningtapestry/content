@@ -5,7 +5,6 @@ after :'development:organizations' do
       public: true
     )
     .find_or_create_by(
-      value: 'sandbox',
-      organization: Organization.find_by(value: :lt)
+      organization: Organization.find_by(name: 'LearningTapestry')
     )
 end

@@ -3,43 +3,28 @@ class DocumentImportRow < ActiveRecord::Base
 
   def parse_csv_content(row)
     self.content = {
-      id: prepare_content(row['id']),
-
-      title: prepare_content(row['title']),
-
-      description: prepare_content(row['description']),
-
-      grades: parse_array_column(row['grades']),
-
-      languages: parse_array_column(row['languages']),
-
-      publishers: parse_array_column(row['publishers']),
-
+      id:             prepare_content(row['id']),
+      title:          prepare_content(row['title']),
+      description:    prepare_content(row['description']),
+      grades:         parse_array_column(row['grades']),
+      languages:      parse_array_column(row['languages']),
+      publishers:     parse_array_column(row['publishers']),
       resource_types: parse_array_column(row['resource_types']),
-
-      subjects: parse_array_column(row['subjects']),
-
-      standards: parse_array_column(row['standards']),
-
-      url: prepare_content(row['url'])
+      subjects:       parse_array_column(row['subjects']),
+      standards:      parse_array_column(row['standards']),
+      url:            prepare_content(row['url'])
     }
   end
 
   def map_content
     self.mappings = {
-      grades: candidates_hash(content['grades'], :find_grades),
-
-      languages: candidates_hash(content['languages'], :find_languages),
-
-      publishers: candidates_hash(content['publishers'], :find_publishers),
-
-      resource_types: candidates_hash(content['resource_types'], :find_resource_types),
-
-      subjects: candidates_hash(content['subjects'], :find_subjects),
-
-      standards: candidates_hash(content['standards'], :find_standards),
-
-      url: candidates_hash(content['url'], :find_urls)
+      grades:         find_candidates(GradeMapper, content['grades']),
+      languages:      find_candidates(LanguageMapper, content['languages']),
+      publishers:     find_candidates(IdentityMapper, content['publishers']),
+      resource_types: find_candidates(ResourceTypeMapper, content['resource_types']),
+      subjects:       find_candidates(SubjectMapper, content['subjects']),
+      standards:      find_candidates(StandardMapper, content['standards']),
+      url:            find_candidates(UrlMapper, content['url'])
     }
   end
 
@@ -48,7 +33,7 @@ class DocumentImportRow < ActiveRecord::Base
 
     doc.description     = content['description']
     doc.document_status = DocumentStatus.unpublished
-    doc.repository      = document_import.repository
+    doc.repository      = repository
     doc.title           = content['title']
     doc.url             = Url.find(mappings['url'].first[1][0])
 
@@ -62,6 +47,10 @@ class DocumentImportRow < ActiveRecord::Base
     }
 
     doc
+  end
+
+  def repository
+    document_import.repository
   end
 
   protected
@@ -78,11 +67,11 @@ class DocumentImportRow < ActiveRecord::Base
 
   # Mapping
 
-  def candidates_hash(column, finder_method)
+  def find_candidates(mapper_class, column)
     candidates = {}
-    mapper = EntityMapper.new
+    mapper = mapper_class.new(repository: repository)
     Array.wrap(column).each do |val|
-      candidates[val] = mapper.send(finder_method, val).map(&:id)
+      candidates[val] = mapper.find_mappings(val).map(&:id)
     end
     candidates
   end
@@ -95,8 +84,7 @@ class DocumentImportRow < ActiveRecord::Base
 
   def find_document_with_same_id
     content['id'].present? &&
-      document_import
-        .repository
+      repository
         .documents
         .where(id: content['id'])
         .first
@@ -104,8 +92,7 @@ class DocumentImportRow < ActiveRecord::Base
 
   def find_document_with_same_url
     content['url'].present? &&
-      document_import
-        .repository
+      repository
         .documents
         .find_by_url(content['url'])
   end

@@ -99,13 +99,14 @@ class DocumentImportRowTest < ActiveSupport::TestCase
 
   test '#map_content maps grades' do
     row = DocumentImportRow.new
+    row.document_import = DocumentImport.new(repository: @khan_repo)
     content = { 'grades' => 'grade 1, grade 120' }
 
     row.parse_csv_content(content)
     row.map_content
 
     grade_1 = grades(:grade_1)
-    grade_120 = Grade.find_by(value: 'grade 120')
+    grade_120 = Grade.find_by(name: 'grade 120')
 
     assert_same_elements [grade_1.id], row.mappings['grades']['grade 1']
     assert_same_elements [grade_120.id], row.mappings['grades']['grade 120']
@@ -113,13 +114,14 @@ class DocumentImportRowTest < ActiveSupport::TestCase
 
   test '#map_content maps languages' do
     row = DocumentImportRow.new
+    row.document_import = DocumentImport.new(repository: @khan_repo)
     content = { 'languages' => 'en, pt' }
 
     row.parse_csv_content(content)
     row.map_content
 
     en = languages(:en)
-    pt = Language.find_by(value: 'pt')
+    pt = Language.find_by(name: 'pt')
 
     assert_same_elements [en.id], row.mappings['languages']['en']
     assert_same_elements [pt.id], row.mappings['languages']['pt']
@@ -127,27 +129,29 @@ class DocumentImportRowTest < ActiveSupport::TestCase
 
   test '#map_content maps identities' do
     row = DocumentImportRow.new
-    content = { 'publishers' => 'khan, smithsonian' }
+    row.document_import = DocumentImport.new(repository: @khan_repo)
+    content = { 'publishers' => 'Khan Academy, smithsonian' }
 
     row.parse_csv_content(content)
     row.map_content
 
     khan = identities(:khan)
-    smithsonian = Identity.find_by(value: 'smithsonian')
+    smithsonian = Identity.find_by(name: 'smithsonian')
 
-    assert_same_elements [khan.id], row.mappings['publishers']['khan']
+    assert_same_elements [khan.id], row.mappings['publishers']['Khan Academy']
     assert_same_elements [smithsonian.id], row.mappings['publishers']['smithsonian']
   end
 
   test '#map_content maps resource types' do
     row = DocumentImportRow.new
+    row.document_import = DocumentImport.new(repository: @khan_repo)
     content = { 'resource_types' => 'video, lesson' }
 
     row.parse_csv_content(content)
     row.map_content
 
     lesson = resource_types(:lesson)
-    video = ResourceType.find_by(value: 'video')
+    video = ResourceType.find_by(name: 'video')
 
     assert_same_elements [lesson.id], row.mappings['resource_types']['lesson']
     assert_same_elements [video.id], row.mappings['resource_types']['video']
@@ -155,13 +159,14 @@ class DocumentImportRowTest < ActiveSupport::TestCase
 
   test '#map_content maps subjects' do
     row = DocumentImportRow.new
+    row.document_import = DocumentImport.new(repository: @khan_repo)
     content = { 'subjects' => 'history, geography' }
 
     row.parse_csv_content(content)
     row.map_content
 
     history = subjects(:history)
-    geography = Subject.find_by(value: 'geography')
+    geography = Subject.find_by(name: 'geography')
 
     assert_same_elements [history.id], row.mappings['subjects']['history']
     assert_same_elements [geography.id], row.mappings['subjects']['geography']
@@ -169,13 +174,14 @@ class DocumentImportRowTest < ActiveSupport::TestCase
 
   test '#map_content maps standards' do
     row = DocumentImportRow.new
+    row.document_import = DocumentImport.new(repository: @khan_repo)
     content = { 'standards' => 'ccls.1.2, ccls.3.4' }
 
     row.parse_csv_content(content)
     row.map_content
 
     ccls_1_2 = standards(:ccls_1_2)
-    ccls_3_4 = Standard.find_by(value: 'ccls.3.4')
+    ccls_3_4 = Standard.find_by(name: 'ccls.3.4')
 
     assert_same_elements [ccls_1_2.id], row.mappings['standards']['ccls.1.2']
     assert_same_elements [ccls_3_4.id], row.mappings['standards']['ccls.3.4']
@@ -183,6 +189,7 @@ class DocumentImportRowTest < ActiveSupport::TestCase
 
   test '#map_content maps url' do
     row = DocumentImportRow.new
+    row.document_import = DocumentImport.new(repository: @khan_repo)
     khan = urls(:khan_intro_algebra)
     content = { 'url' => khan.url }
 
@@ -220,8 +227,8 @@ class DocumentImportRowTest < ActiveSupport::TestCase
     doc = row.to_document
     doc.save
 
-    assert_equal 'Grade 1', doc.grades[0].value
-    assert_equal 'Grade 2', doc.grades[1].value
+    assert_equal 'Grade 1', doc.grades[0].name
+    assert_equal 'Grade 2', doc.grades[1].name
   end
 
   test '#to_document imports languages' do
@@ -232,8 +239,8 @@ class DocumentImportRowTest < ActiveSupport::TestCase
     doc = row.to_document
     doc.save
 
-    assert_equal 'English', doc.languages[0].value
-    assert_equal 'Spanish', doc.languages[1].value
+    assert_equal 'English', doc.languages[0].name
+    assert_equal 'Spanish', doc.languages[1].name
   end
 
   test '#to_document imports resource_types' do
@@ -244,8 +251,8 @@ class DocumentImportRowTest < ActiveSupport::TestCase
     doc = row.to_document
     doc.save
 
-    assert_equal 'Lesson',        doc.resource_types[0].value
-    assert_equal 'Resource Plan', doc.resource_types[1].value
+    assert_equal 'Lesson',        doc.resource_types[0].name
+    assert_equal 'Resource Plan', doc.resource_types[1].name
   end
 
   test '#to_document imports standards' do
@@ -256,8 +263,8 @@ class DocumentImportRowTest < ActiveSupport::TestCase
     doc = row.to_document
     doc.save
 
-    assert_equal 'CCLS1', doc.standards[0].value
-    assert_equal 'CCLS2', doc.standards[1].value
+    assert_equal 'CCLS1', doc.standards[0].name
+    assert_equal 'CCLS2', doc.standards[1].name
   end
 
   test '#to_document imports subjects' do
@@ -268,8 +275,8 @@ class DocumentImportRowTest < ActiveSupport::TestCase
     doc = row.to_document
     doc.save
 
-    assert_equal 'History',   doc.subjects[0].value
-    assert_equal 'Geography', doc.subjects[1].value
+    assert_equal 'History',   doc.subjects[0].name
+    assert_equal 'Geography', doc.subjects[1].name
   end
 
   test '#to_document imports publishers' do
@@ -280,8 +287,8 @@ class DocumentImportRowTest < ActiveSupport::TestCase
     doc = row.to_document
     doc.save
 
-    assert_equal 'Khan', doc.identities.order(value: :asc)[0].value
-    assert_equal 'LR',   doc.identities.order(value: :asc)[1].value
+    assert_equal 'Khan', doc.identities.order(name: :asc)[0].name
+    assert_equal 'LR',   doc.identities.order(name: :asc)[1].name
     assert doc.document_identities.all? do |doc_idt|
       doc_idt.identity_type == IdentityType.publisher
     end

@@ -1,94 +1,54 @@
 class EntityMapper
 
-  #
-  # Grades
-  #
-
-  def find_grades(grade_val)
-    candidate = Grade
-      .create_with(review_status: ReviewStatus.not_reviewed)
-      .where(value: grade_val)
-      .first_or_create!
-
-    [candidate]
+  def initialize(repository:)
+    @repository = repository
   end
 
-  #
-  # Languages
-  #
-
-  def find_languages(language_val)
-    candidate = Language
-      .create_with(review_status: ReviewStatus.not_reviewed)
-      .where(value: language_val)
-      .first_or_create!
-
-    [candidate]
+  def self.map_for(mappable_type)
+    @mappable_type = mappable_type
   end
 
-  #
-  # Publisher
-  #
-
-  def find_publishers(publisher_val)
-    candidate = Identity
-      .create_with(review_status: ReviewStatus.not_reviewed, name: publisher_val)
-      .where(value: publisher_val)
-      .first_or_create!
-
-    [candidate]
+  def self.mappable_type
+    @mappable_type
   end
 
-  #
-  # Resource type
-  #
-  
-  def find_resource_types(resource_type_val)
-    candidate = ResourceType
-      .create_with(review_status: ReviewStatus.not_reviewed)
-      .where(value: resource_type_val)
-      .first_or_create!
+  def find_mappings(value)
+    mappables = @repository
+      .value_mappings
+      .where(mappable_type: self.class.mappable_type)
+      .where(value: normalize(value))
+      .order(rank: :desc)
+      .map(&:mappable)
 
-    [candidate]
+    if mappables.empty?
+      unmapped = find_candidates(value)
+
+      if unmapped.any?
+        unmapped.each_with_index { |u,i| create_mapping(u, value, i+1) }
+        mappables = unmapped
+      else
+        new_mappable = create_candidate(value)
+        create_mapping(new_mappable, value, 1)
+        mappables = [new_mappable]
+      end
+    end
+
+    mappables
   end
 
-  #
-  # Subject
-  #
-  
-  def find_subjects(subject_val)
-    candidate = Subject
-      .create_with(review_status: ReviewStatus.not_reviewed)
-      .where(value: subject_val)
-      .first_or_create!
+  protected
 
-    [candidate]
+  def create_mapping(mappable_inst, value, rank)
+    @repository.value_mappings.create!(
+      mappable: mappable_inst,
+      value: value,
+      rank: rank
+    )
   end
 
-  #
-  # Standard
-  #
-  
-  def find_standards(standard_val)
-    candidate = Standard
-      .create_with(review_status: ReviewStatus.not_reviewed, name: standard_val)
-      .where(value: standard_val)
-      .first_or_create!
-
-    [candidate]
-  end
-
-  #
-  # URL
-  #
-  
-  def find_urls(url_val)
-    candidate = Url
-      .create_with(review_status: ReviewStatus.not_reviewed)
-      .where(url: url_val)
-      .first_or_create!
-
-    [candidate]
+  def normalize(value)
+    value = value.to_s
+    value.strip.gsub(/\s+/,'_').downcase
   end
   
 end

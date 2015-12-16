@@ -1,11 +1,9 @@
 khan:
-  value: lt_khan
   organization: lt
   name: Khan Academy
   public: true
 
 blank_slates:
-  value: lt_blank_slate
   organization: lt
   name: Blank Slates
   public: true

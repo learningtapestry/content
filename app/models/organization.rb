@@ -3,6 +3,4 @@ class Organization < ActiveRecord::Base
 
   has_many :repositories
   has_many :roles, as: :resource
-
-  include HasValueField
 end

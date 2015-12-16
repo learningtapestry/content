@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151211215420) do
+ActiveRecord::Schema.define(version: 20151215211214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,18 +146,16 @@ ActiveRecord::Schema.define(version: 20151211215420) do
   add_index "grade_hierarchies", ["descendant_id"], name: "grade_desc_idx", using: :btree
 
   create_table "grades", force: :cascade do |t|
-    t.string   "value",            null: false
     t.integer  "parent_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "review_status_id", null: false
+    t.string   "name"
   end
 
   add_index "grades", ["review_status_id"], name: "index_grades_on_review_status_id", using: :btree
-  add_index "grades", ["value", "parent_id"], name: "index_grades_on_value_and_parent_id", unique: true, using: :btree
 
   create_table "identities", force: :cascade do |t|
-    t.string   "value",            null: false
     t.string   "name",             null: false
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
@@ -165,7 +163,6 @@ ActiveRecord::Schema.define(version: 20151211215420) do
   end
 
   add_index "identities", ["review_status_id"], name: "index_identities_on_review_status_id", using: :btree
-  add_index "identities", ["value"], name: "index_identities_on_value", unique: true, using: :btree
 
   create_table "identity_types", force: :cascade do |t|
     t.string   "value",      null: false
@@ -176,26 +173,21 @@ ActiveRecord::Schema.define(version: 20151211215420) do
   add_index "identity_types", ["value"], name: "index_identity_types_on_value", unique: true, using: :btree
 
   create_table "languages", force: :cascade do |t|
-    t.string   "value",            null: false
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "review_status_id", null: false
+    t.string   "name"
   end
 
   add_index "languages", ["review_status_id"], name: "index_languages_on_review_status_id", using: :btree
-  add_index "languages", ["value"], name: "index_languages_on_value", unique: true, using: :btree
 
   create_table "organizations", force: :cascade do |t|
-    t.string   "value",      null: false
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_index "organizations", ["value"], name: "index_organizations_on_value", unique: true, using: :btree
-
   create_table "repositories", force: :cascade do |t|
-    t.string   "value",           null: false
     t.string   "name",            null: false
     t.integer  "organization_id", null: false
     t.boolean  "public",          null: false
@@ -204,8 +196,6 @@ ActiveRecord::Schema.define(version: 20151211215420) do
   end
 
   add_index "repositories", ["organization_id"], name: "index_repositories_on_organization_id", using: :btree
-  add_index "repositories", ["value", "organization_id"], name: "index_repositories_on_value_and_organization_id", unique: true, using: :btree
-  add_index "repositories", ["value"], name: "index_repositories_on_value", using: :btree
 
   create_table "resource_type_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id",   null: false
@@ -217,15 +207,14 @@ ActiveRecord::Schema.define(version: 20151211215420) do
   add_index "resource_type_hierarchies", ["descendant_id"], name: "resource_type_desc_idx", using: :btree
 
   create_table "resource_types", force: :cascade do |t|
-    t.string   "value",            null: false
     t.integer  "parent_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "review_status_id", null: false
+    t.string   "name"
   end
 
   add_index "resource_types", ["review_status_id"], name: "index_resource_types_on_review_status_id", using: :btree
-  add_index "resource_types", ["value", "parent_id"], name: "index_resource_types_on_value_and_parent_id", unique: true, using: :btree
 
   create_table "review_statuses", force: :cascade do |t|
     t.string "value",       null: false
@@ -264,7 +253,6 @@ ActiveRecord::Schema.define(version: 20151211215420) do
   add_index "standard_hierarchies", ["descendant_id"], name: "standard_desc_idx", using: :btree
 
   create_table "standards", force: :cascade do |t|
-    t.string   "value",                 null: false
     t.integer  "parent_id"
     t.string   "name",                  null: false
     t.integer  "standard_framework_id"
@@ -276,7 +264,6 @@ ActiveRecord::Schema.define(version: 20151211215420) do
 
   add_index "standards", ["review_status_id"], name: "index_standards_on_review_status_id", using: :btree
   add_index "standards", ["standard_framework_id"], name: "index_standards_on_standard_framework_id", using: :btree
-  add_index "standards", ["value", "parent_id"], name: "index_standards_on_value_and_parent_id", unique: true, using: :btree
 
   create_table "subject_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id",   null: false
@@ -288,15 +275,14 @@ ActiveRecord::Schema.define(version: 20151211215420) do
   add_index "subject_hierarchies", ["descendant_id"], name: "subject_desc_idx", using: :btree
 
   create_table "subjects", force: :cascade do |t|
-    t.string   "value",            null: false
     t.integer  "parent_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "review_status_id", null: false
+    t.string   "name"
   end
 
   add_index "subjects", ["review_status_id"], name: "index_subjects_on_review_status_id", using: :btree
-  add_index "subjects", ["value", "parent_id"], name: "index_subjects_on_value_and_parent_id", unique: true, using: :btree
 
   create_table "url_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id",   null: false
@@ -344,6 +330,21 @@ ActiveRecord::Schema.define(version: 20151211215420) do
 
   add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
 
+  create_table "value_mappings", force: :cascade do |t|
+    t.string   "value",         null: false
+    t.integer  "repository_id", null: false
+    t.integer  "mappable_id",   null: false
+    t.string   "mappable_type", null: false
+    t.integer  "rank",          null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "value_mappings", ["mappable_id"], name: "index_value_mappings_on_mappable_id", using: :btree
+  add_index "value_mappings", ["mappable_type"], name: "index_value_mappings_on_mappable_type", using: :btree
+  add_index "value_mappings", ["repository_id"], name: "index_value_mappings_on_repository_id", using: :btree
+  add_index "value_mappings", ["value"], name: "index_value_mappings_on_value", using: :btree
+
   add_foreign_key "document_grades", "documents"
   add_foreign_key "document_grades", "grades"
   add_foreign_key "document_identities", "documents"
@@ -375,4 +376,5 @@ ActiveRecord::Schema.define(version: 20151211215420) do
   add_foreign_key "subjects", "review_statuses"
   add_foreign_key "subjects", "subjects", column: "parent_id"
   add_foreign_key "urls", "urls", column: "parent_id"
+  add_foreign_key "value_mappings", "repositories"
 end
