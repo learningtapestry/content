@@ -1,0 +1,12 @@
+<%= simple_form_for(@document_export) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.association :repository %>
+    <%= f.input :export_type, collection: DocumentExport::EXPORT_TYPES %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit t('ui.export') %>
+  </div>
+<% end %>

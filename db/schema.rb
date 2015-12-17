@@ -11,10 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215211214) do
+ActiveRecord::Schema.define(version: 20151217162201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "document_exports", force: :cascade do |t|
+    t.integer  "export_jid"
+    t.datetime "exported_at"
+    t.integer  "repository_id",              null: false
+    t.string   "file"
+    t.string   "export_type",                null: false
+    t.text     "filtered_ids",  default: [],              array: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "document_exports", ["repository_id"], name: "index_document_exports_on_repository_id", using: :btree
 
   create_table "document_grades", force: :cascade do |t|
     t.integer  "document_id", null: false
@@ -345,6 +358,7 @@ ActiveRecord::Schema.define(version: 20151215211214) do
   add_index "value_mappings", ["repository_id"], name: "index_value_mappings_on_repository_id", using: :btree
   add_index "value_mappings", ["value"], name: "index_value_mappings_on_value", using: :btree
 
+  add_foreign_key "document_exports", "repositories"
   add_foreign_key "document_grades", "documents"
   add_foreign_key "document_grades", "grades"
   add_foreign_key "document_identities", "documents"

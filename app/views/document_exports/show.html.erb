@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Export jid:</strong>
+  <%= @document_export.export_jid %>
+</p>
+
+<p>
+  <strong>Exported at:</strong>
+  <%= @document_export.exported_at %>
+</p>
+
+<p>
+  <strong>Repository:</strong>
+  <%= @document_export.repository %>
+</p>
+
+<p>
+  <strong>File:</strong>
+  <%= @document_export.file %>
+</p>
+
+<p>
+  <strong>Export type:</strong>
+  <%= @document_export.export_type %>
+</p>
+
+<p>
+  <strong>Filtered ids:</strong>
+  <%= @document_export.filtered_ids %>
+</p>
+
+<%= link_to 'Edit', edit_document_export_path(@document_export) %> |
+<%= link_to 'Back', document_exports_path %>

@@ -6,6 +6,7 @@ en:
     repository: Repository
     upload: Upload
     status: Status
+    export: Export
     document_import_status:
       publish: Publish
       imported: Imported

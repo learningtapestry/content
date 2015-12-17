@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Document Exports</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Export jid</th>
+      <th>Exported at</th>
+      <th>Repository</th>
+      <th>File</th>
+      <th>Export type</th>
+      <th>Filtered ids</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @document_exports.each do |document_export| %>
+      <tr>
+        <td><%= document_export.export_jid %></td>
+        <td><%= document_export.exported_at %></td>
+        <td><%= document_export.repository %></td>
+        <td><%= document_export.file %></td>
+        <td><%= document_export.export_type %></td>
+        <td><%= document_export.filtered_ids %></td>
+        <td><%= link_to 'Show', document_export %></td>
+        <td><%= link_to 'Edit', edit_document_export_path(document_export) %></td>
+        <td><%= link_to 'Destroy', document_export, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Download', download_document_export_path(document_export) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Document export', new_document_export_path %>

@@ -7,3 +7,8 @@ blank_slates:
   organization: lt
   name: Blank Slates
   public: true
+
+empty:
+  organization: lt
+  name: Empty
+  public: true

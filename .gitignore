@@ -24,3 +24,5 @@
 !.env.template
 
 /public/uploads
+/public/exports
+
