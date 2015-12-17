@@ -58,7 +58,11 @@ class DocumentImportRow < ActiveRecord::Base
   # CSV parsing
 
   def parse_array_column(column)
-    column.present? && column.to_s.split(',').map { |v| prepare_content(v) }
+    if column.present?
+      column.to_s.split(',').map { |v| prepare_content(v) }
+    else
+      nil
+    end
   end
 
   def prepare_content(val)

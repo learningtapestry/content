@@ -34,6 +34,15 @@ class DocumentImportRowTest < ActiveSupport::TestCase
     assert_equal 'test', row.content['description']
   end
 
+  test '#parse_csv_content parses nil correctly' do
+    row = DocumentImportRow.new
+    content = { 'grades' => '' }
+
+    row.parse_csv_content(content)
+
+    assert_nil row.content['grades']
+  end
+
   test '#parse_csv_content parses grades' do
     row = DocumentImportRow.new
     content = { 'grades' => 'grade 1, grade 2' }
