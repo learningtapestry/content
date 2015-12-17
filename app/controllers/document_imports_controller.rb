@@ -39,10 +39,17 @@ class DocumentImportsController < ApplicationController
   end
 
   def publish
-    DocumentImportWorker.perform_async(@document_import.id)
-    respond_to do |format|
-      format.html { redirect_to @document_import, notice: 'Csv document import is being imported.' }
-      format.json { head :no_content }
+    if @document_import.can_import?
+      DocumentImportWorker.perform_async(@document_import.id)
+      respond_to do |format|
+        format.html { redirect_to @document_import, notice: 'Csv document import is being imported.' }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to @document_import, notice: 'Csv document import can not be imported yet.' }
+        format.json { render json: @document_import.errors, status: :unprocessable_entity }
+      end
     end
   end
 

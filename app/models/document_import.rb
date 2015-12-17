@@ -38,6 +38,12 @@ class DocumentImport < ActiveRecord::Base
     (header.map { |h| h.strip.downcase }.sort) == (HEADER.sort)
   end
 
+  # Preparing
+
+  def can_prepare?
+    prepared_at.blank?
+  end
+
   #
   # Processes the CSV and extracts valid and invalid documents before the import
   # job is confirmed by the user.
@@ -54,6 +60,12 @@ class DocumentImport < ActiveRecord::Base
     touch(:prepared_at)
   end
 
+  # Mapping
+
+  def can_map?
+    prepared_at.present? && mapped_at.blank?
+  end
+
   #
   # Creates mappings between row fields and entities in the database.
   # Those mappings will be used when the row is converted to a Document.
@@ -65,6 +77,12 @@ class DocumentImport < ActiveRecord::Base
     end
 
     touch(:mapped_at)
+  end
+
+  # Importing
+
+  def can_import?
+    mapped_at.present? && imported_at.blank?
   end
 
   #
@@ -94,5 +112,14 @@ class DocumentImport < ActiveRecord::Base
     else
       :waiting
     end
+  end
+
+  #
+  # Goes through the whole process: prepare, mappings and import.
+  #
+  def process
+    prepare_import
+    create_mappings
+    import
   end
 end

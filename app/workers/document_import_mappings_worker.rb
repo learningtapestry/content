@@ -3,6 +3,9 @@ class DocumentImportMappingsWorker
 
   def perform(document_import_id)
     document_import = DocumentImport.find(document_import_id)
+
+    return unless document_import.can_map?
+    
     document_import.update_attributes(mappings_jid: jid)
     document_import.create_mappings
   end
