@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
-  resources :document_exports do
+  resources :document_exports, except: [:edit, :update] do
     get :download, on: :member
   end
   
-  resources :document_imports, except: [:update] do
-    resources :document_import_rows, path: :rows, only: [:show, :create, :update, :destroy]
+  resources :document_imports, except: [:edit, :update] do
     post :publish, on: :member
   end
 

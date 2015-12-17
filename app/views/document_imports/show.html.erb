@@ -8,7 +8,6 @@
       <th>url</th>
       <th>title</th>
       <th>description</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
@@ -18,9 +17,6 @@
         <td><%= document_import_row.content['url'] %></td>
         <td><%= document_import_row.content['title'] %></td>
         <td><%= document_import_row.content['description'] %></td>
-        <td><%= link_to 'Show', document_import_document_import_row_path(@document_import, document_import_row) %></td>
-        <td>Edit</td>
-        <td><%= link_to 'Destroy', document_import_document_import_row_path(@document_import, document_import_row), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

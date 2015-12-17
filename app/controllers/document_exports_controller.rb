@@ -1,5 +1,5 @@
 class DocumentExportsController < ApplicationController
-  before_action :set_document_export, only: [:show, :edit, :update, :destroy, :download]
+  before_action :set_document_export, only: [:show, :destroy, :download]
 
   CONTENT_TYPES = {
     'csv' => 'text/csv'
@@ -16,9 +16,6 @@ class DocumentExportsController < ApplicationController
     @document_export = DocumentExport.new
   end
 
-  def edit
-  end
-
   def create
     @document_export = DocumentExport.new(document_export_params)
 
@@ -29,18 +26,6 @@ class DocumentExportsController < ApplicationController
         format.json { render :show, status: :created, location: @document_export }
       else
         format.html { render :new }
-        format.json { render json: @document_export.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def update
-    respond_to do |format|
-      if @document_export.update(document_export_params)
-        format.html { redirect_to @document_export, notice: 'Document export was successfully updated.' }
-        format.json { render :show, status: :ok, location: @document_export }
-      else
-        format.html { render :edit }
         format.json { render json: @document_export.errors, status: :unprocessable_entity }
       end
     end

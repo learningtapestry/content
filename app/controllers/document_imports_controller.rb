@@ -1,5 +1,5 @@
 class DocumentImportsController < ApplicationController
-  before_action :set_document_import, only: [:show, :edit, :destroy, :publish]
+  before_action :set_document_import, only: [:show, :destroy, :publish]
 
   def index
     @document_imports = DocumentImport.all
@@ -10,9 +10,6 @@ class DocumentImportsController < ApplicationController
 
   def new
     @document_import = DocumentImport.new
-  end
-
-  def edit
   end
 
   def create
