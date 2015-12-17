@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151217162201) do
+ActiveRecord::Schema.define(version: 20151217193419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "document_exports", force: :cascade do |t|
-    t.integer  "export_jid"
+    t.string   "export_jid"
     t.datetime "exported_at"
     t.integer  "repository_id",              null: false
     t.string   "file"
@@ -67,15 +67,15 @@ ActiveRecord::Schema.define(version: 20151217162201) do
   add_index "document_import_rows", ["document_import_id"], name: "index_document_import_rows_on_document_import_id", using: :btree
 
   create_table "document_imports", force: :cascade do |t|
-    t.integer  "prepare_jid"
-    t.integer  "import_jid"
+    t.string   "prepare_jid"
+    t.string   "import_jid"
     t.string   "file",          null: false
     t.integer  "repository_id", null: false
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.datetime "prepared_at"
     t.datetime "imported_at"
-    t.integer  "mappings_jid"
+    t.string   "mappings_jid"
     t.datetime "mapped_at"
   end
 
