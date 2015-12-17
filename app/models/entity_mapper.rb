@@ -41,7 +41,7 @@ class EntityMapper
   def create_mapping(mappable_inst, value, rank)
     @repository.value_mappings.create!(
       mappable: mappable_inst,
-      value: value,
+      value: normalize(value),
       rank: rank
     )
   end
