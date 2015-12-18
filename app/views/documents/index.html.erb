@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Documents</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @documents.each do |document| %>
+      <tr>
+        <td><%= document.title %></td>
+        <td><%= document.description %></td>
+        <td><%= document.grades.pluck(:name).join(',') %></td>
+        <td><%= document.publishers.pluck(:name).join(',') %></td>
+        <td><%= document.languages.pluck(:name).join(',') %></td>
+        <td><%= document.resource_types.pluck(:name).join(',') %></td>
+        <td><%= document.standards.pluck(:name).join(',') %></td>
+        <td><%= document.subjects.pluck(:name).join(',') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :documents, only: [:index]
+
   resources :document_exports, except: [:edit, :update] do
     get :download, on: :member
   end
