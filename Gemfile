@@ -8,6 +8,7 @@ gem 'dotenv', '~> 2.0', '>= 2.0.2'
 gem 'dotenv-rails', '~> 2.0', '>= 2.0.2', groups: [:development, :test]
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
+gem 'kaminari', '~> 0.16.3'
 gem 'pg', '~> 0.18.4'
 gem 'rails', '4.2.5'
 gem 'rolify', '~> 5.0'

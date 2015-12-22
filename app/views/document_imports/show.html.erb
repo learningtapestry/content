@@ -12,7 +12,7 @@
   </thead>
 
   <tbody>
-    <% @document_import.rows.each do |document_import_row| %>
+    <% @rows.each do |document_import_row| %>
       <tr>
         <td><%= document_import_row.content['url'] %></td>
         <td><%= document_import_row.content['title'] %></td>
@@ -21,4 +21,7 @@
     <% end %>
   </tbody>
 </table>
+
+<%= paginate @rows %>
+
 <%= link_to t('ui.publish'), publish_document_import_path(@document_import), method: :post, data: { confirm: 'Are you sure?' } %>

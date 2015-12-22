@@ -6,6 +6,7 @@ class DocumentImportsController < ApplicationController
   end
 
   def show
+    @rows = @document_import.rows.order(id: :asc).page(params[:page] || 1)
   end
 
   def new

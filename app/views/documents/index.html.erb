@@ -6,6 +6,13 @@
   <thead>
     <tr>
       <th>Title</th>
+      <th>Description</th>
+      <th>Grades</th>
+      <th>Publishers</th>
+      <th>Languages</th>
+      <th>Resource Types</th>
+      <th>Standards</th>
+      <th>Subjects</th>
     </tr>
   </thead>
 
@@ -23,4 +30,8 @@
       </tr>
     <% end %>
   </tbody>
+
 </table>
+
+<%= paginate @documents %>
+
