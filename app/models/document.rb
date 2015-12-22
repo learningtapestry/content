@@ -1,4 +1,6 @@
 class Document < ActiveRecord::Base
+  attr_accessor :skip_indexing
+
   belongs_to :document_status
   belongs_to :repository
   belongs_to :url
@@ -50,5 +52,32 @@ class Document < ActiveRecord::Base
   # 
   def publishers
     identities_of(:publisher)
+  end
+
+  #
+  # Searching
+  #
+  after_commit :index_document, on: [:create, :update], unless: :skip_indexing?
+  after_commit :delete_document, on: :destroy, unless: :skip_indexing?
+
+  def index_document
+    begin
+      search_repository.save(self)
+      update_column(:indexed_at, Time.now)
+    rescue Faraday::ConnectionFailed; end
+  end
+
+  def delete_document
+    begin
+      search_repository.delete(self)
+    rescue Faraday::ConnectionFailed; end
+  end
+
+  def search_repository
+    @search_repository ||= DocumentSearchRepository.new(repository: repository)
+  end
+
+  def skip_indexing?
+    !!skip_indexing
   end
 end

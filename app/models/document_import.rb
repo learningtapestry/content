@@ -90,12 +90,16 @@ class DocumentImport < ActiveRecord::Base
   # table is converted into a full-blown Document.
   # 
   def import
+    search_repository = DocumentSearchRepository.new(repository: repository)
+
     rows.find_each do |row|
       doc = row.to_document
       if !doc.save
         row.import_errors ||= {}
         row.import_errors[:document_errors] = doc.errors
         row.save
+      else
+        search_repository.save(doc)
       end
     end
 
