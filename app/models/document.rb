@@ -63,7 +63,6 @@ class Document < ActiveRecord::Base
   def index_document
     begin
       search_index.save(self)
-      update_column(:indexed_at, Time.now)
     rescue Faraday::ConnectionFailed; end
   end
 
@@ -79,5 +78,9 @@ class Document < ActiveRecord::Base
 
   def skip_indexing?
     !!skip_indexing
+  end
+
+  def indexed?
+    indexed_at.present?
   end
 end
