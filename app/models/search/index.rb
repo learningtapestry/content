@@ -58,6 +58,8 @@ module Search
     # Storage
 
     def save(document)
+      create_index!
+
       serialized = document.as_json(root: false)
 
       res = client.index(
@@ -67,17 +69,23 @@ module Search
         type:  'document'
       )
 
-      document.update_column(:indexed_at, Time.now)
-
-      res
+      if res['created']
+        document.update_column(:indexed_at, Time.now)
+        true
+      end
     end
 
     def delete(document)
-      client.delete(
+      res = client.delete(
         id:    document.id,
         index: index_name,
         type:  'document'
       )
+
+      if res['found']
+        document.update_column(:indexed_at, nil)
+        document
+      end
     end
   end
 end
