@@ -62,19 +62,19 @@ class Document < ActiveRecord::Base
 
   def index_document
     begin
-      search_repository.save(self)
+      search_index.save(self)
       update_column(:indexed_at, Time.now)
     rescue Faraday::ConnectionFailed; end
   end
 
   def delete_document
     begin
-      search_repository.delete(self)
+      search_index.delete(self)
     rescue Faraday::ConnectionFailed; end
   end
 
-  def search_repository
-    @search_repository ||= DocumentSearchRepository.new(repository: repository)
+  def search_index
+    repository.search_index
   end
 
   def skip_indexing?

@@ -46,8 +46,6 @@ class DocumentImportRow < ActiveRecord::Base
       |idt| idt.identity_type = IdentityType.publisher
     }
 
-    doc.skip_indexing = true
-
     doc
   end
 
