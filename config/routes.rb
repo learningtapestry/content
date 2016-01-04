@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   resources :document_imports, except: [:edit, :update] do
     post :publish, on: :member
   end
+  
+  resources :repositories
 
   devise_for :users
 
