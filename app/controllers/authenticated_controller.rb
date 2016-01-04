@@ -1,8 +1,8 @@
 class AuthenticatedController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_organization
+  helper_method :current_organization
 
-  def find_organization
+  def current_organization
     @organization ||= begin
       Organization.find(
         user_session[:organization_id] ||= current_user.organizations.first.id
