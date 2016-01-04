@@ -1,4 +1,4 @@
-class DocumentExportsController < ApplicationController
+class DocumentExportsController < AuthenticatedController
   before_action :set_document_export, only: [:show, :destroy, :download]
 
   CONTENT_TYPES = {

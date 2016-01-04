@@ -1,4 +1,4 @@
-class DocumentImportsController < ApplicationController
+class DocumentImportsController < AuthenticatedController
   before_action :set_document_import, only: [:show, :destroy, :publish]
 
   def index
