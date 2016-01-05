@@ -60,7 +60,7 @@ module Search
     def save(document)
       create_index!
 
-      serialized = document.as_json(root: false)
+      serialized = document.as_indexed_json
 
       res = client.index(
         id:    document.id,

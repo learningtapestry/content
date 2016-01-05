@@ -83,4 +83,10 @@ class Document < ActiveRecord::Base
   def indexed?
     indexed_at.present?
   end
+
+  def as_indexed_json
+    ActiveModel::SerializableResource
+      .new(self, serializer: DocumentIndexedSerializer)
+      .as_json
+  end
 end

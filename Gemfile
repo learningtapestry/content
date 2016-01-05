@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'active_model_serializers', '~> 0.10.0.rc3'
 gem 'cancan', '~> 1.6', '>= 1.6.10'
 gem 'carrierwave', '~> 0.10.0'
 gem 'closure_tree', '~> 6.0'
