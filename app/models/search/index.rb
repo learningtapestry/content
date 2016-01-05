@@ -37,6 +37,14 @@ module Search
       client.indices.delete(index: index_name)
     end
 
+    def update_index_mapping!(new_mappings)
+      client.indices.put_mapping(
+        index: index_name,
+        type: 'document',
+        body: new_mappings
+      )
+    end
+
     def update_index_settings!(new_settings)
       client.indices.close(index: index_name)
       client.indices.put_settings(index: index_name, body: new_settings)
@@ -48,7 +56,30 @@ module Search
     end
 
     def mappings
-      {}
+      {
+        document: {
+          properties: {
+            grades: {
+              type: :nested
+            },
+            identities: {
+              type: :nested
+            },
+            languages: {
+              type: :nested
+            },
+            resource_types: {
+              type: :nested
+            },
+            standards: {
+              type: :nested
+            },
+            subjects: {
+              type: :nested
+            }
+          }
+        }
+      }
     end
 
     def settings
