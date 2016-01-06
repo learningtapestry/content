@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151221050557) do
+ActiveRecord::Schema.define(version: 20160106131811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "api_keys", force: :cascade do |t|
+    t.integer  "organization_id",                 null: false
+    t.string   "key",                             null: false
+    t.boolean  "expired",         default: false, null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "api_keys", ["key"], name: "index_api_keys_on_key", using: :btree
+  add_index "api_keys", ["organization_id"], name: "index_api_keys_on_organization_id", using: :btree
 
   create_table "document_exports", force: :cascade do |t|
     t.string   "export_jid"
@@ -359,6 +370,7 @@ ActiveRecord::Schema.define(version: 20151221050557) do
   add_index "value_mappings", ["repository_id"], name: "index_value_mappings_on_repository_id", using: :btree
   add_index "value_mappings", ["value"], name: "index_value_mappings_on_value", using: :btree
 
+  add_foreign_key "api_keys", "organizations"
   add_foreign_key "document_exports", "repositories"
   add_foreign_key "document_grades", "documents"
   add_foreign_key "document_grades", "grades"
