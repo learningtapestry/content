@@ -13,14 +13,14 @@ module Search
     end
 
     test '#index_name is composed with repo ID and environment' do
-      index = Search::Index.new(repository: @khan_repo)
+      index = Index.new(repository: @khan_repo)
 
       assert_match(/#{@khan_repo.id}/, index.index_name)
       assert_match(/test/,             index.index_name)
     end
 
     test '#create_index! creates a new index' do
-      index = Search::Index.new(repository: @khan_repo)
+      index = Index.new(repository: @khan_repo)
 
       refute index.index_exists?
       index.create_index!
@@ -29,7 +29,7 @@ module Search
     end
 
     test '#delete_index! deletes an index' do
-      index = Search::Index.new(repository: @khan_repo)
+      index = Index.new(repository: @khan_repo)
 
       index.create_index!
       assert index.index_exists?
@@ -39,7 +39,7 @@ module Search
     end
 
     test '#save indexes a document' do
-      index = Search::Index.new(repository: @khan_repo)
+      index = Index.new(repository: @khan_repo)
       doc = documents(:khan_intro_algebra)
 
       assert index.save(doc)
@@ -47,7 +47,7 @@ module Search
     end
 
     test '#delete deletes a document from the index' do
-      index = Search::Index.new(repository: @khan_repo)
+      index = Index.new(repository: @khan_repo)
       doc = documents(:khan_intro_algebra)
       index.save(doc)
 
