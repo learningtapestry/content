@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount API::V1::Root => '/api/v1'
+
   resources :documents, only: [:index]
 
   resources :document_exports, except: [:edit, :update] do

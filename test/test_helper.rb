@@ -42,3 +42,16 @@ class ActionDispatch::IntegrationTest
     DatabaseCleaner.clean
   end
 end
+
+class APITest < ActiveSupport::TestCase
+  include Rack::Test::Methods
+  include SearchTest
+
+  def app
+    Rails.application
+  end
+
+  def set_api_key
+    header 'X-Api-Key', api_keys(:api_user).key
+  end
+end

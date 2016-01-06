@@ -12,3 +12,8 @@ empty:
   organization: lt
   name: Empty
   public: true
+
+api_docs:
+  organization: api_user
+  name: API Docs
+  public: true
