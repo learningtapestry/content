@@ -9,6 +9,8 @@ gem 'dotenv', '~> 2.0', '>= 2.0.2'
 gem 'dotenv-rails', '~> 2.0', '>= 2.0.2', groups: [:development, :test]
 gem 'elasticsearch', '~> 1.0', '>= 1.0.15'
 gem 'elasticsearch-dsl', '~> 0.1.2'
+gem 'grape', '~> 0.14.0'
+gem 'hashie-forbidden_attributes', '~> 0.1.1'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'kaminari', '~> 0.16.3'
