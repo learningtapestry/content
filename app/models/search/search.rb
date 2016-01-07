@@ -98,7 +98,7 @@ module Search
                     nested do
                       path path_name
                       query do
-                        match "#{path_name}.#{field_name}" => { query: options[param_name] }
+                        match "#{path_name}.#{field_name}" => { query: options[param_name], operator: 'and' }
                       end
                     end
                   end
