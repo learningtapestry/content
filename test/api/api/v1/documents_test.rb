@@ -57,6 +57,18 @@ class API::V1::DocumentsTest < APITest
     assert last_json.first['grades'].any? { |g| g['name'] == 'Grade 1' }
   end
 
+  test 'GET /api/documents/?identity_name=&identity_type finds docs with specified idt name & type' do
+    set_api_key
+    import_docs
+
+    get '/api/v1/documents', identity_name: 'algebraguys', identity_type: 'publisher'
+
+    assert_equal 1, last_json.size
+    assert last_json.first['identities'].any? { |g| 
+      g['type'] == 'publisher' && g['name'] == 'AlgebraGuys'
+    }
+  end
+
   def import_docs
     delete_indices
 

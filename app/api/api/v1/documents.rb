@@ -15,6 +15,7 @@ class API::V1::Documents < Grape::API
 
     optional :identity_id,        type: Integer
     optional :identity_name,      type: String
+    optional :identity_type,      type: String
 
     optional :language_id,        type: Integer
     optional :language_name,      type: String
