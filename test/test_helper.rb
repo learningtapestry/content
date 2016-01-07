@@ -6,17 +6,31 @@ require 'capybara/rails'
 require 'sidekiq/testing'
 require 'shoulda/context'
 require 'shoulda/matchers'
+require 'json'
 
 Capybara.javascript_driver = :poltergeist
 Warden.test_mode!
 Sidekiq::Testing.inline!
 
 module SearchTest
-  def delete_test_indices
-    es_url = ENV['ELASTICSEARCH_URL']
-    indices = JSON.parse(Faraday.new(:url => "#{es_url}/_aliases").get.body).keys
-    indices.select { |k| k.include?('__test') }.each do |index|
+  def es_url
+    ENV['ELASTICSEARCH_URL']
+  end
+
+  def es_indices
+    indices = JSON.parse(Faraday.new(:url => "#{es_url}/_aliases").get.body)
+    indices.keys.select { |k| k.include?('__test') }
+  end
+
+  def delete_indices
+    es_indices.each do |index|
       Faraday.new(:url => "#{es_url}/#{index}").delete
+    end
+  end
+
+  def refresh_indices
+    es_indices.each do |index|
+      Faraday.new(:url => "#{es_url}/#{index}/_refresh").get
     end
   end
 end
@@ -53,5 +67,9 @@ class APITest < ActiveSupport::TestCase
 
   def set_api_key
     header 'X-Api-Key', api_keys(:api_user).key
+  end
+
+  def last_json
+    JSON.parse(last_response.body)
   end
 end
