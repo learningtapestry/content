@@ -3,11 +3,8 @@ require 'test_helper'
 
 module Search
   class IndexTest < ActiveSupport::TestCase
-    include SearchTest
-
     setup do
       delete_test_indices
-
       @khan_repo = repositories(:khan)
       @lt = organizations(:lt)
     end
