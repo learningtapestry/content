@@ -44,16 +44,20 @@ module Search
       }
 
       query_paths = {
-        grade_name: ['grades', 'name'],
-        identity_name: ['identities', 'name'],
-        language_name: ['languages', 'name'],
-        resource_type_name: ['resource_types', 'name'],
-        standard_name: ['standards', 'name'],
-        subject_name: ['subjects', 'name']
+        grades: [['grade_name', 'name']],
+        identities: [
+          ['identity_name', 'name'],
+          ['identity_type', 'type']
+        ],
+        languages: [['language_name', 'name']],
+        resource_types: [['resource_type_name', 'name']],
+        standards: [['standard_name', 'name']],
+        subjects: [['subject_name', 'name']]
       }
 
       filters = filter_paths.keys.select { |f| options[f].present? }
-      queries = query_paths.keys.select { |q| options[q].present? }
+      queries = query_paths.keys
+        .select { |k| query_paths[k].any? { |(p,f)| options[p].present? } }
 
       definition = dsl do
         size limit
@@ -92,13 +96,17 @@ module Search
                   should { match description: { query: description, operator: 'and' } }
                 end
 
-                queries.each do |param_name|
-                  path_name, field_name = query_paths[param_name]
+                queries.each do |path_name|
                   should do
                     nested do
                       path path_name
                       query do
-                        match "#{path_name}.#{field_name}" => { query: options[param_name], operator: 'and' }
+                        bool do
+                          query_paths[path_name].each do |(param_name, field_name)|
+                            next unless options[param_name].present?
+                            must { match "#{path_name}.#{field_name}" => { query: options[param_name], operator: 'and' } }
+                          end
+                        end
                       end
                     end
                   end
