@@ -21,9 +21,9 @@ echo 'eval "$(rbenv init -)"' >> /home/vagrant/.bashrc
 # setup ruby-build
 echo "-- SETUP RUBY-BUILD"
 git clone git://github.com/sstephenson/ruby-build.git /home/vagrant/.rbenv/plugins/ruby-build
-source /home/vagrant/.bashrc
 
 # setup ruby
+source /home/vagrant/.bashrc
 echo "-- SETUP RUBY"
 rbenv install 2.1.5
 rbenv global 2.1.5
