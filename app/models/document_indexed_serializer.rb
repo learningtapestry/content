@@ -1,4 +1,6 @@
 class DocumentIndexedSerializer < ActiveModel::Serializer
+  self.root = false
+
   class GradeSerializer < ActiveModel::Serializer
     attributes :id, :name
   end
@@ -38,13 +40,13 @@ class DocumentIndexedSerializer < ActiveModel::Serializer
   attributes :id, :title, :description
 
   has_many :grades,              serializer: GradeSerializer
-  has_many :document_identities, serializer: DocumentIdentitySerializer, key: :identities
+  has_many :document_identities, serializer: DocumentIdentitySerializer, root: :identities
   has_many :languages,           serializer: LanguageSerializer
   has_many :resource_types,      serializer: ResourceTypeSerializer
   has_many :standards,           serializer: StandardSerializer
   has_many :subjects,            serializer: SubjectSerializer
 
-  belongs_to :document_status, key: :status
+  has_one  :document_status, key: :status
 
   def document_status
     object.document_status.value

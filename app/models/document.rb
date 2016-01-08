@@ -85,8 +85,6 @@ class Document < ActiveRecord::Base
   end
 
   def as_indexed_json
-    ActiveModel::SerializableResource
-      .new(self, serializer: DocumentIndexedSerializer)
-      .as_json
+    DocumentIndexedSerializer.new(self).as_json
   end
 end
