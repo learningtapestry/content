@@ -23,11 +23,12 @@ echo "-- SETUP RUBY-BUILD"
 git clone git://github.com/sstephenson/ruby-build.git /home/vagrant/.rbenv/plugins/ruby-build
 
 # setup ruby
-source /home/vagrant/.bashrc
 echo "-- SETUP RUBY"
+source /home/vagrant/.bashrc
 rbenv install 2.1.5
 rbenv global 2.1.5
 rbenv rehash
+gem install bundler
 
 # setup redis
 echo "-- SETUP REDIS"
