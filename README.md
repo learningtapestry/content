@@ -20,7 +20,17 @@ This is a standard Rails app:
 2. Run `bundle`
 3. Run tests with `rake test`
 
+## Setup using Vagrant
+
+1. install VirtualBox
+2. install Vagrant
+3. `vagrant up`
+4. `vagrant ssh`
+5. inside the vm: `bash /vagrant/bootstrap.sh`
+6. setup `.env` (copy and change `.env.template`)
+7. run `bundle` and `rake` tasks normally
+
 ## Copyright
 
-(c) 2015/2016 - Learning Tapestry 
+(c) 2015/2016 - Learning Tapestry
 Released under Apache 2.0 license, http://www.apache.org/licenses/LICENSE-2.0
