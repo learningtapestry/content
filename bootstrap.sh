@@ -54,7 +54,6 @@ sudo -u postgres createuser -r -s -d vagrant
 sudo -u postgres createdb vagrant -O vagrant
 sudo -u postgres createdb content_development -O vagrant
 sudo -u postgres psql -c "ALTER USER vagrant WITH PASSWORD 'vagrant';"
-psql -d template1 -c 'create extension hstore;'
 
 echo "-- LINK PROJECT"
 cd /home/vagrant/
