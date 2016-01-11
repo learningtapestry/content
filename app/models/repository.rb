@@ -1,10 +1,13 @@
 class Repository < ActiveRecord::Base
   after_commit :create_search_index!, on: :create
+  after_commit :delete_index,         on: :destroy
 
   belongs_to :organization
   
-  has_many :documents
-  has_many :value_mappings
+  has_many :document_exports, dependent: :destroy,    autosave: true
+  has_many :document_imports, dependent: :destroy,    autosave: true
+  has_many :documents,        dependent: :destroy,    autosave: true
+  has_many :value_mappings,   dependent: :delete_all, autosave: true
 
   def search_index
     @search_index ||= Search::Index.new(repository: self)
@@ -13,5 +16,13 @@ class Repository < ActiveRecord::Base
   def create_search_index!
     search_index.create_index!
     search_index
+  end
+
+  def document_count
+    documents.count
+  end
+
+  def delete_index
+    search_index.delete_index!
   end
 end

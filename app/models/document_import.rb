@@ -10,7 +10,7 @@ class DocumentImport < ActiveRecord::Base
 
   belongs_to :repository
 
-  has_many :document_import_rows, dependent: :destroy
+  has_many :document_import_rows, dependent: :delete_all
   alias_attribute :rows, :document_import_rows
 
   validates :file, presence: true

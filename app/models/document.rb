@@ -5,12 +5,12 @@ class Document < ActiveRecord::Base
   belongs_to :repository
   belongs_to :url
 
-  has_many :document_grades,         dependent: :destroy, autosave: true
-  has_many :document_identities,     dependent: :destroy, autosave: true
-  has_many :document_languages,      dependent: :destroy, autosave: true
-  has_many :document_resource_types, dependent: :destroy, autosave: true
-  has_many :document_standards,      dependent: :destroy, autosave: true
-  has_many :document_subjects,       dependent: :destroy, autosave: true
+  has_many :document_grades,         dependent: :delete_all, autosave: true
+  has_many :document_identities,     dependent: :delete_all, autosave: true
+  has_many :document_languages,      dependent: :delete_all, autosave: true
+  has_many :document_resource_types, dependent: :delete_all, autosave: true
+  has_many :document_standards,      dependent: :delete_all, autosave: true
+  has_many :document_subjects,       dependent: :delete_all, autosave: true
 
   has_many :identities,     through: :document_identities
   has_many :grades,         through: :document_grades
@@ -77,7 +77,7 @@ class Document < ActiveRecord::Base
   end
 
   def skip_indexing?
-    !!skip_indexing
+    !!skip_indexing || !search_index.index_exists?
   end
 
   def indexed?

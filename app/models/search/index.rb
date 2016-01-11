@@ -114,7 +114,7 @@ module Search
       )
 
       if res['found']
-        document.update_column(:indexed_at, nil)
+        document.update_column(:indexed_at, nil) if Document.exists?(document.id)
         document
       end
     end
