@@ -15,4 +15,6 @@ module API::V1::Helpers
   def declared_params
     @declared_params ||= declared(params)
   end
+
+  alias_method :dparams, :declared_params
 end

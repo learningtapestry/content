@@ -1,4 +1,6 @@
-class API::V1::Documents < Grape::API
+require 'search/search'
+
+class API::V1::Search < Grape::API
   helpers API::V1::Helpers
 
   params do
@@ -28,10 +30,19 @@ class API::V1::Documents < Grape::API
 
     optional :subject_id,         type: Integer
     optional :subject_name,       type: String
+
+    optional :repository_ids,     type: Array[Integer]
   end
 
   get '/' do
-    results = current_organization.search.search(declared_params)
+    repos = current_organization.repositories
+
+    if dparams.repository_ids.present?
+      repos = repos.where(id: dparams.repository_ids)
+      raise ActiveRecord::RecordNotFound if repos.empty?
+    end
+
+    results = Search::Search.new(repos.search_indices).search(dparams)
     header 'X-Total', results.total_hits.to_s
     results.sources
   end

@@ -8,6 +8,6 @@ class API::V1::Root < Grape::API
     error!("401 Unauthorized", 401) unless current_organization
   end
 
-  mount API::V1::Documents => '/documents'
   mount API::V1::Repositories => '/repositories'
+  mount API::V1::Search => '/search'
 end

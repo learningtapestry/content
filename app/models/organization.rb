@@ -2,7 +2,13 @@ class Organization < ActiveRecord::Base
   resourcify # Allows user roles to be scoped per Organization (using gem rolify)
 
   has_many :api_keys
-  has_many :repositories
+
+  has_many :repositories do
+    def search_indices
+      map(&:search_index)
+    end
+  end
+
   has_many :roles, as: :resource
 
   def create_api_key
@@ -12,7 +18,7 @@ class Organization < ActiveRecord::Base
     api_key
   end
 
-  def search
+  def new_search
     @search ||= Search::Search.new(*repositories.map(&:search_index))
   end
 end

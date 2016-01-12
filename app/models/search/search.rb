@@ -26,8 +26,8 @@ module Search
       end
     end
 
-    def initialize(*indices)
-      self.indices = indices
+    def initialize(indices)
+      self.indices = Array.wrap(indices)
     end
 
     def search(options = {})

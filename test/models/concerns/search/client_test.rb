@@ -4,7 +4,7 @@ require 'test_helper'
 module Search
   class ClientTest < ActiveSupport::TestCase
     class IncludesSearchClient
-      include Search::Client
+      include Client
     end
 
     test '#client, .client return an ElasticSearch client' do
