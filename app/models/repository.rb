@@ -9,6 +9,10 @@ class Repository < ActiveRecord::Base
   has_many :documents,        dependent: :destroy,    autosave: true
   has_many :value_mappings,   dependent: :delete_all, autosave: true
 
+  def self.where_name(name)
+    where('name ilike ?', "%#{name}%")
+  end
+
   def search_index
     @search_index ||= Search::Index.new(repository: self)
   end

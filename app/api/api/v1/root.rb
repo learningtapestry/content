@@ -9,4 +9,5 @@ class API::V1::Root < Grape::API
   end
 
   mount API::V1::Documents => '/documents'
+  mount API::V1::Repositories => '/repositories'
 end
