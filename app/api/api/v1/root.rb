@@ -1,5 +1,6 @@
 class API::V1::Root < Grape::API
   format :json
+  formatter :json, Grape::Formatter::ActiveModelSerializers
 
   helpers API::V1::Helpers
   
