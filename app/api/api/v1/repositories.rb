@@ -23,6 +23,7 @@ class API::V1::Repositories < Grape::API
       filtered_repos = filtered_repos.where_name(declared_params.name)
     end
 
+    x_total filtered_repos.count
     filtered_repos.page(declared_params.page).per(declared_params.limit)
   end
 

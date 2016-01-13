@@ -43,7 +43,8 @@ class API::V1::Search < Grape::API
     end
 
     results = Search::Search.new(repos.search_indices).search(dparams)
-    header 'X-Total', results.total_hits.to_s
+    
+    x_total results.total_hits
     results.sources
   end
 end

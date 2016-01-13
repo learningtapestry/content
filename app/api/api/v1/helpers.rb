@@ -17,4 +17,8 @@ module API::V1::Helpers
   end
 
   alias_method :dparams, :declared_params
+
+  def x_total(total)
+    header 'X-Total', total.to_s
+  end
 end
