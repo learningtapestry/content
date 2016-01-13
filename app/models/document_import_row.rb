@@ -18,13 +18,13 @@ class DocumentImportRow < ActiveRecord::Base
 
   def map_content
     self.mappings = {
-      grades:         find_candidates(GradeMapper, content['grades']),
-      languages:      find_candidates(LanguageMapper, content['languages']),
-      publishers:     find_candidates(IdentityMapper, content['publishers']),
-      resource_types: find_candidates(ResourceTypeMapper, content['resource_types']),
-      subjects:       find_candidates(SubjectMapper, content['subjects']),
-      standards:      find_candidates(StandardMapper, content['standards']),
-      url:            find_candidates(UrlMapper, content['url'])
+      grades:         find_candidates(Grade,        content['grades']),
+      languages:      find_candidates(Language,     content['languages']),
+      publishers:     find_candidates(Identity,     content['publishers']),
+      resource_types: find_candidates(ResourceType, content['resource_types']),
+      subjects:       find_candidates(Subject,      content['subjects']),
+      standards:      find_candidates(Standard,     content['standards']),
+      url:            find_candidates(Url,          content['url'])
     }
   end
 
@@ -71,11 +71,10 @@ class DocumentImportRow < ActiveRecord::Base
 
   # Mapping
 
-  def find_candidates(mapper_class, column)
+  def find_candidates(klass, column)
     candidates = {}
-    mapper = mapper_class.new(repository: repository)
     Array.wrap(column).each do |val|
-      candidates[val] = mapper.find_mappings(val).map(&:id)
+      candidates[val] = klass.reconcile(repository, val).map(&:id)
     end
     candidates
   end

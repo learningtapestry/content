@@ -7,4 +7,9 @@ class Url < ActiveRecord::Base
     node = find_by(url: url)
     node.root
   end
+
+  include Reconcile
+
+  reconcile_by ->(repo, val) { where(url: val) }
+  reconcile_create ->(repo, val) { create!(url: val) }
 end
