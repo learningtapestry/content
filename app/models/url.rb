@@ -10,6 +10,6 @@ class Url < ActiveRecord::Base
 
   include Reconcile
 
-  reconcile_by ->(repo, val) { where(url: val) }
-  reconcile_create ->(repo, val) { create!(url: val) }
+  reconcile_by :url
+  reconcile_create ->(context) { create!(url: context[:value]) }
 end

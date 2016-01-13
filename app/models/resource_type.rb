@@ -8,8 +8,8 @@ class ResourceType < ActiveRecord::Base
 
   include Reconcile
 
-  reconcile_by ->(repo, val) { where(name: val) }
-  reconcile_create ->(repo, val) { 
-    create!(name: val, review_status: ReviewStatus.not_reviewed)
+  reconcile_by :name
+  reconcile_create ->(context) { 
+    create!(name: context[:value], review_status: ReviewStatus.not_reviewed)
   }
 end

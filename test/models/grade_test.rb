@@ -7,14 +7,14 @@ class GradeTest < ActiveSupport::TestCase
 
   test '.reconcile creates a new grade' do
     assert_difference 'Grade.count', +1 do
-      grade = Grade.reconcile(@repo, 'test grade')[0]
+      grade = Grade.reconcile(repository: @repo, value: 'test grade')[0]
       assert_equal 'test grade', grade.name
     end
   end
 
   test '.reconcile finds existing grade' do
     assert_no_difference 'Grade.count' do
-      grade = Grade.reconcile(@repo, 'grade 1')[0]
+      grade = Grade.reconcile(repository: @repo, value: 'grade 1')[0]
       assert_equal 'grade 1', grade.name
     end
   end
@@ -22,13 +22,13 @@ class GradeTest < ActiveSupport::TestCase
   test '.reconcile reuses grade mapping' do
     assert_difference 'ValueMapping.count', +1 do
       assert_no_difference 'Grade.count' do
-        grade = Grade.reconcile(@repo, 'grade 1')[0]
+        grade = Grade.reconcile(repository: @repo, value: 'grade 1')[0]
         assert_equal 'grade 1', grade.name
       end
     end
 
     assert_no_difference 'ValueMapping.count' do
-      Grade.reconcile(@repo, 'grade 1')
+      Grade.reconcile(repository: @repo, value: 'grade 1')
     end
   end
 end

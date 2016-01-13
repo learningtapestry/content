@@ -14,7 +14,7 @@ class UrlTest < ActiveSupport::TestCase
 
   test '.reconcile creates a new url' do
     assert_difference 'Url.count', +1 do
-      url = Url.reconcile(@repo, 'http://www.test.com')[0]
+      url = Url.reconcile(repository: @repo, value: 'http://www.test.com')[0]
       assert_equal 'http://www.test.com', url.url
     end
   end
@@ -23,7 +23,7 @@ class UrlTest < ActiveSupport::TestCase
     khan = urls(:khan_intro_algebra).url
 
     assert_no_difference 'Url.count' do
-      url = Url.reconcile(@repo, khan)[0]
+      url = Url.reconcile(repository: @repo, value: khan)[0]
       assert_equal khan, url.url
     end
   end
@@ -33,13 +33,13 @@ class UrlTest < ActiveSupport::TestCase
 
     assert_difference 'ValueMapping.count', +1 do
       assert_no_difference 'Url.count' do
-        url = Url.reconcile(@repo, khan)[0]
+        url = Url.reconcile(repository: @repo, value: khan)[0]
         assert_equal khan, url.url
       end
     end
 
     assert_no_difference 'ValueMapping.count' do
-      Url.reconcile(@repo, khan)
+      Url.reconcile(repository: @repo, value: khan)
     end
   end
 end

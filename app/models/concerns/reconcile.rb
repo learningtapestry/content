@@ -10,38 +10,42 @@ module Reconcile
       @creator = creator
     end
 
-    def reconcile(repository, value)
-      mappables = repository
+    def reconcile(context)
+      repo       = context[:repository]
+      value      = context[:value]
+      normalized = normalize(value)
+
+      reconciled = repo
         .value_mappings
         .where(mappable_type: @klass)
-        .where(value: normalize(value))
+        .where(value: normalized)
         .order(rank: :desc)
         .map(&:mappable)
 
-      if mappables.empty?
-        unmapped = @klass.instance_exec(repository, value, &@finder)
+      if reconciled.empty?
+        found = @klass.instance_exec(context, &@finder)
 
-        if unmapped.any?
-          unmapped.each do |u|
-            repository.value_mappings.create!(
-              mappable: u,
-              value: normalize(value),
+        if found.any?
+          found.each do |f|
+            repo.value_mappings.create!(
+              mappable: f,
+              value: normalized,
               rank: 1
             )
           end
-          mappables = unmapped
+          reconciled = found
         else
-          new_mappable = @klass.instance_exec(repository, value, &@creator)
-          repository.value_mappings.create!(
-            mappable: new_mappable,
-            value: normalize(value),
+          created = @klass.instance_exec(context, &@creator)
+          repo.value_mappings.create!(
+            mappable: created,
+            value: normalized,
             rank: 1
           )
-          mappables = [new_mappable]
+          reconciled = [created]
         end
       end
 
-      mappables
+      reconciled
     end
 
     def normalize(value)
@@ -51,11 +55,11 @@ module Reconcile
   end
 
   included do
-    def self.reconcile_by(field)
-      if field.respond_to? :call
-        @reconcile_by = field
+    def self.reconcile_by(field_or_callable)
+      if field_or_callable.respond_to? :call
+        @reconcile_by = field_or_callable
       else
-        @reconcile_by = ->(value) { where(field => value) }
+        @reconcile_by = ->(context) { where(field_or_callable => context[:value]) }
       end
     end
 
@@ -63,9 +67,17 @@ module Reconcile
       @reconcile_create = creator
     end
 
-    def self.reconcile(repo, value)
+    def self.reconcile(context)
+      unless context[:repository].present?
+        raise ArgumentError.new('Context requires a repository')
+      end
+        
+      unless context[:value].present?
+        raise ArgumentError.new('Context requires a value')
+      end
+
       reconciler = Reconciler.new(self, finder: @reconcile_by, creator: @reconcile_create)
-      reconciler.reconcile(repo, value)
+      reconciler.reconcile(context)
     end
   end
 end

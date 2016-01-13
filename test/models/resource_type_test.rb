@@ -7,14 +7,14 @@ class ResourceTypeTest < ActiveSupport::TestCase
 
   test '.reconcile creates a new resource_type' do
     assert_difference 'ResourceType.count', +1 do
-      resource_type = ResourceType.reconcile(@repo, 'test resource_type')[0]
+      resource_type = ResourceType.reconcile(repository: @repo, value: 'test resource_type')[0]
       assert_equal 'test resource_type', resource_type.name
     end
   end
 
   test '.reconcile finds existing resource_type' do
     assert_no_difference 'ResourceType.count' do
-      resource_type = ResourceType.reconcile(@repo, 'lesson')[0]
+      resource_type = ResourceType.reconcile(repository: @repo, value: 'lesson')[0]
       assert_equal 'lesson', resource_type.name
     end
   end
@@ -22,13 +22,13 @@ class ResourceTypeTest < ActiveSupport::TestCase
   test '.reconcile reuses resource_type mapping' do
     assert_difference 'ValueMapping.count', +1 do
       assert_no_difference 'ResourceType.count' do
-        resource_type = ResourceType.reconcile(@repo, 'lesson')[0]
+        resource_type = ResourceType.reconcile(repository: @repo, value: 'lesson')[0]
         assert_equal 'lesson', resource_type.name
       end
     end
 
     assert_no_difference 'ValueMapping.count' do
-      ResourceType.reconcile(@repo, 'lesson')
+      ResourceType.reconcile(repository: @repo, value: 'lesson')
     end
   end
 end

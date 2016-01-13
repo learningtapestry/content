@@ -66,7 +66,7 @@ class DocumentImportRow < ActiveRecord::Base
   end
 
   def prepare_content(val)
-    val.present? && val.strip
+    (val.present? && val.strip) || nil
   end
 
   # Mapping
@@ -74,7 +74,8 @@ class DocumentImportRow < ActiveRecord::Base
   def find_candidates(klass, column)
     candidates = {}
     Array.wrap(column).each do |val|
-      candidates[val] = klass.reconcile(repository, val).map(&:id)
+      context = { value: val, repository: repository }
+      candidates[val] = klass.reconcile(context).map(&:id)
     end
     candidates
   end
