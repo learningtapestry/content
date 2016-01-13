@@ -35,8 +35,7 @@ class DocumentImport < ActiveRecord::Base
   end
 
   def check_header(header)
-    to_be_checked = header.select { |h| h.present? }.map { |h| h.strip.downcase }.sort
-    to_be_checked == HEADER.sort
+    HEADER.all? { |h| header.include?(h) }
   end
 
   # Preparing
