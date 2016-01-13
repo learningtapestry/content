@@ -138,6 +138,7 @@ GEM
     hashie (3.4.3)
     hashie-forbidden_attributes (0.1.1)
       hashie (>= 3.0)
+    highline (1.7.8)
     i18n (0.7.0)
     ice_nine (0.11.1)
     jbuilder (2.3.2)
@@ -315,6 +316,7 @@ DEPENDENCIES
   guard (~> 2.13)
   guard-minitest (~> 2.4, >= 2.4.4)
   hashie-forbidden_attributes (~> 0.1.1)
+  highline (~> 1.7, >= 1.7.8)
   jbuilder (~> 2.0)
   jquery-rails
   kaminari (~> 0.16.3)
