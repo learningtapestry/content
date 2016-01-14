@@ -37,6 +37,11 @@ module Search
       client.indices.delete(index: index_name)
     end
 
+    def reset_index!
+      delete_index!
+      create_index!
+    end
+
     def update_index_mapping!(new_mappings)
       client.indices.put_mapping(
         index: index_name,
