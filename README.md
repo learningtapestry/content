@@ -26,9 +26,11 @@ This is a standard Rails app:
 2. install Vagrant
 3. `vagrant up`
 4. `vagrant ssh`
-5. inside the vm: `bash /vagrant/bootstrap.sh`
+5. inside the vm: `bash /vagrant/scripts/bootstrap.sh`
 6. setup `.env` (copy and change `.env.template`)
 7. run `bundle` and `rake` tasks normally
+
+8. to install OpenRefine, just run: `sh scripts/open_refine.sh`, then run with: `refine`
 
 ## Copyright
 

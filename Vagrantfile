@@ -35,4 +35,7 @@ Vagrant.configure(2) do |config|
 
   # ElasticSearch
   config.vm.network :forwarded_port, guest: 9200, host: 9200
+
+  # OpenRefine
+  config.vm.network :forwarded_port, guest: 3333, host: 3333
 end
