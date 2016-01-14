@@ -10,4 +10,5 @@ class Identity < ActiveRecord::Base
   reconcile_create ->(context) { 
     create!(name: context[:value], review_status: ReviewStatus.not_reviewed)
   }
+  reconcile_normalize :default
 end

@@ -12,4 +12,5 @@ class Url < ActiveRecord::Base
 
   reconcile_by :url
   reconcile_create ->(context) { create!(url: context[:value]) }
+  reconcile_normalize :skip
 end

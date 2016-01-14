@@ -4,16 +4,16 @@ module Reconcile
   extend ActiveSupport::Concern
 
   class Reconciler
-    def initialize(klass, finder:, creator:)
+    def initialize(klass, finder:, creator:, normalizer:)
       @klass = klass
       @finder = finder
       @creator = creator
+      @normalizer = normalizer
     end
 
     def reconcile(context)
       repo       = context[:repository]
-      value      = context[:value]
-      normalized = normalize(value)
+      normalized = @klass.instance_exec(context, &@normalizer)
 
       reconciled = repo
         .value_mappings
@@ -47,24 +47,26 @@ module Reconcile
 
       reconciled
     end
-
-    def normalize(value)
-      value = value.to_s
-      value.strip.gsub(/\s+/,'_').downcase
-    end
   end
 
   included do
     def self.reconcile_by(field_or_callable)
-      if field_or_callable.respond_to? :call
-        @reconcile_by = field_or_callable
-      else
-        @reconcile_by = ->(context) { where(field_or_callable => context[:value]) }
-      end
+      @reconcile_by = field_or_callable.respond_to?(:call) ? field_or_callable :
+        ->(context) { where(field_or_callable => context[:value]) }
     end
 
     def self.reconcile_create(creator)
       @reconcile_create = creator
+    end
+
+    def self.reconcile_normalize(normalizer_or_callable)
+      if normalizer_or_callable.respond_to?(:call)
+        @reconcile_normalize = normalizer_or_callable
+      elsif normalizer_or_callable == :default
+        @reconcile_normalize = ->(context) { context[:value].to_s.strip.gsub(/\s+/,'_').downcase }
+      elsif normalizer_or_callable == :skip
+        @reconcile_normalize = ->(context) { context[:value].to_s }
+      end
     end
 
     def self.reconcile(context)
@@ -76,7 +78,24 @@ module Reconcile
         raise ArgumentError.new('Context requires a value')
       end
 
-      reconciler = Reconciler.new(self, finder: @reconcile_by, creator: @reconcile_create)
+      unless @reconcile_by.present? 
+        raise ArgumentError.new('Reconcile requires a reconcile_by finder')
+      end
+
+      unless @reconcile_create.present? 
+        raise ArgumentError.new('Reconcile requires a reconcile_create creator')
+      end
+
+      unless @reconcile_normalize.present? 
+        raise ArgumentError.new('Reconcile requires a reconcile_normalize normalizer')
+      end
+
+      reconciler = Reconciler.new(self,
+        finder: @reconcile_by,
+        creator: @reconcile_create,
+        normalizer: @reconcile_normalize
+      )
+
       reconciler.reconcile(context)
     end
   end
