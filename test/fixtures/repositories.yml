@@ -17,3 +17,8 @@ api_docs:
   organization: api_user
   name: API Docs
   public: true
+
+has_3_docs:
+  organization: lt
+  name: Has3Docs
+  public: true

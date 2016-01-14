@@ -51,5 +51,16 @@ module Search
       assert index.delete(doc)
       refute doc.indexed?
     end
+
+    test '#bulk_index indexes in bulk' do
+      repo = repositories(:has_3_docs)
+      repo.documents.update_all(indexed_at: nil)
+
+      index = Index.new(repository: repo)
+      index.bulk_index(repo.documents)
+      repo.documents.reload
+
+      assert repo.documents.all? { |doc| doc.indexed? }
+    end
   end
 end

@@ -111,6 +111,8 @@ module Search
       end
     end
 
+    alias_method :index, :save
+
     def delete(document)
       res = client.delete(
         id:    document.id,
@@ -122,6 +124,37 @@ module Search
         document.update_column(:indexed_at, nil) if Document.exists?(document.id)
         document
       end
+    end
+
+    def bulk_index(documents)
+      create_index!
+      
+      res = client.bulk(
+        body: documents.map { |doc|
+          {
+            index: {
+              _id: doc.id,
+              _index: index_name,
+              _type: 'document',
+              data: doc.as_indexed_json
+            }
+          }
+        }
+      )
+
+      should_update_ids = []
+      res['items'].each do |item|
+        status = item['index']['status'].to_i
+        if status == 200 || status == 201
+          should_update_ids << item['index']['_id']
+        end
+      end
+
+      Document.where(id: should_update_ids).update_all(
+        indexed_at: Document.new._current_time_from_proper_timezone
+      )
+
+      should_update_ids
     end
   end
 end

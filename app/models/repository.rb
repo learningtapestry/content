@@ -29,4 +29,9 @@ class Repository < ActiveRecord::Base
   def delete_index
     search_index.delete_index!
   end
+
+  def index_all_documents(skip_indexed: true)
+    set = skip_indexed ? documents.where(indexed_at: nil) : documents
+    set.find_in_batches { |docs| search_index.bulk_index(docs) }
+  end
 end

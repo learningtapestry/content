@@ -127,6 +127,8 @@ class API::V1::SearchTest < APITest
       file: File.new(File.join(fixture_path, 'document_import', 'api_docs.csv'))
     ).process
 
+    repositories(:api_docs).index_all_documents
+
     refresh_indices
   end
 end

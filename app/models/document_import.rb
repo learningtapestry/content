@@ -97,8 +97,6 @@ class DocumentImport < ActiveRecord::Base
         row.import_errors ||= {}
         row.import_errors[:document_errors] = doc.errors
         row.save
-      else
-        repository.search_index.save(doc)
       end
     end
 

@@ -8,5 +8,7 @@ class DocumentImportWorker
     
     document_import.update_attributes(import_jid: jid)
     document_import.import
+
+    RepositoryIndexAllDocumentsWorker.perform_async(document_import.repository.id)
   end
 end

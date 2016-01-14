@@ -9,3 +9,21 @@ published_blank_slate:
   title: Blank Slate
   repository: blank_slates
   document_status: published
+
+whatever_1:
+  url: whatever_1
+  title: Whatever 1
+  repository: has_3_docs
+  document_status: published
+
+whatever_2:
+  url: whatever_2
+  title: Whatever 2
+  repository: has_3_docs
+  document_status: published
+
+whatever_3:
+  url: whatever_3
+  title: Whatever 3
+  repository: has_3_docs
+  document_status: published

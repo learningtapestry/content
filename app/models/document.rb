@@ -87,4 +87,11 @@ class Document < ActiveRecord::Base
   def as_indexed_json
     DocumentIndexedSerializer.new(self).as_json
   end
+
+  # This is just a handy method to get the correct timezone for doing
+  # manual .touch operations in bulk.
+  def _current_time_from_proper_timezone
+    current_time_from_proper_timezone
+  end
+
 end
