@@ -5,34 +5,13 @@ module Search
 
     attr_accessor :indices
 
-    class Results
-      attr_reader :results, :sources, :total_hits
-
-      def initialize(results)
-        @results = results
-        @total_hits = results['hits']['total']
-      end
-
-      def ids
-        @ids ||= results['hits']['hits'].map { |h| h['_id'] }
-      end
-
-      def records
-        Document.find(ids)
-      end
-
-      def sources
-        results['hits']['hits'].map { |h| h['_source'] }
-      end
-    end
-
     def initialize(indices)
       self.indices = Array.wrap(indices)
     end
 
     def search(options = {})
-      limit = options[:limit]
-      page = options[:page]
+      limit = options[:limit] || 100
+      page = options[:page] || 1
 
       filter_paths = {
         grade_id: ['grades', 'id'],
@@ -122,7 +101,7 @@ module Search
         end
       end
 
-      Search::Results.new(client.search(
+      ::Search::Results.new(client.search(
         index: index_names,
         body: definition,
         type: 'document'
