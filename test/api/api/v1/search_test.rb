@@ -36,12 +36,12 @@ class API::V1::SearchTest < APITest
     assert_match (/algebra/i), last_json.first['description']
   end
 
-  test 'GET /api/search/?grade_id= finds docs with specified grade' do
+  test 'GET /api/search/?grade_ids= finds docs with specified grade' do
     set_api_key
     import_docs
     grade = repositories(:api_docs).documents.first.grades.first
 
-    get '/api/v1/search', grade_id: grade.id
+    get '/api/v1/search', grade_ids: [grade.id]
 
     assert_equal 1, last_json.size
     assert last_json.first['grades'].any? { |g| g['id'] == grade.id }

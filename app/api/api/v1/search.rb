@@ -12,23 +12,23 @@ class API::V1::Search < Grape::API
 
     optional :status,             type: String
 
-    optional :grade_id,           type: Integer
+    optional :grade_ids,          type: Array[Integer]
     optional :grade_name,         type: String
 
-    optional :identity_id,        type: Integer
+    optional :identity_ids,       type: Array[Integer]
     optional :identity_name,      type: String
     optional :identity_type,      type: String
 
-    optional :language_id,        type: Integer
+    optional :language_ids,       type: Array[Integer]
     optional :language_name,      type: String
 
-    optional :resource_type_id,   type: Integer
+    optional :resource_type_ids,  type: Array[Integer]
     optional :resource_type_name, type: String
 
-    optional :standard_id,        type: Integer
+    optional :standard_ids,       type: Array[Integer]
     optional :standard_name,      type: String
 
-    optional :subject_id,         type: Integer
+    optional :subject_ids,        type: Array[Integer]
     optional :subject_name,       type: String
 
     optional :repository_ids,     type: Array[Integer]

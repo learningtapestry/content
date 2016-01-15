@@ -14,12 +14,12 @@ module Search
       page = options[:page] || 1
 
       filter_paths = {
-        grade_id: ['grades', 'id'],
-        identity_id: ['identities', 'id'],
-        language_id: ['languages', 'id'],
-        resource_type_id: ['resource_types', 'id'],
-        standard_id: ['standards', 'id'],
-        subject_id: ['subjects', 'id']
+        grade_ids: ['grades', 'id'],
+        identity_ids: ['identities', 'id'],
+        language_ids: ['languages', 'id'],
+        resource_type_ids: ['resource_types', 'id'],
+        standard_ids: ['standards', 'id'],
+        subject_ids: ['subjects', 'id']
       }
 
       query_paths = {
@@ -48,11 +48,13 @@ module Search
               bool do
                 filters.each do |param_name|
                   path_name, field_name = filter_paths[param_name]
-                  must do
-                    nested do
-                      path path_name
-                      filter do
-                        term "#{path_name}.#{field_name}" => options[param_name]
+                  options[param_name].each do |param_value|
+                    must do
+                      nested do
+                        path path_name
+                        filter do
+                          term "#{path_name}.#{field_name}" => param_value
+                        end
                       end
                     end
                   end
