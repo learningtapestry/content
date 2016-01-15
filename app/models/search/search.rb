@@ -101,6 +101,26 @@ module Search
         if options[:only].is_a? Array
           fields options[:only]
         end
+
+        if options[:show_facets]
+          filter_paths.each do |param_name,(path_name, field_name)|
+            aggregation path_name do
+              nested do
+                path path_name
+                aggregation path_name do
+                  terms do
+                    field "#{path_name}.#{field_name}"
+                    size 10
+
+                    aggregation :top_hits do
+                      top_hits({ size: 1 })
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
       end
 
       ::Search::Results.new(client.search(

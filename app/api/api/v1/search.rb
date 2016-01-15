@@ -32,6 +32,8 @@ class API::V1::Search < Grape::API
     optional :subject_name,       type: String
 
     optional :repository_ids,     type: Array[Integer]
+
+    optional :show_facets,        type: Boolean
   end
 
   get '/' do
@@ -45,6 +47,6 @@ class API::V1::Search < Grape::API
     results = Search::Search.new(repos.search_indices).search(dparams)
     
     x_total results.total_hits
-    results.sources
+    results.display
   end
 end

@@ -16,24 +16,24 @@ class API::V1::SearchTest < APITest
     set_api_key
     import_docs
     get '/api/v1/search', q: 'algebra'
-    assert_equal 1, last_json.size
-    assert_match (/algebra/i), last_json.first['title']
+    assert_equal 1, last_json['documents'].size
+    assert_match (/algebra/i), last_json['documents'].first['title']
   end
 
   test 'GET /api/search/?title= performs a full text search' do
     set_api_key
     import_docs
     get '/api/v1/search', title: 'algebra'
-    assert_equal 1, last_json.size
-    assert_match (/algebra/i), last_json.first['title']
+    assert_equal 1, last_json['documents'].size
+    assert_match (/algebra/i), last_json['documents'].first['title']
   end
 
   test 'GET /api/search/?description= performs a full text search' do
     set_api_key
     import_docs
     get '/api/v1/search', description: 'algebra'
-    assert_equal 1, last_json.size
-    assert_match (/algebra/i), last_json.first['description']
+    assert_equal 1, last_json['documents'].size
+    assert_match (/algebra/i), last_json['documents'].first['description']
   end
 
   test 'GET /api/search/?grade_ids= finds docs with specified grade' do
@@ -43,8 +43,8 @@ class API::V1::SearchTest < APITest
 
     get '/api/v1/search', grade_ids: [grade.id]
 
-    assert_equal 1, last_json.size
-    assert last_json.first['grades'].any? { |g| g['id'] == grade.id }
+    assert_equal 1, last_json['documents'].size
+    assert last_json['documents'].first['grades'].any? { |g| g['id'] == grade.id }
   end
 
   test 'GET /api/search/?grade_name= finds docs with specified grade' do
@@ -53,8 +53,8 @@ class API::V1::SearchTest < APITest
 
     get '/api/v1/search', grade_name: 'grade 1'
 
-    assert_equal 1, last_json.size
-    assert last_json.first['grades'].any? { |g| g['name'] == 'Grade 1' }
+    assert_equal 1, last_json['documents'].size
+    assert last_json['documents'].first['grades'].any? { |g| g['name'] == 'Grade 1' }
   end
 
   test 'GET /api/search/?identity_name=& finds docs with idt name' do
@@ -63,8 +63,8 @@ class API::V1::SearchTest < APITest
 
     get '/api/v1/search', identity_name: 'algebraguys'
 
-    assert_equal 1, last_json.size
-    assert last_json.first['identities'][0]['name'] == 'AlgebraGuys'
+    assert_equal 1, last_json['documents'].size
+    assert last_json['documents'].first['identities'][0]['name'] == 'AlgebraGuys'
   end
 
   test 'GET /api/search/?identity_name=& finds docs with idt type' do
@@ -73,8 +73,8 @@ class API::V1::SearchTest < APITest
 
     get '/api/v1/search', identity_type: 'publisher'
 
-    assert_equal 2, last_json.size
-    assert last_json.first['identities'].all? { |idt| idt['type'] == 'publisher' }
+    assert_equal 2, last_json['documents'].size
+    assert last_json['documents'].first['identities'].all? { |idt| idt['type'] == 'publisher' }
   end
 
   test 'GET /api/search/?identity_name=&identity_type finds docs with idt name & type' do
@@ -83,8 +83,8 @@ class API::V1::SearchTest < APITest
 
     get '/api/v1/search', identity_name: 'algebraguys', identity_type: 'publisher'
 
-    assert_equal 1, last_json.size
-    idt = last_json.first['identities'][0]
+    assert_equal 1, last_json['documents'].size
+    idt = last_json['documents'].first['identities'][0]
     assert_equal 'publisher', idt['type']
     assert_equal 'AlgebraGuys', idt['name']
   end
@@ -95,9 +95,9 @@ class API::V1::SearchTest < APITest
 
     get '/api/v1/search', repository_ids: [@repo.id]
 
-    assert_equal 1, last_json.size
-    assert_equal 'New doc', last_json.first['title']
-    assert_equal 'New doc', last_json.first['description']
+    assert_equal 1, last_json['documents'].size
+    assert_equal 'New doc', last_json['documents'].first['title']
+    assert_equal 'New doc', last_json['documents'].first['description']
   end
 
   def create_repo
