@@ -4,16 +4,16 @@ module Reconcile
   extend ActiveSupport::Concern
 
   class Reconciler
-    def initialize(klass, finder:, creator:, normalizer:)
+    def initialize(klass, find:, create:, normalize:)
       @klass = klass
-      @finder = finder
-      @creator = creator
-      @normalizer = normalizer
+      @find = find
+      @create = create
+      @normalize = normalize
     end
 
     def reconcile(context)
       repo       = context[:repository]
-      normalized = @klass.instance_exec(context, &@normalizer)
+      normalized = @klass.instance_exec(context, &@normalize)
 
       reconciled = repo
         .value_mappings
@@ -23,7 +23,7 @@ module Reconcile
         .map(&:mappable)
 
       if reconciled.empty?
-        found = @klass.instance_exec(context, &@finder)
+        found = @klass.instance_exec(context, &@find)
 
         if found.any?
           found.each do |f|
@@ -35,7 +35,7 @@ module Reconcile
           end
           reconciled = found
         else
-          created = @klass.instance_exec(context, &@creator)
+          created = @klass.instance_exec(context, &@create)
           repo.value_mappings.create!(
             mappable: created,
             value: normalized,
@@ -50,21 +50,17 @@ module Reconcile
   end
 
   included do
-    def self.reconcile_by(field_or_callable)
-      @reconcile_by = field_or_callable.respond_to?(:call) ? field_or_callable :
-        ->(context) { where(field_or_callable => context[:value]) }
-    end
+    def self.reconciles(find:, create:, normalize:)
+      @reconcile_find = find.respond_to?(:call) ? find :
+        ->(context) { where(find => context[:value]) }
 
-    def self.reconcile_create(creator)
-      @reconcile_create = creator
-    end
+      @reconcile_create = create
 
-    def self.reconcile_normalize(normalizer_or_callable)
-      if normalizer_or_callable.respond_to?(:call)
-        @reconcile_normalize = normalizer_or_callable
-      elsif normalizer_or_callable == :default
+      if normalize.respond_to?(:call)
+        @reconcile_normalize = normalize
+      elsif normalize == :default
         @reconcile_normalize = ->(context) { context[:value].to_s.strip.gsub(/\s+/,'_').downcase }
-      elsif normalizer_or_callable == :skip
+      elsif normalize == :skip
         @reconcile_normalize = ->(context) { context[:value].to_s }
       end
     end
@@ -78,22 +74,22 @@ module Reconcile
         raise ArgumentError.new('Context requires a value')
       end
 
-      unless @reconcile_by.present? 
-        raise ArgumentError.new('Reconcile requires a reconcile_by finder')
+      unless @reconcile_find.present? 
+        raise ArgumentError.new('Reconcile requires a reconcile_by find')
       end
 
       unless @reconcile_create.present? 
-        raise ArgumentError.new('Reconcile requires a reconcile_create creator')
+        raise ArgumentError.new('Reconcile requires a reconcile_create create')
       end
 
       unless @reconcile_normalize.present? 
-        raise ArgumentError.new('Reconcile requires a reconcile_normalize normalizer')
+        raise ArgumentError.new('Reconcile requires a reconcile_normalize normalize')
       end
 
       reconciler = Reconciler.new(self,
-        finder: @reconcile_by,
-        creator: @reconcile_create,
-        normalizer: @reconcile_normalize
+        find: @reconcile_find,
+        create: @reconcile_create,
+        normalize: @reconcile_normalize
       )
 
       reconciler.reconcile(context)

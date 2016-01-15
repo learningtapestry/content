@@ -10,7 +10,9 @@ class Url < ActiveRecord::Base
 
   include Reconcile
 
-  reconcile_by :url
-  reconcile_create ->(context) { create!(url: context[:value]) }
-  reconcile_normalize :skip
+  reconciles(
+    find: :url,
+    normalize: :skip,
+    create: ->(context) { create!(url: context[:value]) }
+  )
 end

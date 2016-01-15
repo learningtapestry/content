@@ -8,9 +8,11 @@ class Subject < ActiveRecord::Base
 
   include Reconcile
 
-  reconcile_by :name
-  reconcile_create ->(context) { 
-    create!(name: context[:value], review_status: ReviewStatus.not_reviewed)
-  }
-  reconcile_normalize :default
+  reconciles(
+    find: :name,
+    normalize: :default,
+    create: ->(context) { 
+      create!(name: context[:value], review_status: ReviewStatus.not_reviewed)
+    }
+  )
 end
