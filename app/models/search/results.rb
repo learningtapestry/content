@@ -30,7 +30,6 @@ module Search
       }
       aggs = {}
       results['aggregations'].keys.each do |k|
-        puts results['aggregations'][k][k]
         aggs[k] = results['aggregations'][k][k]['buckets'].map do |bucket|
           {
             id: bucket['key'],

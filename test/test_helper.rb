@@ -14,7 +14,7 @@ Sidekiq::Testing.inline!
 
 module SearchTest
   def es_url
-    ENV['ELASTICSEARCH_URL']
+    ENV.fetch('ELASTICSEARCH_URL', 'http://localhost:9200')
   end
 
   def es_indices
