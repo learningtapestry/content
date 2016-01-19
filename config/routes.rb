@@ -11,11 +11,11 @@ Rails.application.routes.draw do
     resources :document_exports, except: [:edit, :update] do
       get :download, on: :member
     end
-    
+
     resources :document_imports, except: [:edit, :update] do
       post :publish, on: :member
     end
-    
+
     resources :repositories
   end
 
@@ -27,4 +27,11 @@ Rails.application.routes.draw do
 
   # Public (visitor) routes.
   root 'visitor/welcome#index', as: :visitor_root
+
+  namespace :refine do
+    namespace :reconcile do
+      get  :grades, to: 'grades#index'
+      post :grades, to: 'grades#index'
+    end
+  end
 end
