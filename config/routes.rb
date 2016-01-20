@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   mount API::V1::Root => '/api/v1'
+  mount Refine::Reconcile::Root => '/refine/reconcile'
 
   devise_for :users
 
@@ -28,10 +29,4 @@ Rails.application.routes.draw do
   # Public (visitor) routes.
   root 'visitor/welcome#index', as: :visitor_root
 
-  namespace :refine do
-    namespace :reconcile do
-      get  :grades, to: 'grades#index'
-      post :grades, to: 'grades#index'
-    end
-  end
 end
