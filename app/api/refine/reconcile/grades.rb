@@ -8,19 +8,23 @@ class Refine::Reconcile::Grades < Grape::API
     end
   end
 
-  format :jsonp
   params do
     requires :callback, type: String
   end
   get '/' do
-    header 'X-Xss-Protection', '1; mode=block'
-    header 'X-Frame-Options', 'SAMEORIGIN'
-    header 'X-Content-Type-Options', 'nosniff'
     if wants_service_metadata?
-      { data: service_metadata, callback: params[:callback] }
-    # elsif wants_query?
-    #   set_queries
-    #   render json: reconcile, callback: params[:callback]
+      service_metadata
+    else
+      error!("400 Bad Request", 400)
+    end
+  end
+
+  post '/' do
+    if wants_query?
+      set_queries
+      reconcile
+    else
+      error!("400 Bad Request", 400)
     end
   end
 
