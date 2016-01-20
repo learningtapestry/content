@@ -19,37 +19,27 @@ module Refine::Reconcile::Helpers
   #
   def reconcile
     results = {}
-
-    # @queries.each do |k, query|
-    #   results[k] = {
-    #     result: model.reconcile(query[:query], limit: query[:limit])
-    #   }
-    # end
+    @queries.each do |k, query|
+      results[k] = {
+        result: [], # model.reconcile(query[:query], limit: query[:limit])
+      }
+    end
 
     results
   end
 
-  #
   # Parse the OpenRefine query payload.
-  #
   def set_queries
     @queries = params[:queries]
-
-    unless @queries.is_a? Hash
-      @queries = JSON.parse(@queries, symbolize_names: true)
-    end
+    @queries = JSON.parse(@queries, symbolize_names: true) unless @queries.is_a? Hash
   end
 
-  #
   # Check whether this is a service metadata request.
-  #
   def wants_service_metadata?
     params[:queries].blank?
   end
 
-  #
   # Check whether this is a query request.
-  #
   def wants_query?
     params[:queries].present?
   end

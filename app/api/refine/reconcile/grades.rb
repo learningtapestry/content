@@ -3,9 +3,7 @@ class Refine::Reconcile::Grades < Grape::API
 
   helpers do
     # Model class derived from controller name.
-    def model
-      Grade
-    end
+    def model; Grade end
   end
 
   params do
@@ -19,6 +17,9 @@ class Refine::Reconcile::Grades < Grape::API
     end
   end
 
+  params do
+    requires :queries, type: String
+  end
   post '/' do
     if wants_query?
       set_queries
