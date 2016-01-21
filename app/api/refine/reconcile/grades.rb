@@ -2,7 +2,6 @@ class Refine::Reconcile::Grades < Grape::API
   include Refine::Reconcile::Base
 
   helpers do
-    # Model class derived from controller name.
     def model; Grade end
   end
 
@@ -10,23 +9,15 @@ class Refine::Reconcile::Grades < Grape::API
     requires :callback, type: String
   end
   get '/' do
-    if wants_service_metadata?
-      service_metadata
-    else
-      error!("400 Bad Request", 400)
-    end
+    error!("400 Bad Request", 400) unless is_service_metadata?
+    service_metadata
   end
 
   params do
     requires :queries, type: String
   end
   post '/' do
-    if wants_query?
-      set_queries
-      reconcile
-    else
-      error!("400 Bad Request", 400)
-    end
+    error!("400 Bad Request", 400) unless is_query?
+    reconcile parse_queries
   end
-
 end
