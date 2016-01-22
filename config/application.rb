@@ -27,5 +27,18 @@ module ContentSearch
     config.paths.add(File.join('app', 'api'), glob: File.join('**', '*.rb'))
     config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
     config.autoload_paths += Dir[Rails.root.join('app', 'tasks', '*')]
+
+    if (cors_origins = ENV['API_CORS_ORIGINS']) &&
+       (cors_origins = cors_origins.split(',')).any?
+      config.middleware.use Rack::Cors do
+        allow do
+          origins cors_origins
+          resource '/api/*',
+            headers: :any,
+            methods: [:get, :post, :options, :put],
+            expose: ['X-Total']
+        end
+      end
+    end
   end
 end
