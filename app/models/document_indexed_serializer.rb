@@ -47,8 +47,13 @@ class DocumentIndexedSerializer < ActiveModel::Serializer
   has_many :subjects,            serializer: SubjectSerializer
 
   has_one  :document_status, key: :status
+  has_one  :url, key: :url
 
   def document_status
     object.document_status.value
+  end
+
+  def url
+    object.url.url
   end
 end
