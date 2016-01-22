@@ -33,7 +33,7 @@ class API::V1::Search < Grape::API
 
     optional :repository_ids,     type: Array[Integer]
 
-    optional :show_facets,        type: Boolean
+    optional :num_facets,         type: Integer, values: 5..50
   end
 
   get '/' do
