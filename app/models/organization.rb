@@ -11,9 +11,10 @@ class Organization < ActiveRecord::Base
 
   has_many :roles, as: :resource
 
-  def create_api_key
+  def create_api_key(role_name: :admin)
     api_key = api_keys.build
     api_key.generate_key
+    api_key.roles = [Role.where(name: role_name).first_or_initialize]
     api_key
   end
 

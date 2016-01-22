@@ -3,6 +3,8 @@ require 'search/search'
 class API::V1::Search < Grape::API
   helpers API::V1::Helpers
 
+  before { check_roles one_of: [:admin, :search] }
+
   params do
     use :pagination
 

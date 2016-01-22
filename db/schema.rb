@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106131811) do
+ActiveRecord::Schema.define(version: 20160122172746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 20160106131811) do
 
   add_index "api_keys", ["key"], name: "index_api_keys_on_key", using: :btree
   add_index "api_keys", ["organization_id"], name: "index_api_keys_on_organization_id", using: :btree
+
+  create_table "api_keys_roles", force: :cascade do |t|
+    t.integer "api_key_id"
+    t.integer "role_id"
+  end
+
+  add_index "api_keys_roles", ["api_key_id", "role_id"], name: "index_api_keys_roles_on_api_key_id_and_role_id", using: :btree
+  add_index "api_keys_roles", ["api_key_id"], name: "index_api_keys_roles_on_api_key_id", using: :btree
+  add_index "api_keys_roles", ["role_id"], name: "index_api_keys_roles_on_role_id", using: :btree
 
   create_table "document_exports", force: :cascade do |t|
     t.string   "export_jid"
@@ -371,6 +380,8 @@ ActiveRecord::Schema.define(version: 20160106131811) do
   add_index "value_mappings", ["value"], name: "index_value_mappings_on_value", using: :btree
 
   add_foreign_key "api_keys", "organizations"
+  add_foreign_key "api_keys_roles", "api_keys"
+  add_foreign_key "api_keys_roles", "roles"
   add_foreign_key "document_exports", "repositories"
   add_foreign_key "document_grades", "documents"
   add_foreign_key "document_grades", "grades"

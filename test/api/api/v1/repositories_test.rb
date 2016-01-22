@@ -14,6 +14,12 @@ class API::V1::RepositoriesTest < APITest
     assert_equal 401, last_response.status
   end
 
+  test 'GET /api/repositories requires admin role' do
+    set_api_key(api_keys(:api_search))
+    get '/api/v1/repositories'
+    assert_equal 401, last_response.status
+  end
+
   test 'GET /api/repositories works when API key is provided' do
     set_api_key
     get '/api/v1/repositories'

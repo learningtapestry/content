@@ -2,3 +2,10 @@ api_user:
   organization: api_user
   key: 0a62ec01-28d0-4a3f-9905-73ce92334a60
   expired: false
+  roles: api_key_admin
+
+api_search:
+  organization: api_user
+  key: 9915a6fc-75ba-44c3-a311-3f3465c866b9
+  expired: false
+  roles: api_key_search
