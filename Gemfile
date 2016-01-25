@@ -31,6 +31,7 @@ gem 'uglifier', '>= 1.3.0'
 
 group :development, :test do
   gem 'byebug'
+  gem 'thin', '~> 1.6', '>= 1.6.4' # Useful for running an SSL-enabled dev server
 end
 
 group :development do
