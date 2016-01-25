@@ -3,7 +3,7 @@ class Repository < ActiveRecord::Base
   after_commit :delete_index,         on: :destroy
 
   belongs_to :organization
-  
+
   has_many :document_exports, dependent: :destroy,    autosave: true
   has_many :document_imports, dependent: :destroy,    autosave: true
   has_many :documents,        dependent: :destroy,    autosave: true
@@ -14,7 +14,7 @@ class Repository < ActiveRecord::Base
   end
 
   def search_index
-    @search_index ||= Search::Index.new(repository: self)
+    @search_index ||= Search::Indexes::DocumentsIndex.new(repository: self)
   end
 
   def create_search_index!

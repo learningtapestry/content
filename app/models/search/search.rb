@@ -94,7 +94,7 @@ module Search
                 end
               end
             end
-            
+
           end
         end
 

@@ -7,18 +7,23 @@ module Search
 
     attr_reader :repository
 
-    def initialize(repository:)
+    def initialize(repository: nil)
       @repository = repository
     end
 
     # Indexing
 
-    def index_name
-      doc_suffix        = "documents"
-      env_suffix        = "__#{Rails.env}" unless Rails.env.production?
-      repository_suffix = "__#{repository.id}"
+    def type_name
+      self.class.name.demodulize.gsub('Index', '').downcase.singularize
+    end
 
-      "#{doc_suffix}#{repository_suffix}#{env_suffix}"
+    def index_name
+      @index_name ||= begin
+        parts = [type_name.pluralize]
+        parts << Rails.env unless Rails.env.production?
+        parts << repository.id if repository
+        parts.join('__')
+      end
     end
 
     def create_index!
@@ -45,7 +50,7 @@ module Search
     def update_index_mapping!(new_mappings)
       client.indices.put_mapping(
         index: index_name,
-        type: 'document',
+        type: type_name,
         body: new_mappings
       )
     end
@@ -61,30 +66,7 @@ module Search
     end
 
     def mappings
-      {
-        document: {
-          properties: {
-            grades: {
-              type: :nested
-            },
-            identities: {
-              type: :nested
-            },
-            languages: {
-              type: :nested
-            },
-            resource_types: {
-              type: :nested
-            },
-            standards: {
-              type: :nested
-            },
-            subjects: {
-              type: :nested
-            }
-          }
-        }
-      }
+      raise NotImplementedError 'must define a mapping'
     end
 
     def settings
@@ -102,13 +84,14 @@ module Search
         id:    document.id,
         body:  serialized,
         index: index_name,
-        type:  'document'
+        type:  type_name
       )
 
-      if res['created']
-        document.update_column(:indexed_at, Time.now)
-        true
-      end
+      after_save(document, res) if res['created']
+    end
+
+    def after_save(document, res)
+      # overridable
     end
 
     alias_method :index, :save
@@ -117,43 +100,38 @@ module Search
       res = client.delete(
         id:    document.id,
         index: index_name,
-        type:  'document'
+        type:  type_name
       )
 
-      if res['found']
-        document.update_column(:indexed_at, nil) if Document.exists?(document.id)
-        document
-      end
+      after_delete(document, res) if res['found']
+    end
+
+    def after_delete(document, res)
+      # overridable
     end
 
     def bulk_index(documents)
       create_index!
-      
+
       res = client.bulk(
         body: documents.map { |doc|
           {
             index: {
               _id: doc.id,
               _index: index_name,
-              _type: 'document',
+              _type: type_name,
               data: doc.as_indexed_json
             }
           }
         }
       )
 
-      should_update_ids = []
-      res['items'].each do |item|
+      should_update_ids = res['items'].map do |item|
         status = item['index']['status'].to_i
-        if status == 200 || status == 201
-          should_update_ids << item['index']['_id']
-        end
-      end
+        (status == 200 || status == 201) ? item['index']['_id']  : nil
+      end.compact
 
-      Document.where(id: should_update_ids).update_all(
-        indexed_at: Document.new._current_time_from_proper_timezone
-      )
-
+      after_bulk_index(should_update_ids)
       should_update_ids
     end
   end
