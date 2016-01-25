@@ -20,30 +20,6 @@ module Search
         }
       end
 
-      def settings
-        {
-          index: {
-            analysis: {
-              filter: {
-                str_ngrams: {type: "nGram", min_gram: 2, max_gram: 10},
-                stop_en:    {type: "stop", stopwords: "_english_"},
-              },
-              analyzer: {
-                full_str: {
-                  filter: ["standard", "lowercase", "stop_en", "asciifolding"],
-                  type: "custom",
-                  tokenizer: "standard",
-                },
-                partial_str: {
-                  filter: ["standard", "lowercase", "stop_en", "asciifolding", "str_ngrams"],
-                  type: "custom",
-                  tokenizer: "standard",
-                }
-              }
-            }
-          }
-        }
-      end
     end
 
   end
