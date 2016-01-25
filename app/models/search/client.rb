@@ -6,7 +6,12 @@ module Search
 
     included do
       def self.client
-        @client ||= Elasticsearch::Client.new(url: ENV['ELASTICSEARCH_URL']) #, log: true) <<<<<< Use RailsLogger
+        @client ||= begin
+          url = ENV.fetch('ELASTICSEARCH_URL', 'http://localhost:9200')
+          log = Rails.env.test? ? false : Rails.logger
+
+          Elasticsearch::Client.new(url: url, log: log)
+        end
       end
 
       def client
