@@ -4,6 +4,7 @@ module Indexable
   extend ActiveSupport::Concern
 
   included do
+    class_attribute :index_class
     attr_accessor :skip_indexing
 
     after_commit :index_document, on: [:create, :update], unless: :skip_indexing?
@@ -22,11 +23,11 @@ module Indexable
     end
 
     def self.index_class(index_class)
-      @@index_class = index_class
+      self.index_class = index_class
     end
 
     def search_index
-      @search_index ||= @@index_class.new(repository: self.try(:repository))
+      @search_index ||= self.class.index_class.new(repository: self.try(:repository))
     end
 
     def skip_indexing?
