@@ -29,6 +29,10 @@ module Search
         }
       end
 
+      def serialize(document)
+        DocumentIndexedSerializer.new(document).as_json
+      end
+
       def after_save(document, response)
         document.update_column(:indexed_at, Time.now)
         true

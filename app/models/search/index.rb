@@ -7,21 +7,33 @@ module Search
 
     attr_reader :repository
 
+    # for `Document`, we split one index per repository
+    # but other types might not be separated (like grades)
     def initialize(repository: nil)
       @repository = repository
     end
 
+    # =====================
     # Indexing
 
+    # infer type_name from class.
+    #
+    # e.g:
+    #    Search::Indexes::GradesIndex => 'grade'
     def type_name
       self.class.name.demodulize.gsub('Index', '').downcase.singularize
     end
 
+    # index_name follows the pattern: '<type_name>__<repo_id>__<env>'
+    #
+    # e.g.:
+    #   'documents__123__development'
+    #   'grades__staging'
     def index_name
       @index_name ||= begin
         parts = [type_name.pluralize]
-        parts << Rails.env unless Rails.env.production?
         parts << repository.id if repository
+        parts << Rails.env unless Rails.env.production?
         parts.join('__')
       end
     end
@@ -65,10 +77,30 @@ module Search
       client.indices.exists(index: index_name) rescue false
     end
 
+    # Define a specific mapping schema for this type
+    # The mappings are defined as a serializable Hash.
+    #
+    # e.g:
+    #    {
+    #      <type_name>: {  # top key should be the type_name, i.e: GradesIndex => 'grade'
+    #        properties: {
+    #          # define you document properties mappings here
+    #        }
+    #      }
+    #    }
+    #
+    #  For more info on mappings: https://www.elastic.co/guide/en/elasticsearch/reference/2.1/mapping.html
     def mappings
       raise NotImplementedError 'must define a mapping'
     end
 
+    # Filter and Analyzer settings.
+    # Can be Overrided to define any additional specific setting
+    #
+    # partial_str: is a simple N-Gram analyzer for doing fuzzy partial full-text search
+    # full_str: string analyzer, slightly improved from standard
+    #
+    # For more info: https://www.elastic.co/guide/en/elasticsearch/reference/2.1/analysis-custom-analyzer.html
     def settings
       {
         index: {
@@ -94,13 +126,20 @@ module Search
       }
     end
 
+    # Convert a document object to json-serializable Hash
+    #
+    # Should be *Overridden* for the specific type (see `DocumentsIndex#serialize` for an Example)
+    def serialize(document)
+      document.attributes
+    end
+
+    # =====================
     # Storage
 
     def save(document)
       create_index!
 
-      serialized = document.as_indexed_json
-
+      serialized = serialize(document)
       res = client.index(
         id:    document.id,
         body:  serialized,
@@ -108,14 +147,23 @@ module Search
         type:  type_name
       )
 
-      after_save(document, res) if res['created']
-    end
+      saved? = !!res['created']
+      after_save(document, res) if saved?
 
-    def after_save(document, res)
-      # overridable
+      saved?
     end
-
     alias_method :index, :save
+
+    # Overridable callback.
+    # called after the document is succesfully saved.
+    #
+    # params:
+    #   :document:  is the original object
+    #   :res:       is the ES response
+    def after_save(document, res)
+      # override-me
+    end
+
 
     def delete(document)
       res = client.delete(
@@ -124,11 +172,20 @@ module Search
         type:  type_name
       )
 
-      after_delete(document, res) if res['found']
+      deleted? = !!res['found']
+      after_delete(document, res) if deleted?
+
+      deleted?
     end
 
+    # Overridable callback.
+    # called after the document is succesfully deleted.
+    #
+    # params:
+    #   :document:  is the original object
+    #   :res:       is the ES response
     def after_delete(document, res)
-      # overridable
+      # override-me
     end
 
     def bulk_index(documents)
@@ -141,7 +198,7 @@ module Search
               _id: doc.id,
               _index: index_name,
               _type: type_name,
-              data: doc.as_indexed_json
+              data: serialize(doc)
             }
           }
         }
@@ -154,6 +211,10 @@ module Search
 
       after_bulk_index(should_update_ids)
       should_update_ids
+    end
+
+    def after_bulk_index(updated_ids)
+      # override-me
     end
   end
 end

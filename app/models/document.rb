@@ -49,7 +49,7 @@ class Document < ActiveRecord::Base
 
   #
   # Returns publisher identities
-  # 
+  #
   def publishers
     identities_of(:publisher)
   end
@@ -82,10 +82,6 @@ class Document < ActiveRecord::Base
 
   def indexed?
     indexed_at.present?
-  end
-
-  def as_indexed_json
-    DocumentIndexedSerializer.new(self).as_json
   end
 
   # This is just a handy method to get the correct timezone for doing
