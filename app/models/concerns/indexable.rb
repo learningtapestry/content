@@ -1,0 +1,40 @@
+require 'active_support/concern'
+
+module Indexable
+  extend ActiveSupport::Concern
+
+  included do
+    attr_accessor :skip_indexing
+
+    after_commit :index_document, on: [:create, :update], unless: :skip_indexing?
+    after_commit :delete_document, on: :destroy, unless: :skip_indexing?
+
+    def index_document
+      begin
+        search_index.save(self)
+      rescue Faraday::ConnectionFailed; end
+    end
+
+    def delete_document
+      begin
+        search_index.delete(self)
+      rescue Faraday::ConnectionFailed; end
+    end
+
+    def self.index_class(index_class)
+      @@index_class = index_class
+    end
+
+    def search_index
+      @search_index ||= @@index_class.new(repository: self.try(:repository))
+    end
+
+    def skip_indexing?
+      !!skip_indexing || !search_index.index_exists?
+    end
+
+    def indexed?
+      indexed_at.present?
+    end
+  end
+end
