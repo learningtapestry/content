@@ -147,10 +147,10 @@ module Search
         type:  type_name
       )
 
-      saved? = !!res['created']
-      after_save(document, res) if saved?
+      saved = !!res['created']
+      after_save(document, res) if saved
 
-      saved?
+      saved
     end
     alias_method :index, :save
 
@@ -172,10 +172,10 @@ module Search
         type:  type_name
       )
 
-      deleted? = !!res['found']
-      after_delete(document, res) if deleted?
+      deleted = !!res['found']
+      after_delete(document, res) if deleted
 
-      deleted?
+      deleted
     end
 
     # Overridable callback.
