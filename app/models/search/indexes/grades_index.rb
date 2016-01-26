@@ -20,6 +20,9 @@ module Search
         }
       end
 
+      def serialize(grade)
+        GradeSerializer.new(grade).as_json
+      end
     end
 
   end

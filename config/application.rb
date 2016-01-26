@@ -25,7 +25,8 @@ module ContentSearch
     config.active_record.raise_in_transactional_callbacks = true
 
     config.paths.add(File.join('app', 'api'), glob: File.join('**', '*.rb'))
-    config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
-    config.autoload_paths += Dir[Rails.root.join('app', 'tasks', '*')]
+    ['api', 'tasks', 'serializers'].each do |folder|
+      config.autoload_paths += Dir[Rails.root.join('app', folder, '*')]
+    end
   end
 end

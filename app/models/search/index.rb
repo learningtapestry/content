@@ -130,7 +130,7 @@ module Search
     #
     # Should be *Overridden* for the specific type (see `DocumentsIndex#serialize` for an Example)
     def serialize(document)
-      document.attributes
+      document.as_json
     end
 
     # =====================
