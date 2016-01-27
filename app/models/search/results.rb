@@ -1,22 +1,28 @@
 module Search
   class Results
-    attr_reader :results, :sources, :total_hits
+    attr_reader :results, :sources, :total_hits, :model, :hits
 
-    def initialize(results)
+    def initialize(results, model=nil)
       @results = results
       @total_hits = results['hits']['total']
+      @hits = results['hits']['hits']
+      @model = model
+    end
+
+    def result_key
+      model.name.underscore.pluralize.to_sym
     end
 
     def ids
-      @ids ||= results['hits']['hits'].map { |h| h['_id'] }
+      @ids ||= hits.map { |h| h['_id'] }
     end
 
     def records
-      Document.find(ids)
+      model.find(ids)
     end
 
     def sources
-      results['hits']['hits'].map { |h| h['_source'] }
+      hits.map { |h| h['_source'] }
     end
 
     def facets
@@ -42,7 +48,7 @@ module Search
     end
 
     def display
-      d = { documents: sources }
+      d = { result_key => sources }
       d[:facets] = facets if results['aggregations'].present?
       d
     end

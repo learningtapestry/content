@@ -21,7 +21,7 @@ module Search
     # e.g:
     #    Search::Indexes::GradesIndex => 'grade'
     def type_name
-      self.class.name.demodulize.gsub('Index', '').downcase.singularize
+      self.class.name.demodulize.gsub('Index', '').underscore.singularize
     end
 
     # index_name follows the pattern: '<type_name>__<repo_id>__<env>'

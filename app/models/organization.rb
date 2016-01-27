@@ -18,6 +18,6 @@ class Organization < ActiveRecord::Base
   end
 
   def new_search
-    @search ||= Search::Search.new(*repositories.map(&:search_index))
+    @search ||= Search::DocumentSearch.new(*repositories.map(&:search_index))
   end
 end

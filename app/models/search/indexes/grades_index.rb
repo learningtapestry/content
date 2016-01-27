@@ -2,6 +2,31 @@ module Search
   module Indexes
 
     class GradesIndex < Index
+      def settings
+        {
+          index: {
+            analysis: {
+              filter: {
+                # Grades needs smaller 'grams' (starting from 1) to indentify the numbers at the end
+                str_ngrams: {type: "nGram", min_gram: 1, max_gram: 6},
+              },
+              analyzer: {
+                full_str: {
+                  filter: ["lowercase", "asciifolding"],
+                  type: "custom",
+                  tokenizer: "standard",
+                },
+                partial_str: {
+                  filter: ["lowercase", "asciifolding", "str_ngrams"],
+                  type: "custom",
+                  tokenizer: "standard",
+                }
+              }
+            }
+          }
+        }
+      end
+
       def mappings
         {
           grade: {
