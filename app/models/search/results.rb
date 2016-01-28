@@ -5,7 +5,7 @@ module Search
     def initialize(results, model=nil)
       @results = results
       @total_hits = results['hits']['total']
-      @hits = results['hits']['hits']
+      @hits = results['hits']['hits'].map { |hit| Hashie::Mash.new **hit.symbolize_keys }
       @model = model
     end
 
@@ -14,7 +14,7 @@ module Search
     end
 
     def ids
-      @ids ||= hits.map { |h| h['_id'] }
+      @ids ||= hits.map { |h| h._id }
     end
 
     def records

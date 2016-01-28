@@ -19,13 +19,9 @@ module Search
         from (page - 1) * limit
 
         query do
-          filtered do
-            query do
-              bool do
-                should { match 'name.full'    => { query: term, operator: "and", type: 'phrase', boost: 3 } }
-                should { match 'name.partial' => { query: term, operator: "and", boost: 1 } }
-              end
-            end
+          bool do
+            should { match 'name.full'    => { query: term, operator: "and", type: 'phrase', boost: 3 } }
+            should { match 'name.partial' => { query: term, operator: "and", boost: 1 } }
           end
         end
       end

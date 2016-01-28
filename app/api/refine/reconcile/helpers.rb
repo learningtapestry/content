@@ -16,9 +16,15 @@ module Refine::Reconcile::Helpers
   end
 
   #
-  # Reconciliation queries do the actual reconciliation work.
-  def reconcile(queries)
-    Hash[queries.map { |k, query| [ k, {result: []} ] }] # result: model.reconcile(query[:query], limit: query[:limit])
+  # Reconciliation multiple queries.
+  def reconcile_multi(queries)
+    Hash[queries.map { |k, query| [ k, {result: reconcile_query(query)} ] }]
+  end
+
+  #
+  # Reconcile query should be *overridden* and contain the actual reconciliation logic
+  def reconcile_query(query)
+    raise NotImplementedError 'must define reconcile_query'
   end
 
   #
