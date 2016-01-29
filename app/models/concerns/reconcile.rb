@@ -15,8 +15,8 @@ module Reconcile
       repo       = context[:repository]
       normalized = @klass.instance_exec(context, &@normalize)
 
-      reconciled = repo
-        .value_mappings
+      value_mappings = repo.present? ? repo.value_mappings : ValueMapping
+      reconciled = value_mappings
         .where(mappable_type: @klass)
         .where(value: normalized)
         .order(rank: :desc)
@@ -27,7 +27,7 @@ module Reconcile
 
         if found.any?
           found.each do |f|
-            repo.value_mappings.create!(
+            value_mappings.create!(
               mappable: f,
               value: normalized,
               rank: 1
@@ -36,7 +36,7 @@ module Reconcile
           reconciled = found
         else
           created = @klass.instance_exec(context, &@create)
-          repo.value_mappings.create!(
+          value_mappings.create!(
             mappable: created,
             value: normalized,
             rank: 1
@@ -69,20 +69,20 @@ module Reconcile
       unless context[:repository].present?
         raise ArgumentError.new('Context requires a repository')
       end
-        
+
       unless context[:value].present?
         raise ArgumentError.new('Context requires a value')
       end
 
-      unless @reconcile_find.present? 
+      unless @reconcile_find.present?
         raise ArgumentError.new('Reconcile requires a reconcile_by find')
       end
 
-      unless @reconcile_create.present? 
+      unless @reconcile_create.present?
         raise ArgumentError.new('Reconcile requires a reconcile_create create')
       end
 
-      unless @reconcile_normalize.present? 
+      unless @reconcile_normalize.present?
         raise ArgumentError.new('Reconcile requires a reconcile_normalize normalize')
       end
 

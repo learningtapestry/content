@@ -1,3 +1,8 @@
 en:
   name: en
+  full_name: english
+  review_status: reviewed
+es:
+  name: es
+  full_name: spanish
   review_status: reviewed

@@ -216,5 +216,6 @@ module Search
     def after_bulk_index(updated_ids)
       # override-me
     end
+
   end
 end

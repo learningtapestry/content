@@ -6,7 +6,7 @@ class Refine::Reconcile::Grades < Grape::API
 
     def reconcile_query(query)
       # model.reconcile **query
-      res = Search::GradeSearch.new.search(q: query[:query])
+      res = Search::GradeSearch.new.search(q: query[:query], limit: query[:limit])
       res.hits.map { |h|
         {
           id: h._id,
