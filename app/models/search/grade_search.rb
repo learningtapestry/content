@@ -1,20 +1,17 @@
 module Search
   class GradeSearch
-    include Client
-    include Dsl
+    include SimpleSearch
 
-    attr_accessor :index
-
-    def index_name
-      Grade.new.search_index.index_name
+    def model
+      Grade
     end
 
-    def search(options = {})
+    def query(options = {})
       limit = options[:limit] || 100
       page = options[:page] || 1
       term = options[:q]
 
-      definition = dsl do
+      dsl do
         size limit
         from (page - 1) * limit
 
@@ -25,12 +22,6 @@ module Search
           end
         end
       end
-
-      parse_results client.search(index: index_name, body: definition, type: 'grade')
-    end
-
-    def parse_results(res)
-      ::Search::Results.new res, Grade
     end
 
   end

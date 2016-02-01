@@ -1,20 +1,17 @@
 module Search
   class LanguageSearch
-    include Client
-    include Dsl
+    include SimpleSearch
 
-    attr_accessor :index
-
-    def index_name
-      Language.new.search_index.index_name
+    def model
+      Language
     end
 
-    def search(options = {})
+    def query(options = {})
       limit = options[:limit] || 100
       page = options[:page] || 1
       term = options[:q]
 
-      definition = dsl do
+      dsl do
         size limit
         from (page - 1) * limit
 
@@ -27,12 +24,6 @@ module Search
           end
         end
       end
-
-      parse_results client.search(index: index_name, body: definition, type: 'language')
-    end
-
-    def parse_results(res)
-      ::Search::Results.new res, Language
     end
 
   end
