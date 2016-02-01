@@ -1,7 +1,7 @@
 module Search
   module Indexes
 
-    class GradesIndex < Index
+    class GradeIndex < Index
       def settings
         {
           index: {

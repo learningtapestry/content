@@ -7,7 +7,7 @@ class Identity < ActiveRecord::Base
   include Indexable
   include Reconcile
 
-  index_class Search::Indexes::IdentitiesIndex
+  index_class Search::Indexes::IdentityIndex
 
   reconciles(
     find: :name,

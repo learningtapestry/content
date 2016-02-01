@@ -7,7 +7,7 @@ class Language < ActiveRecord::Base
   include Indexable
   include Reconcile
 
-  index_class Search::Indexes::LanguagesIndex
+  index_class Search::Indexes::LanguageIndex
 
   reconciles(
     find: :name,

@@ -11,7 +11,7 @@ class Grade < ActiveRecord::Base
   include Indexable
   include Reconcile
 
-  index_class Search::Indexes::GradesIndex
+  index_class Search::Indexes::GradeIndex
 
   reconciles(
     find: :name,

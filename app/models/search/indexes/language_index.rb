@@ -1,10 +1,10 @@
 module Search
   module Indexes
 
-    class ResourceTypesIndex < Index
+    class LanguageIndex < Index
       def mappings
         {
-          resource_type: {
+          language: {
             properties: {
               id: {type: 'string', index: 'not_analyzed'},
               name: {
@@ -14,14 +14,23 @@ module Search
                   full:    {type: 'string', analyzer: 'full_str'},
                   partial: {type: 'string', analyzer: 'partial_str'}
                 }
+              },
+              full_name: {
+                type: 'multi_field',
+                fields: {
+                  full_name: {type: 'string', index: 'not_analyzed'},
+                  full:      {type: 'string', analyzer: 'full_str'},
+                  partial:   {type: 'string', analyzer: 'partial_str'}
+
+                }
               }
             }
           }
         }
       end
 
-      def serialize(obj)
-        ResourceTypeSerializer.new(obj).as_json
+      def serialize(grade)
+        LanguageSerializer.new(grade).as_json
       end
     end
 

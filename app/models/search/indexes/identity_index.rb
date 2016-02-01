@@ -1,10 +1,10 @@
 module Search
   module Indexes
 
-    class LanguagesIndex < Index
+    class IdentityIndex < Index
       def mappings
         {
-          language: {
+          identity: {
             properties: {
               id: {type: 'string', index: 'not_analyzed'},
               name: {
@@ -14,23 +14,14 @@ module Search
                   full:    {type: 'string', analyzer: 'full_str'},
                   partial: {type: 'string', analyzer: 'partial_str'}
                 }
-              },
-              full_name: {
-                type: 'multi_field',
-                fields: {
-                  full_name: {type: 'string', index: 'not_analyzed'},
-                  full:      {type: 'string', analyzer: 'full_str'},
-                  partial:   {type: 'string', analyzer: 'partial_str'}
-
-                }
               }
             }
           }
         }
       end
 
-      def serialize(grade)
-        LanguageSerializer.new(grade).as_json
+      def serialize(identity)
+        IdentitySerializer.new(identity).as_json
       end
     end
 

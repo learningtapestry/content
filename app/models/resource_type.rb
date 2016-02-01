@@ -9,7 +9,7 @@ class ResourceType < ActiveRecord::Base
   include Indexable
   include Reconcile
 
-  index_class Search::Indexes::ResourceTypesIndex
+  index_class Search::Indexes::ResourceTypeIndex
 
   reconciles(
     find: :name,

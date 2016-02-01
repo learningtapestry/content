@@ -1,10 +1,10 @@
 module Search
   module Indexes
 
-    class IdentitiesIndex < Index
+    class ResourceTypeIndex < Index
       def mappings
         {
-          identity: {
+          resource_type: {
             properties: {
               id: {type: 'string', index: 'not_analyzed'},
               name: {
@@ -20,8 +20,8 @@ module Search
         }
       end
 
-      def serialize(identity)
-        IdentitySerializer.new(identity).as_json
+      def serialize(obj)
+        ResourceTypeSerializer.new(obj).as_json
       end
     end
 
