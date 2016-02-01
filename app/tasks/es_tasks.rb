@@ -7,7 +7,7 @@ module ESTasks
     model = model_name.classify.constantize
     index = model.new.search_index
 
-    index.reset_index!
+    index.index_exists? ? index.reset_index! : index.create_index!
   end
 
   # index all entries from the db
