@@ -9,4 +9,5 @@ class Refine::Reconcile::Root < Grape::API
   mount Refine::Reconcile::Languages => '/languages'
   mount Refine::Reconcile::Identities => '/identities'
   mount Refine::Reconcile::ResourceTypes => '/resource_types'
+  mount Refine::Reconcile::Subjects => '/subjects'
 end
