@@ -22,8 +22,8 @@ module Indexable
       rescue Faraday::ConnectionFailed; end
     end
 
-    def self.index_class(index_class)
-      self.index_class = index_class
+    def self.acts_as_indexed(index_class=nil)
+      self.index_class = index_class || "Search::Indexes::#{self.name}Index".constantize
     end
 
     def search_index

@@ -1,13 +1,13 @@
 class Identity < ActiveRecord::Base
+  include Indexable
+  include Reconcile
+
   belongs_to :review_status
 
   has_many :document_identities
   has_many :documents, through: :document_identities
 
-  include Indexable
-  include Reconcile
-
-  index_class Search::Indexes::IdentityIndex
+  acts_as_indexed
 
   reconciles(
     find: :name,

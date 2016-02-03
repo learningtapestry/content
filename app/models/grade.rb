@@ -1,5 +1,9 @@
 class Grade < ActiveRecord::Base
+  include Indexable
+  include Reconcile
+
   acts_as_tree
+  acts_as_indexed
 
   belongs_to :review_status
 
@@ -7,11 +11,6 @@ class Grade < ActiveRecord::Base
   has_many :documents, through: :document_grades
 
   validates :name, length: { maximum: 30 }
-
-  include Indexable
-  include Reconcile
-
-  index_class Search::Indexes::GradeIndex
 
   reconciles(
     find: :name,

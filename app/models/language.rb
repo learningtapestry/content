@@ -1,13 +1,13 @@
 class Language < ActiveRecord::Base
+  include Indexable
+  include Reconcile
+
   belongs_to :review_status
 
   has_many :document_languages
   has_many :documents, through: :document_languages
 
-  include Indexable
-  include Reconcile
-
-  index_class Search::Indexes::LanguageIndex
+  acts_as_indexed
 
   reconciles(
     find: :name,
