@@ -1,6 +1,6 @@
 class Grade < ActiveRecord::Base
   include Indexable
-  include Reconcile
+  include Reconcilable
 
   acts_as_tree
   acts_as_indexed
@@ -11,12 +11,4 @@ class Grade < ActiveRecord::Base
   has_many :documents, through: :document_grades
 
   validates :name, length: { maximum: 30 }
-
-  reconciles(
-    find: :name,
-    normalize: :default,
-    create: ->(context) {
-      create!(name: context[:value], review_status: ReviewStatus.not_reviewed)
-    }
-  )
 end
