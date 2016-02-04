@@ -1,6 +1,6 @@
 class ResourceType < ActiveRecord::Base
   include Indexable
-  include Reconcile
+  include Reconcilable
 
   acts_as_tree
   acts_as_indexed
@@ -9,12 +9,4 @@ class ResourceType < ActiveRecord::Base
 
   has_many :document_resource_types
   has_many :documents, through: :document_resource_types
-
-  reconciles(
-    find: :name,
-    normalize: :default,
-    create: ->(context) {
-      create!(name: context[:value], review_status: ReviewStatus.not_reviewed)
-    }
-  )
 end

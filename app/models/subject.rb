@@ -1,6 +1,6 @@
 class Subject < ActiveRecord::Base
   include Indexable
-  include Reconcile
+  include Reconcilable
 
   acts_as_tree
   acts_as_indexed
@@ -9,12 +9,4 @@ class Subject < ActiveRecord::Base
 
   has_many :document_subjects
   has_many :documents, through: :document_subjects
-
-  reconciles(
-    find: :name,
-    normalize: :default,
-    create: ->(context) {
-      create!(name: context[:value], review_status: ReviewStatus.not_reviewed)
-    }
-  )
 end

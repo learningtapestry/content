@@ -17,7 +17,7 @@ class Reconciler
 
   def method_call(method_name, context, options)
     if options[method_name] == :skip
-      false
+      method_name == :normalize ?  context[:value] : nil
 
     elsif options[method_name].respond_to?(:call)
       options[method_name].call(context)
@@ -45,7 +45,7 @@ class Reconciler
       found = method_call(:find, context, options)
 
       save_mappings = options.fetch(:save_mappings, true)
-      
+
       if found.any?
         if save_mappings
           found.each do |f|
