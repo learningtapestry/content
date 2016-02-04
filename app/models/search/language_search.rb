@@ -17,8 +17,8 @@ module Search
 
         query do
           bool do
-            should { match 'name.full'         => { query: term, operator: "and", type: 'phrase', boost: 3 } }
-            should { match 'name.partial'      => { query: term, operator: "and", boost: 1 } }
+            should { match 'name.full'         => { query: term, operator: "and", type: 'phrase', boost: 5 } }
+            should { match 'name.partial'      => { query: term, operator: "and", boost: 2 } }
             should { match 'full_name.full'    => { query: term, operator: "and", type: 'phrase', boost: 5 } }
             should { match 'full_name.partial' => { query: term, operator: "and", boost: 1 } }
           end
