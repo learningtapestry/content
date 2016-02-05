@@ -1,5 +1,12 @@
 require 'active_support/concern'
 
+# Defines behavior for indexable models on ElasticSearch
+# Usage:
+#
+#    class MyModel < ActiveRecord:Base
+#       include Indexable
+#       acts_as_indexed  # will point to Search::Indexes::MyModelIndex
+#
 module Indexable
   extend ActiveSupport::Concern
 
@@ -22,10 +29,21 @@ module Indexable
       rescue Faraday::ConnectionFailed; end
     end
 
+    # Mark the model as indexed.
+    # The index will point to `Search::Indexess::<ModelName>Index`.
+    #
+    # Optionally you can pass an index_class. E.g:
+    #
+    #  class MyModel < ActiveRecord:Base
+    #    include Indexable
+    #    acts_as_indexed  Search::Indexes::SomeOtherIndex
+    #
     def self.acts_as_indexed(index_class=nil)
       self.index_class = index_class || "Search::Indexes::#{self.name}Index".constantize
     end
 
+    # Points to proper index. If the instance has a repository, then starts
+    # the index for that specific repo
     def search_index
       @search_index ||= self.class.index_class.new(repository: self.try(:repository))
     end
