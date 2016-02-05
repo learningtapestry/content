@@ -1,3 +1,4 @@
+# Encapsulates ElasticSearch search results
 module Search
   class Results
     attr_reader :results, :sources, :total_hits, :model, :hits
@@ -5,10 +6,10 @@ module Search
     def initialize(results, model=nil)
       @results = results
       @total_hits = results['hits']['total']
-      @hits = results['hits']['hits'].map { |hit| Hashie::Mash.new **hit.symbolize_keys }
       @model = model
     end
 
+    # ResourceType => resource_types
     def result_key
       model.name.underscore.pluralize.to_sym
     end
@@ -17,8 +18,15 @@ module Search
       @ids ||= hits.map { |h| h._id }
     end
 
+    # model instances for the found objects
     def records
       model.find(ids)
+    end
+
+    # search results with `_score`
+    # returns a Hashie::Mash to use dot notation on nested hashes
+    def hits
+      @hits ||= @results['hits']['hits'].map { |hit| Hashie::Mash.new **hit.symbolize_keys }
     end
 
     def sources

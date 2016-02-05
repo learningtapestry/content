@@ -1,6 +1,7 @@
 require 'elasticsearch'
 require 'elasticsearch/dsl'
 
+# Base index class
 module Search
   class Index
     include Client
@@ -128,7 +129,7 @@ module Search
 
     # Convert a document object to json-serializable Hash
     #
-    # Should be *Overridden* for the specific type (see `DocumentsIndex#serialize` for an Example)
+    # Can be *Overridden* for the specific type (see `DocumentsIndex#serialize` for an Example)
     def serialize(document)
       begin
         serializer.new(document).as_json
@@ -137,6 +138,9 @@ module Search
       end
     end
 
+    # Try to find a corresponding `AM::Serializer` given the associated model name.
+    # I.e:
+    #   MyModelIndex => MyModelSerializer
     def self.serializer
       @serializer ||= begin
         model_name = self.name.demodulize.gsub('Index', '')
