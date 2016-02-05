@@ -28,6 +28,7 @@ module ContentSearch
 
     ['api', 'tasks', 'serializers', 'reconcilers'].each do |folder|
       config.autoload_paths += Dir[Rails.root.join('app', folder, '*')]
+    end
 
     if (cors_origins = ENV['API_CORS_ORIGINS']) &&
        (cors_origins = cors_origins.split(',')).any?
