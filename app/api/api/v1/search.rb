@@ -3,6 +3,8 @@ require 'search/document_search'
 class API::V1::Search < Grape::API
   helpers API::V1::Helpers
 
+  before { check_roles one_of: [:admin, :search] }
+
   params do
     use :pagination
 
@@ -33,7 +35,7 @@ class API::V1::Search < Grape::API
 
     optional :repository_ids,     type: Array[Integer]
 
-    optional :show_facets,        type: Boolean
+    optional :num_facets,         type: Integer, values: 5..50
   end
 
   get '/' do

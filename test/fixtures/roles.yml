@@ -1,3 +1,9 @@
 lt_admin:
   name: admin
   resource: lt (Organization)
+
+api_key_admin:
+  name: admin
+
+api_key_search:
+  name: search

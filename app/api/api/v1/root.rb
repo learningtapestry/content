@@ -3,10 +3,8 @@ class API::V1::Root < Grape::API
   formatter :json, Grape::Formatter::ActiveModelSerializers
 
   helpers API::V1::Helpers
-  
-  before do
-    error!("401 Unauthorized", 401) unless current_organization
-  end
+
+  before { unauthorized! unless current_organization }
 
   mount API::V1::Repositories => '/repositories'
   mount API::V1::Search => '/search'

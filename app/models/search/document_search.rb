@@ -102,7 +102,7 @@ module Search
           fields options[:only]
         end
 
-        if options[:show_facets]
+        if options[:num_facets].present?
           filter_paths.each do |param_name,(path_name, field_name)|
             aggregation path_name do
               nested do
@@ -110,7 +110,7 @@ module Search
                 aggregation path_name do
                   terms do
                     field "#{path_name}.#{field_name}"
-                    size 10
+                    size options[:num_facets]
 
                     aggregation :top_hits do
                       top_hits({ size: 1 })

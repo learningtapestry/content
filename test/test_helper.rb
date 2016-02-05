@@ -65,8 +65,8 @@ class APITest < ActiveSupport::TestCase
     Rails.application
   end
 
-  def set_api_key
-    header 'X-Api-Key', api_keys(:api_user).key
+  def set_api_key(api_key = api_keys(:api_user))
+    header 'X-Api-Key', api_key.key
   end
 
   def last_json

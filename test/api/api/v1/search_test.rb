@@ -6,7 +6,13 @@ class API::V1::SearchTest < APITest
     assert_equal 401, last_response.status
   end
 
-  test 'GET /api/search works when API key is provided' do
+  test 'GET /api/search works with search role' do
+    set_api_key(api_keys(:api_search))
+    get '/api/v1/search'
+    assert last_response.ok?
+  end
+
+  test 'GET /api/search works with admin role' do
     set_api_key
     get '/api/v1/search'
     assert last_response.ok?

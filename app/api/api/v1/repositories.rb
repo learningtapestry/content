@@ -1,6 +1,8 @@
 class API::V1::Repositories < Grape::API
   helpers API::V1::Helpers
 
+  before { check_roles one_of: [:admin] }
+
   helpers do
     def repositories
       current_organization.repositories

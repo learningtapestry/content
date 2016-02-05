@@ -17,7 +17,10 @@ gem 'highline', '~> 1.7', '>= 1.7.8'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'kaminari', '~> 0.16.3'
+gem 'oj', '~> 2.14', '>= 2.14.3'
+gem 'oj_mimic_json', '~> 1.0', '>= 1.0.1'
 gem 'pg', '~> 0.18.4'
+gem 'rack-cors', '~> 0.4.0'
 gem 'rails', '4.2.5'
 gem 'rolify', '~> 5.0'
 gem 'sass-rails', '~> 5.0'
@@ -31,6 +34,7 @@ gem 'uglifier', '>= 1.3.0'
 
 group :development, :test do
   gem 'byebug'
+  gem 'thin', '~> 1.6', '>= 1.6.4' # Useful for running an SSL-enabled dev server
 end
 
 group :development do
