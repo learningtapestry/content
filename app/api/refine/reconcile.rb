@@ -5,7 +5,7 @@ class Refine::Reconcile < Grape::API
 
   helpers do
     def services
-      ['Grade', 'Language', 'Identity', 'ResourceType', 'Subject']
+      ['Grade', 'Language', 'Identity', 'ResourceType', 'Subject', 'Standard']
     end
 
     #
