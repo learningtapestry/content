@@ -130,7 +130,22 @@ module Search
     #
     # Should be *Overridden* for the specific type (see `DocumentsIndex#serialize` for an Example)
     def serialize(document)
-      document.as_json
+      begin
+        serializer.new(document).as_json
+      rescue
+        document.as_json
+      end
+    end
+
+    def self.serializer
+      @serializer ||= begin
+        model_name = self.name.demodulize.gsub('Index', '')
+        "#{model_name}Serializer".constantize
+      end
+    end
+
+    def serializer
+      self.class.serializer
     end
 
     # =====================

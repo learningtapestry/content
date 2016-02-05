@@ -28,10 +28,6 @@ module Search
           }
         }
       end
-
-      def serialize(grade)
-        LanguageSerializer.new(grade).as_json
-      end
     end
 
   end

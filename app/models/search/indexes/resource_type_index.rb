@@ -19,10 +19,6 @@ module Search
           }
         }
       end
-
-      def serialize(obj)
-        ResourceTypeSerializer.new(obj).as_json
-      end
     end
 
   end

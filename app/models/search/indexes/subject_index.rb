@@ -19,10 +19,6 @@ module Search
           }
         }
       end
-
-      def serialize(identity)
-        SubjectSerializer.new(identity).as_json
-      end
     end
 
   end

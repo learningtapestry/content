@@ -20,10 +20,6 @@ module Search
           }
         }
       end
-
-      def serialize(grade)
-        StandardSerializer.new(grade).as_json
-      end
     end
 
   end
