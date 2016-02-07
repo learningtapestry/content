@@ -56,7 +56,7 @@ module Search
     end
 
     def reset_index!
-      delete_index!
+      delete_index! if index_exists?
       create_index!
     end
 
