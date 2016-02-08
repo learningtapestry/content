@@ -330,7 +330,7 @@ class DocumentImportRowTest < ActiveSupport::TestCase
 
     row = @khan_import.rows.first
     doc = row.to_document
-    
+
     assert_equal DocumentStatus.unpublished, doc.document_status
   end
 
