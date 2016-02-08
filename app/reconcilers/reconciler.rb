@@ -93,7 +93,7 @@ class Reconciler
       else
         # if didnt found anything, then call `create`
         created = method_call(:create, context, options)
-        value_mappings.create!(mappable: created, value: normalized, rank: 1) if save_mappings
+        value_mappings.create!(mappable: created, value: normalized, rank: 1) if save_mappings && created
 
         reconciled = [created]
       end

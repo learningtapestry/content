@@ -12,10 +12,9 @@ module Search
       index = Indexes::GradeIndex.new
       index.create_index!
       sleep 0.5 # wait for ES to perform operation
-      index.save grades(:grade_1)
-      index.save grades(:grade_2)
-      index.save grades(:grade_K)
-      sleep 0.5 # wait for ES to perform operation
+      objects = [:grade_1, :grade_2, :grade_K].map { |key| grades(key) }
+      index.bulk_index objects
+      sleep 1 # wait for ES to perform operation
     end
 
     test "#results" do

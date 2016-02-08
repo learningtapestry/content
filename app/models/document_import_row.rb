@@ -42,7 +42,7 @@ class DocumentImportRow < ActiveRecord::Base
     import_relation('resource_types', doc.document_resource_types, ResourceType)
     import_relation('standards',      doc.document_standards,      Standard)
     import_relation('subjects',       doc.document_subjects,       Subject)
-    import_relation('publishers',     doc.document_identities,     Identity) { 
+    import_relation('publishers',     doc.document_identities,     Identity) {
       |idt| idt.identity_type = IdentityType.publisher
     }
 
