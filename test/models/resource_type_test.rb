@@ -5,6 +5,10 @@ class ResourceTypeTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test '.reconciler' do
+    assert_kind_of ResourceTypeReconciler, ResourceType.reconciler
+  end
+
   test '.reconcile creates a new resource_type' do
     assert_difference 'ResourceType.count', +1 do
       resource_type = ResourceType.reconcile(repository: @repo, value: 'test resource_type')[0]
@@ -31,4 +35,9 @@ class ResourceTypeTest < ActiveSupport::TestCase
       ResourceType.reconcile(repository: @repo, value: 'lesson')
     end
   end
+
+  test '#search_index points to Index class' do
+    assert_kind_of  Search::Indexes::ResourceTypeIndex, ResourceType.new.search_index
+  end
+
 end

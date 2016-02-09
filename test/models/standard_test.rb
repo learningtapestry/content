@@ -5,6 +5,10 @@ class StandardTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test '.reconciler' do
+    assert_kind_of StandardReconciler, Standard.reconciler
+  end
+
   test '.reconcile creates a new standard' do
     assert_difference 'Standard.count', +1 do
       standard = Standard.reconcile(repository: @repo, value: 'test standard')[0]
@@ -31,4 +35,9 @@ class StandardTest < ActiveSupport::TestCase
       Standard.reconcile(repository: @repo, value: 'ccls.1.2')
     end
   end
+
+  test '#search_index points to Index class' do
+    assert_kind_of  Search::Indexes::StandardIndex, Standard.new.search_index
+  end
+
 end

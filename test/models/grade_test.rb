@@ -5,6 +5,10 @@ class GradeTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test '.reconciler' do
+    assert_kind_of GradeReconciler, Grade.reconciler
+  end
+
   test '.reconcile creates a new grade' do
     assert_difference 'Grade.count', +1 do
       grade = Grade.reconcile(repository: @repo, value: 'test grade')[0]
@@ -30,5 +34,9 @@ class GradeTest < ActiveSupport::TestCase
     assert_no_difference 'ValueMapping.count' do
       Grade.reconcile(repository: @repo, value: 'grade 1')
     end
+  end
+
+  test '#search_index points to Index class' do
+    assert_kind_of  Search::Indexes::GradeIndex, Grade.new.search_index
   end
 end

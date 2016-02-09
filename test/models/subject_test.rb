@@ -5,6 +5,10 @@ class SubjectTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test ".reconciler" do
+    assert_kind_of SubjectReconciler, Subject.reconciler
+  end
+
   test '.reconcile creates a new subject' do
     assert_difference 'Subject.count', +1 do
       subject = Subject.reconcile(repository: @repo, value: 'test subject')[0]
@@ -30,5 +34,9 @@ class SubjectTest < ActiveSupport::TestCase
     assert_no_difference 'ValueMapping.count' do
       Subject.reconcile(repository: @repo, value: 'history')
     end
+  end
+
+  test '#search_index points to Index class' do
+    assert_kind_of  Search::Indexes::SubjectIndex, Subject.new.search_index
   end
 end

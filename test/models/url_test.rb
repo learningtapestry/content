@@ -12,6 +12,10 @@ class UrlTest < ActiveSupport::TestCase
     assert_equal parent, Url.find_root('http://www.child.com')
   end
 
+  test '.reconciler' do
+    assert_kind_of UrlReconciler, Url.reconciler
+  end
+
   test '.reconcile creates a new url' do
     assert_difference 'Url.count', +1 do
       url = Url.reconcile(repository: @repo, value: 'http://www.test.com')[0]

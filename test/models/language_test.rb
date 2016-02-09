@@ -5,6 +5,10 @@ class LanguageTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test '.reconciler' do
+    assert_kind_of LanguageReconciler, Language.reconciler
+  end
+
   test '.reconcile creates a new language' do
     assert_difference 'Language.count', +1 do
       language = Language.reconcile(repository: @repo, value: 'ko')[0]
@@ -30,6 +34,10 @@ class LanguageTest < ActiveSupport::TestCase
     assert_no_difference 'ValueMapping.count' do
       Language.reconcile(repository: @repo, value: 'en')
     end
+  end
+
+  test '#search_index points to Index class' do
+    assert_kind_of Search::Indexes::LanguageIndex, Language.new.search_index
   end
 
 end

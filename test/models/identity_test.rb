@@ -5,6 +5,10 @@ class IdentityTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test '.reconciler' do
+    assert_kind_of IdentityReconciler, Identity.reconciler
+  end
+
   test '.reconcile creates a new publisher' do
     assert_difference 'Identity.count', +1 do
       publisher = Identity.reconcile(repository: @repo, value: 'test publisher')[0]
@@ -30,6 +34,10 @@ class IdentityTest < ActiveSupport::TestCase
     assert_no_difference 'ValueMapping.count' do
       Identity.reconcile(repository: @repo, value: 'Khan Academy')
     end
+  end
+
+  test '#search_index points to Index class' do
+    assert_kind_of  Search::Indexes::IdentityIndex, Identity.new.search_index
   end
 
 end
