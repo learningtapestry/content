@@ -61,7 +61,7 @@ module Search
         name = SecureRandom.hex(8)
         grade = Grade.create name: name, review_status: ReviewStatus.reviewed
 
-        assert index.save(grade)
+        index.save(grade)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -77,16 +77,15 @@ module Search
           @after_save_called = true
         end
 
-        assert index.save(grade)
+        index.save(grade)
         assert index.instance_variable_get(:@after_save_called)
       end
 
       test '#delete' do
         index = GradeIndex.new
         name = SecureRandom.hex(8)
-        grade = Grade.create name: name, review_status: ReviewStatus.reviewed
-
-        assert index.save(grade)
+        grade = Grade.create name: name
+        index.save(grade)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -102,9 +101,8 @@ module Search
       test '#after_delete' do
         index = GradeIndex.new
         name = SecureRandom.hex(8)
-        grade = Grade.create name: name, review_status: ReviewStatus.reviewed
-
-        assert index.save(grade)
+        grade = Grade.create name: name
+        index.save(grade)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)

@@ -59,9 +59,8 @@ module Search
       test '#save' do
         index = SubjectIndex.new
         name = SecureRandom.hex(8)
-        subject = Subject.create name: name, review_status: ReviewStatus.reviewed
-
-        assert index.save(subject)
+        subject = Subject.create name: name
+        index.save(subject)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -77,16 +76,15 @@ module Search
           @after_save_called = true
         end
 
-        assert index.save(subject)
+        index.save(subject)
         assert index.instance_variable_get(:@after_save_called)
       end
 
       test '#delete' do
         index = SubjectIndex.new
         name = SecureRandom.hex(8)
-        subject = Subject.create name: name, review_status: ReviewStatus.reviewed
-
-        assert index.save(subject)
+        subject = Subject.create name: name
+        index.save(subject)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -102,9 +100,8 @@ module Search
       test '#after_delete' do
         index = SubjectIndex.new
         name = SecureRandom.hex(8)
-        subject = Subject.create name: name, review_status: ReviewStatus.reviewed
-
-        assert index.save(subject)
+        subject = Subject.create name: name
+        index.save(subject)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)

@@ -39,4 +39,39 @@ class SubjectTest < ActiveSupport::TestCase
   test '#search_index points to Index class' do
     assert_kind_of  Search::Indexes::SubjectIndex, Subject.new.search_index
   end
+
+  test "index on create" do
+    reset_index
+    name = SecureRandom.hex(8)
+    assert Subject.create name: name
+
+    sleep 1
+    res = Search::SubjectSearch.new.search q: name
+    assert_equal 1, res.total_hits
+    assert_equal name, res.sources.first['name']
+  end
+
+  test "remove from index on destroy" do
+    reset_index
+    name = SecureRandom.hex(8)
+    obj = Subject.create name: name
+
+    sleep 1
+    res = Search::SubjectSearch.new.search q: name
+    assert_equal 1, res.total_hits
+
+    obj.destroy
+
+    sleep 1
+    res = Search::SubjectSearch.new.search q: name
+    assert_equal 0, res.total_hits
+  end
+
+  test "reviewable" do
+    assert_equal ReviewStatus.not_reviewed, Subject.new.review_status
+  end
+
+  def reset_index
+    @index ||= Search::Indexes::SubjectIndex.new.reset_index!
+  end
 end

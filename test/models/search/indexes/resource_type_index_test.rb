@@ -59,9 +59,8 @@ module Search
       test '#save' do
         index = ResourceTypeIndex.new
         name = SecureRandom.hex(8)
-        resource_type = ResourceType.create name: name, review_status: ReviewStatus.reviewed
-
-        assert index.save(resource_type)
+        resource_type = ResourceType.create name: name
+        index.save(resource_type)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -77,16 +76,15 @@ module Search
           @after_save_called = true
         end
 
-        assert index.save(resource_type)
+        index.save(resource_type)
         assert index.instance_variable_get(:@after_save_called)
       end
 
       test '#delete' do
         index = ResourceTypeIndex.new
         name = SecureRandom.hex(8)
-        resource_type = ResourceType.create name: name, review_status: ReviewStatus.reviewed
-
-        assert index.save(resource_type)
+        resource_type = ResourceType.create name: name
+        index.save(resource_type)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -102,9 +100,8 @@ module Search
       test '#after_delete' do
         index = ResourceTypeIndex.new
         name = SecureRandom.hex(8)
-        resource_type = ResourceType.create name: name, review_status: ReviewStatus.reviewed
-
-        assert index.save(resource_type)
+        resource_type = ResourceType.create name: name
+        index.save(resource_type)
         sleep 1.0
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)

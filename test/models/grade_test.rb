@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'securerandom'
 
 class GradeTest < ActiveSupport::TestCase
   setup do
@@ -38,5 +39,40 @@ class GradeTest < ActiveSupport::TestCase
 
   test '#search_index points to Index class' do
     assert_kind_of  Search::Indexes::GradeIndex, Grade.new.search_index
+  end
+
+  test "index on create" do
+    reset_index
+    name = SecureRandom.hex(8)
+    assert Grade.create name: name
+
+    sleep 1
+    res = Search::GradeSearch.new.search q: name
+    assert_equal 1, res.total_hits
+    assert_equal name, res.sources.first['name']
+  end
+
+  test "remove from index on destroy" do
+    reset_index
+    name = SecureRandom.hex(8)
+    grade = Grade.create name: name
+
+    sleep 1
+    res = Search::GradeSearch.new.search q: name
+    assert_equal 1, res.total_hits
+
+    grade.destroy
+
+    sleep 1
+    res = Search::GradeSearch.new.search q: name
+    assert_equal 0, res.total_hits
+  end
+
+  test "reviewable" do
+    assert_equal ReviewStatus.not_reviewed, Grade.new.review_status
+  end
+
+  def reset_index
+    @index ||= Search::Indexes::GradeIndex.new.reset_index!
   end
 end

@@ -39,5 +39,39 @@ class StandardTest < ActiveSupport::TestCase
   test '#search_index points to Index class' do
     assert_kind_of  Search::Indexes::StandardIndex, Standard.new.search_index
   end
+  
+  test "index on create" do
+    reset_index
+    name = SecureRandom.hex(8)
+    assert Standard.create name: name
 
+    sleep 1
+    res = Search::StandardSearch.new.search q: name
+    assert_equal 1, res.total_hits
+    assert_equal name, res.sources.first['name']
+  end
+
+  test "remove from index on destroy" do
+    reset_index
+    name = SecureRandom.hex(8)
+    obj = Standard.create name: name
+
+    sleep 1
+    res = Search::StandardSearch.new.search q: name
+    assert_equal 1, res.total_hits
+
+    obj.destroy
+
+    sleep 1
+    res = Search::StandardSearch.new.search q: name
+    assert_equal 0, res.total_hits
+  end
+
+  test "reviewable" do
+    assert_equal ReviewStatus.not_reviewed, Standard.new.review_status
+  end
+
+  def reset_index
+    @index ||= Search::Indexes::StandardIndex.new.reset_index!
+  end
 end

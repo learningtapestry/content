@@ -40,4 +40,38 @@ class IdentityTest < ActiveSupport::TestCase
     assert_kind_of  Search::Indexes::IdentityIndex, Identity.new.search_index
   end
 
+  test "index on create" do
+    reset_index
+    name = SecureRandom.hex(8)
+    assert Identity.create name: name
+
+    sleep 1
+    res = Search::IdentitySearch.new.search q: name
+    assert_equal 1, res.total_hits
+    assert_equal name, res.sources.first['name']
+  end
+
+  test "remove from index on destroy" do
+    reset_index
+    name = SecureRandom.hex(8)
+    obj = Identity.create name: name
+
+    sleep 1
+    res = Search::IdentitySearch.new.search q: name
+    assert_equal 1, res.total_hits
+
+    obj.destroy
+
+    sleep 1
+    res = Search::IdentitySearch.new.search q: name
+    assert_equal 0, res.total_hits
+  end
+
+  test "reviewable" do
+    assert_equal ReviewStatus.not_reviewed, Identity.new.review_status
+  end
+
+  def reset_index
+    @index ||= Search::Indexes::IdentityIndex.new.reset_index!
+  end
 end
