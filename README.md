@@ -19,6 +19,7 @@ This is a standard Rails app:
 1. Set up `.env.test` and `.env.development` (see `.env.template` for an example)
 2. Run `bundle`
 3. Run tests with `rake test`
+4. (Optional) run `sidekiq` for background tasks
 
 Note: make sure the PostgreSQL database user is a superuser before running tests.
 
