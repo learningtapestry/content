@@ -20,6 +20,8 @@ This is a standard Rails app:
 2. Run `bundle`
 3. Run tests with `rake test`
 
+Note: make sure the PostgreSQL database user is a superuser before running tests.
+
 ## Setup using Vagrant
 
 1. install VirtualBox
