@@ -1,3 +1,6 @@
 lesson:
   name: lesson
   review_status: reviewed
+quiz:
+  name: quiz
+  review_status: reviewed

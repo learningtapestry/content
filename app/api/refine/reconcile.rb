@@ -75,7 +75,7 @@ class Refine::Reconcile < Grape::API
 
     # define type specific thresholds for matching scores
     def match_threshold(type)
-      {'Grade' => 1, 'Language' => 0.2}.fetch(type, 0.5)
+      {'Grade' => 0.7, 'Language' => 0.2}.fetch(type, 0.5)
     end
   end
 
