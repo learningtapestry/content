@@ -37,7 +37,7 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test '#search_index points to Index class' do
-    assert_kind_of  Search::Indexes::SubjectIndex, Subject.new.search_index
+    assert_kind_of  Search::Indices::SubjectIndex, Subject.new.search_index
   end
 
   test "index on create" do
@@ -72,6 +72,6 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   def reset_index
-    @index ||= Search::Indexes::SubjectIndex.new.reset_index!
+    @index ||= Search::Indices::SubjectIndex.new.reset_index!
   end
 end

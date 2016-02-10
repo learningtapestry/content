@@ -14,7 +14,7 @@ class Repository < ActiveRecord::Base
   end
 
   def search_index
-    @search_index ||= Search::Indexes::DocumentsIndex.new(repository: self)
+    @search_index ||= Search::Indices::DocumentsIndex.new(repository: self)
   end
 
   def create_search_index!

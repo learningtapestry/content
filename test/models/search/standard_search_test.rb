@@ -5,7 +5,7 @@ module Search
     @@initial_setup = true
 
     setup do
-      index = Indexes::StandardIndex.new
+      index = Indices::StandardIndex.new
       if @@initial_setup || !index.index_exists?
         index.reset_index!
         @@initial_setup = false
@@ -13,7 +13,7 @@ module Search
     end
 
     def index_objects
-      Indexes::StandardIndex.new.index standards(:ccls_1_2)
+      Indices::StandardIndex.new.index standards(:ccls_1_2)
       refresh_indices
     end
 

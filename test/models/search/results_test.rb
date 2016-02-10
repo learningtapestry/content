@@ -9,7 +9,7 @@ module Search
     end
 
     def setup_index
-      index = Indexes::GradeIndex.new
+      index = Indices::GradeIndex.new
       index.create_index!
       refresh_indices
       objects = [:grade_1, :grade_2, :grade_K].map { |key| grades(key) }

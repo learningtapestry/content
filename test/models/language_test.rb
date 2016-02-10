@@ -37,7 +37,7 @@ class LanguageTest < ActiveSupport::TestCase
   end
 
   test '#search_index points to Index class' do
-    assert_kind_of Search::Indexes::LanguageIndex, Language.new.search_index
+    assert_kind_of Search::Indices::LanguageIndex, Language.new.search_index
   end
 
   test "index on create" do
@@ -72,6 +72,6 @@ class LanguageTest < ActiveSupport::TestCase
   end
 
   def reset_index
-    @index ||= Search::Indexes::LanguageIndex.new.reset_index!
+    @index ||= Search::Indices::LanguageIndex.new.reset_index!
   end
 end

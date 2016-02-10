@@ -1,10 +1,10 @@
 module Search
-  module Indexes
+  module Indices
 
-    class LanguageIndex < Index
+    class ResourceTypeIndex < Index
       def mappings
         {
-          language: {
+          resource_type: {
             properties: {
               id: {type: 'string', index: 'not_analyzed'},
               name: {
@@ -13,15 +13,6 @@ module Search
                   name:    {type: 'string', index: 'not_analyzed'},
                   full:    {type: 'string', analyzer: 'full_str'},
                   partial: {type: 'string', analyzer: 'partial_str'}
-                }
-              },
-              full_name: {
-                type: 'multi_field',
-                fields: {
-                  full_name: {type: 'string', index: 'not_analyzed'},
-                  full:      {type: 'string', analyzer: 'full_str'},
-                  partial:   {type: 'string', analyzer: 'partial_str'}
-
                 }
               }
             }

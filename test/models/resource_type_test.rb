@@ -37,7 +37,7 @@ class ResourceTypeTest < ActiveSupport::TestCase
   end
 
   test '#search_index points to Index class' do
-    assert_kind_of  Search::Indexes::ResourceTypeIndex, ResourceType.new.search_index
+    assert_kind_of  Search::Indices::ResourceTypeIndex, ResourceType.new.search_index
   end
   test "index on create" do
     reset_index
@@ -71,6 +71,6 @@ class ResourceTypeTest < ActiveSupport::TestCase
   end
 
   def reset_index
-    @index ||= Search::Indexes::ResourceTypeIndex.new.reset_index!
+    @index ||= Search::Indices::ResourceTypeIndex.new.reset_index!
   end
 end

@@ -1,5 +1,5 @@
 module Search
-  module Indexes
+  module Indices
 
     class SubjectIndex < Index
       def mappings

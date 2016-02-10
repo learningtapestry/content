@@ -1,10 +1,10 @@
 module Search
-  module Indexes
+  module Indices
 
-    class ResourceTypeIndex < Index
+    class StandardIndex < Index
       def mappings
         {
-          resource_type: {
+          standard: {
             properties: {
               id: {type: 'string', index: 'not_analyzed'},
               name: {
@@ -14,7 +14,8 @@ module Search
                   full:    {type: 'string', analyzer: 'full_str'},
                   partial: {type: 'string', analyzer: 'partial_str'}
                 }
-              }
+              },
+              url: {type: 'string', index: 'not_analyzed'}
             }
           }
         }

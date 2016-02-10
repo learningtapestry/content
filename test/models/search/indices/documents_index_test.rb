@@ -2,7 +2,7 @@ require 'securerandom'
 require 'test_helper'
 
 module Search
-  module Indexes
+  module Indices
     class DocumentsIndexTest < ActiveSupport::TestCase
       setup do
         delete_indices

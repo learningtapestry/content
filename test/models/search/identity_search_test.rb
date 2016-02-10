@@ -5,7 +5,7 @@ module Search
     @@initial_setup = true
 
     setup do
-      index = Indexes::IdentityIndex.new
+      index = Indices::IdentityIndex.new
       if @@initial_setup || !index.index_exists?
         index.reset_index!
         @@initial_setup = false
@@ -14,7 +14,7 @@ module Search
 
     def index_objects
       objects = [:khan, :jason].map { |key| identities(key) }
-      Indexes::IdentityIndex.new.bulk_index objects
+      Indices::IdentityIndex.new.bulk_index objects
       refresh_indices
     end
 

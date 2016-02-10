@@ -1,10 +1,10 @@
 module Search
-  module Indexes
+  module Indices
 
-    class StandardIndex < Index
+    class IdentityIndex < Index
       def mappings
         {
-          standard: {
+          identity: {
             properties: {
               id: {type: 'string', index: 'not_analyzed'},
               name: {
@@ -14,8 +14,7 @@ module Search
                   full:    {type: 'string', analyzer: 'full_str'},
                   partial: {type: 'string', analyzer: 'partial_str'}
                 }
-              },
-              url: {type: 'string', index: 'not_analyzed'}
+              }
             }
           }
         }

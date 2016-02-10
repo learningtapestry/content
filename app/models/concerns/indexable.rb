@@ -5,7 +5,7 @@ require 'active_support/concern'
 #
 #    class MyModel < ActiveRecord:Base
 #       include Indexable
-#       acts_as_indexed  # will point to Search::Indexes::MyModelIndex
+#       acts_as_indexed  # will point to Search::Indices::MyModelIndex
 #
 module Indexable
   extend ActiveSupport::Concern
@@ -30,16 +30,16 @@ module Indexable
     end
 
     # Mark the model as indexed.
-    # The index will point to `Search::Indexess::<ModelName>Index`.
+    # The index will point to `Search::Indices::<ModelName>Index`.
     #
     # Optionally you can pass an index_class. E.g:
     #
     #  class MyModel < ActiveRecord:Base
     #    include Indexable
-    #    acts_as_indexed  Search::Indexes::SomeOtherIndex
+    #    acts_as_indexed  Search::Indices::SomeOtherIndex
     #
     def self.acts_as_indexed(index_class=nil)
-      self.index_class = index_class || "Search::Indexes::#{self.name}Index".constantize
+      self.index_class = index_class || "Search::Indices::#{self.name}Index".constantize
     end
 
     # Points to proper index. If the instance has a repository, then starts

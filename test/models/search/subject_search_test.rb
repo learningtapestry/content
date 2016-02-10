@@ -5,7 +5,7 @@ module Search
     @@initial_setup = true
 
     setup do
-      index = Indexes::SubjectIndex.new
+      index = Indices::SubjectIndex.new
       if @@initial_setup || !index.index_exists?
         index.reset_index!
         @@initial_setup = false
@@ -16,7 +16,7 @@ module Search
       objects = ['math', 'chemistry', 'history'].map do |name|
         Subject.create(name: name, review_status: ReviewStatus.reviewed)
       end
-      Indexes::SubjectIndex.new.bulk_index objects
+      Indices::SubjectIndex.new.bulk_index objects
       refresh_indices
     end
 

@@ -2,7 +2,7 @@ require 'securerandom'
 require 'test_helper'
 
 module Search
-  module Indexes
+  module Indices
     class SubjectIndexTest < ActiveSupport::TestCase
       @@initial_setup = true
 

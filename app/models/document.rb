@@ -21,7 +21,7 @@ class Document < ActiveRecord::Base
   validates :title, presence: true
 
   include Indexable
-  acts_as_indexed Search::Indexes::DocumentsIndex
+  acts_as_indexed Search::Indices::DocumentsIndex
 
   def self.find_by_url(url)
     where(url: Url.find_by(url: url)).first

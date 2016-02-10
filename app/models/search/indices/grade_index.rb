@@ -1,5 +1,5 @@
 module Search
-  module Indexes
+  module Indices
 
     class GradeIndex < Index
       def settings

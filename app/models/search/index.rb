@@ -20,7 +20,7 @@ module Search
     # infer type_name from class.
     #
     # e.g:
-    #    Search::Indexes::GradesIndex => 'grade'
+    #    Search::Indices::GradesIndex => 'grade'
     def type_name
       self.class.name.demodulize.gsub('Index', '').underscore.singularize
     end

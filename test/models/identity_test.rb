@@ -37,7 +37,7 @@ class IdentityTest < ActiveSupport::TestCase
   end
 
   test '#search_index points to Index class' do
-    assert_kind_of  Search::Indexes::IdentityIndex, Identity.new.search_index
+    assert_kind_of  Search::Indices::IdentityIndex, Identity.new.search_index
   end
 
   test "index on create" do
@@ -72,6 +72,6 @@ class IdentityTest < ActiveSupport::TestCase
   end
 
   def reset_index
-    @index ||= Search::Indexes::IdentityIndex.new.reset_index!
+    @index ||= Search::Indices::IdentityIndex.new.reset_index!
   end
 end
