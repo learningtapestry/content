@@ -2,10 +2,6 @@ module Search
   class StandardSearch
     include SimpleSearch
 
-    def model
-      Standard
-    end
-
     def query(options = {})
       limit = options[:limit] || 100
       page = options[:page] || 1

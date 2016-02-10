@@ -2,10 +2,6 @@ module Search
   class LanguageSearch
     include SimpleSearch
 
-    def model
-      Language
-    end
-
     def query(options = {})
       limit = options[:limit] || 100
       page = options[:page] || 1

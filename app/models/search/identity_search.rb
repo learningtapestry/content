@@ -2,10 +2,6 @@ module Search
   class IdentitySearch
     include SimpleSearch
 
-    def model
-      Identity
-    end
-
     def query(options = {})
       limit = options[:limit] || 100
       page = options[:page] || 1

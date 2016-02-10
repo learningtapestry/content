@@ -2,10 +2,6 @@ module Search
   class ResourceTypeSearch
     include SimpleSearch
 
-    def model
-      ResourceType
-    end
-
     def query(options = {})
       limit = options[:limit] || 100
       page = options[:page] || 1

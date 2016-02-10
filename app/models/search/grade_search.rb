@@ -2,10 +2,6 @@ module Search
   class GradeSearch
     include SimpleSearch
 
-    def model
-      Grade
-    end
-
     def query(options = {})
       limit = options[:limit] || 100
       page = options[:page] || 1
