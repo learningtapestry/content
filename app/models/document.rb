@@ -1,6 +1,4 @@
 class Document < ActiveRecord::Base
-  attr_accessor :skip_indexing
-
   belongs_to :document_status
   belongs_to :repository
   belongs_to :url
@@ -21,6 +19,9 @@ class Document < ActiveRecord::Base
 
   validates :url,   presence: true
   validates :title, presence: true
+
+  include Indexable
+  acts_as_indexed
 
   def self.find_by_url(url)
     where(url: Url.find_by(url: url)).first
@@ -49,43 +50,9 @@ class Document < ActiveRecord::Base
 
   #
   # Returns publisher identities
-  # 
+  #
   def publishers
     identities_of(:publisher)
-  end
-
-  #
-  # Searching
-  #
-  after_commit :index_document, on: [:create, :update], unless: :skip_indexing?
-  after_commit :delete_document, on: :destroy, unless: :skip_indexing?
-
-  def index_document
-    begin
-      search_index.save(self)
-    rescue Faraday::ConnectionFailed; end
-  end
-
-  def delete_document
-    begin
-      search_index.delete(self)
-    rescue Faraday::ConnectionFailed; end
-  end
-
-  def search_index
-    repository.search_index
-  end
-
-  def skip_indexing?
-    !!skip_indexing || !search_index.index_exists?
-  end
-
-  def indexed?
-    indexed_at.present?
-  end
-
-  def as_indexed_json
-    DocumentIndexedSerializer.new(self).as_json
   end
 
   # This is just a handy method to get the correct timezone for doing

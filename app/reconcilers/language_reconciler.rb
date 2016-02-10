@@ -1,0 +1,3 @@
+class LanguageReconciler < Reconciler
+
+end

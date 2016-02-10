@@ -1,0 +1,3 @@
+class ResourceTypeReconciler < Reconciler
+
+end

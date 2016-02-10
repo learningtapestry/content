@@ -109,6 +109,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.10)
     formatador (0.2.5)
+    git-version-bump (0.15.1)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     grape (0.14.0)
@@ -192,6 +193,9 @@ GEM
     rack (1.6.4)
     rack-accept (0.4.5)
       rack (>= 0.4)
+    rack-contrib (1.4.0)
+      git-version-bump (~> 0.15)
+      rack (~> 1.4)
     rack-cors (0.4.0)
     rack-mount (0.8.3)
       rack (>= 1.0.0)
@@ -266,6 +270,8 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    test_after_commit (0.4.2)
+      activerecord (>= 3.2)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
@@ -333,6 +339,7 @@ DEPENDENCIES
   oj_mimic_json (~> 1.0, >= 1.0.1)
   pg (~> 0.18.4)
   poltergeist (~> 1.8, >= 1.8.1)
+  rack-contrib (>= 1.4.0)
   rack-cors (~> 0.4.0)
   rails (= 4.2.5)
   rolify (~> 5.0)
@@ -343,6 +350,7 @@ DEPENDENCIES
   sidekiq (~> 4.0, >= 4.0.1)
   simple_form (~> 3.2)
   spring
+  test_after_commit
   therubyracer
   thin (~> 1.6, >= 1.6.4)
   turbolinks

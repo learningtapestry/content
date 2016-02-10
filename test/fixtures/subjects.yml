@@ -1,3 +1,6 @@
 history:
   name: history
   review_status: reviewed
+chemistry:
+  name: chemistry
+  review_status: reviewed

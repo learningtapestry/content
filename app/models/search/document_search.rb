@@ -1,5 +1,5 @@
 module Search
-  class Search
+  class DocumentSearch
     include Client
     include Dsl
 
@@ -94,7 +94,7 @@ module Search
                 end
               end
             end
-            
+
           end
         end
 
@@ -123,11 +123,11 @@ module Search
         end
       end
 
-      ::Search::Results.new(client.search(
-        index: index_names,
-        body: definition,
-        type: 'document'
-      ))
+      parse_results client.search(index: index_names, body: definition, type: 'document')
+    end
+
+    def parse_results(res)
+      ::Search::Results.new res, Document
     end
 
     def index_names

@@ -11,6 +11,7 @@ gem 'elasticsearch', '~> 1.0', '>= 1.0.15'
 gem 'elasticsearch-dsl', '~> 0.1.2'
 gem 'grape', '~> 0.14.0'
 gem 'grape-active_model_serializers', '~> 1.3', '>= 1.3.2'
+gem 'rack-contrib', '>= 1.4.0'
 gem 'hashie-forbidden_attributes', '~> 0.1.1'
 gem 'highline', '~> 1.7', '>= 1.7.8'
 gem 'jbuilder', '~> 2.0'
@@ -48,4 +49,5 @@ group :test do
   gem 'guard-minitest', '~> 2.4', '>= 2.4.4'
   gem 'poltergeist', '~> 1.8', '>= 1.8.1'
   gem 'shoulda', '~> 3.5'
+  gem 'test_after_commit'
 end

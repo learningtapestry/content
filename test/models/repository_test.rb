@@ -5,7 +5,7 @@ class RepositoryTest < ActiveSupport::TestCase
     khan = repositories(:khan)
     idx = khan.search_index
 
-    assert_kind_of Search::Index, idx
+    assert_kind_of Search::Indices::DocumentsIndex, idx
     assert_equal khan, idx.repository
   end
 end

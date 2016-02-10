@@ -1,0 +1,3 @@
+class SubjectReconciler < Reconciler
+
+end

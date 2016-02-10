@@ -1,0 +1,3 @@
+class StandardReconciler < Reconciler
+
+end

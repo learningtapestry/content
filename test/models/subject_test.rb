@@ -5,6 +5,10 @@ class SubjectTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test ".reconciler" do
+    assert_kind_of SubjectReconciler, Subject.reconciler
+  end
+
   test '.reconcile creates a new subject' do
     assert_difference 'Subject.count', +1 do
       subject = Subject.reconcile(repository: @repo, value: 'test subject')[0]
@@ -30,5 +34,44 @@ class SubjectTest < ActiveSupport::TestCase
     assert_no_difference 'ValueMapping.count' do
       Subject.reconcile(repository: @repo, value: 'history')
     end
+  end
+
+  test '#search_index points to Index class' do
+    assert_kind_of  Search::Indices::SubjectsIndex, Subject.new.search_index
+  end
+
+  test "index on create" do
+    reset_index
+    name = SecureRandom.hex(8)
+    assert Subject.create name: name
+
+    refresh_indices
+    res = Subject.search name
+    assert_equal 1, res.total_hits
+    assert_equal name, res.sources.first['name']
+  end
+
+  test "remove from index on destroy" do
+    reset_index
+    name = SecureRandom.hex(8)
+    obj = Subject.create name: name
+
+    refresh_indices
+    res = Subject.search name
+    assert_equal 1, res.total_hits
+
+    obj.destroy
+
+    refresh_indices
+    res = Subject.search name
+    assert_equal 0, res.total_hits
+  end
+
+  test "reviewable" do
+    assert_equal ReviewStatus.not_reviewed, Subject.new.review_status
+  end
+
+  def reset_index
+    @index ||= Search::Indices::SubjectsIndex.new.reset_index!
   end
 end

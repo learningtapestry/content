@@ -1,4 +1,4 @@
-require 'search/search'
+require 'search/document_search'
 
 class API::V1::Search < Grape::API
   helpers API::V1::Helpers
@@ -46,8 +46,8 @@ class API::V1::Search < Grape::API
       raise ActiveRecord::RecordNotFound if repos.empty?
     end
 
-    results = Search::Search.new(repos.search_indices).search(dparams)
-    
+    results = Search::DocumentSearch.new(repos.search_indices).search(dparams)
+
     x_total results.total_hits
     results.display
   end

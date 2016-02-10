@@ -1,0 +1,3 @@
+class IdentityReconciler < Reconciler
+
+end

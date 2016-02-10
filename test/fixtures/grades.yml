@@ -1,3 +1,39 @@
 grade_1:
   name: grade 1
   review_status: reviewed
+grade_2:
+  name: grade 2
+  review_status: reviewed
+grade_3:
+  name: grade 3
+  review_status: reviewed
+grade_4:
+  name: grade 4
+  review_status: reviewed
+grade_5:
+  name: grade 5
+  review_status: reviewed
+grade_6:
+  name: grade 6
+  review_status: reviewed
+grade_7:
+  name: grade 7
+  review_status: reviewed
+grade_8:
+  name: grade 8
+  review_status: reviewed
+grade_9:
+  name: grade 9
+  review_status: reviewed
+grade_10:
+  name: grade 10
+  review_status: reviewed
+grade_11:
+  name: grade 11
+  review_status: reviewed
+grade_12:
+  name: grade 12
+  review_status: reviewed
+grade_K:
+  name: Kindergarten
+  review_status: reviewed

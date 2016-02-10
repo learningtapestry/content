@@ -5,6 +5,10 @@ class LanguageTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test '.reconciler' do
+    assert_kind_of LanguageReconciler, Language.reconciler
+  end
+
   test '.reconcile creates a new language' do
     assert_difference 'Language.count', +1 do
       language = Language.reconcile(repository: @repo, value: 'ko')[0]
@@ -32,4 +36,42 @@ class LanguageTest < ActiveSupport::TestCase
     end
   end
 
+  test '#search_index points to Index class' do
+    assert_kind_of Search::Indices::LanguagesIndex, Language.new.search_index
+  end
+
+  test "index on create" do
+    reset_index
+    name = SecureRandom.hex(8)
+    assert Language.create name: name
+
+    refresh_indices
+    res = Language.search name
+    assert_equal 1, res.total_hits
+    assert_equal name, res.sources.first['name']
+  end
+
+  test "remove from index on destroy" do
+    reset_index
+    name = SecureRandom.hex(8)
+    obj = Language.create name: name
+
+    refresh_indices
+    res = Language.search name
+    assert_equal 1, res.total_hits
+
+    obj.destroy
+
+    refresh_indices
+    res = Language.search name
+    assert_equal 0, res.total_hits
+  end
+
+  test "reviewable" do
+    assert_equal ReviewStatus.not_reviewed, Language.new.review_status
+  end
+
+  def reset_index
+    @index ||= Search::Indices::LanguagesIndex.new.reset_index!
+  end
 end

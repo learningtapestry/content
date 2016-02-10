@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   mount API::V1::Root => '/api/v1'
+  mount Refine::Reconcile => '/refine/reconcile'
 
   devise_for :users
 
@@ -11,11 +12,11 @@ Rails.application.routes.draw do
     resources :document_exports, except: [:edit, :update] do
       get :download, on: :member
     end
-    
+
     resources :document_imports, except: [:edit, :update] do
       post :publish, on: :member
     end
-    
+
     resources :repositories
   end
 
@@ -27,4 +28,5 @@ Rails.application.routes.draw do
 
   # Public (visitor) routes.
   root 'visitor/welcome#index', as: :visitor_root
+
 end
