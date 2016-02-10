@@ -5,7 +5,7 @@ module Search
     @@initial_setup = true
 
     setup do
-      index = Indices::GradeIndex.new
+      index = Indices::GradesIndex.new
       if @@initial_setup || !index.index_exists?
         index.reset_index!
         @@initial_setup = false
@@ -14,7 +14,7 @@ module Search
 
     def index_objects
       objects = [:grade_1, :grade_2, :grade_K].map { |key| grades(key) }
-      Indices::GradeIndex.new.bulk_index objects
+      Indices::GradesIndex.new.bulk_index objects
       refresh_indices
     end
 

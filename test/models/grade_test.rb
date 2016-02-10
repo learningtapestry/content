@@ -38,7 +38,7 @@ class GradeTest < ActiveSupport::TestCase
   end
 
   test '#search_index points to Index class' do
-    assert_kind_of  Search::Indices::GradeIndex, Grade.new.search_index
+    assert_kind_of  Search::Indices::GradesIndex, Grade.new.search_index
   end
 
   test "index on create" do
@@ -73,6 +73,6 @@ class GradeTest < ActiveSupport::TestCase
   end
 
   def reset_index
-    @index ||= Search::Indices::GradeIndex.new.reset_index!
+    @index ||= Search::Indices::GradesIndex.new.reset_index!
   end
 end

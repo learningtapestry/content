@@ -1,10 +1,10 @@
 module Search
   module Indices
 
-    class IdentityIndex < Index
+    class ResourceTypesIndex < Index
       def mappings
         {
-          identity: {
+          resource_type: {
             properties: {
               id: {type: 'string', index: 'not_analyzed'},
               name: {

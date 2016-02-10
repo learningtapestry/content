@@ -140,10 +140,10 @@ module Search
 
     # Try to find a corresponding `AM::Serializer` given the associated model name.
     # I.e:
-    #   MyModelIndex => MyModelSerializer
+    #   MyModelsIndex => MyModelSerializer
     def self.serializer
       @serializer ||= begin
-        model_name = self.name.demodulize.gsub('Index', '')
+        model_name = self.name.demodulize.gsub('Index', '').singularize
         "#{model_name}Serializer".constantize
       end
     end

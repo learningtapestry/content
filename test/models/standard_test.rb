@@ -37,7 +37,7 @@ class StandardTest < ActiveSupport::TestCase
   end
 
   test '#search_index points to Index class' do
-    assert_kind_of  Search::Indices::StandardIndex, Standard.new.search_index
+    assert_kind_of  Search::Indices::StandardsIndex, Standard.new.search_index
   end
 
   test "index on create" do
@@ -72,6 +72,6 @@ class StandardTest < ActiveSupport::TestCase
   end
 
   def reset_index
-    @index ||= Search::Indices::StandardIndex.new.reset_index!
+    @index ||= Search::Indices::StandardsIndex.new.reset_index!
   end
 end

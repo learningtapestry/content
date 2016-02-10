@@ -5,7 +5,7 @@ module Search
     @@initial_setup = true
 
     setup do
-      index = Indices::LanguageIndex.new
+      index = Indices::LanguagesIndex.new
       if @@initial_setup || !index.index_exists?
         index.reset_index!
         @@initial_setup = false
@@ -14,7 +14,7 @@ module Search
 
     def index_objects
       objects = [:en, :es].map { |key| languages(key) }
-      Indices::LanguageIndex.new.bulk_index objects
+      Indices::LanguagesIndex.new.bulk_index objects
       refresh_indices
     end
 

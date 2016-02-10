@@ -5,7 +5,7 @@ module Search
     @@initial_setup = true
 
     setup do
-      index = Indices::ResourceTypeIndex.new
+      index = Indices::ResourceTypesIndex.new
       if @@initial_setup || !index.index_exists?
         index.reset_index!
         @@initial_setup = false
@@ -16,7 +16,7 @@ module Search
       objects = ['lesson', 'video', 'quiz'].map do |name|
         ResourceType.create(name: name, review_status: ReviewStatus.reviewed)
       end
-      Indices::ResourceTypeIndex.new.bulk_index objects
+      Indices::ResourceTypesIndex.new.bulk_index objects
       refresh_indices
     end
 

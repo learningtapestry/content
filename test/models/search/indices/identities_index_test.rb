@@ -3,11 +3,11 @@ require 'test_helper'
 
 module Search
   module Indices
-    class ResourceTypeIndexTest < ActiveSupport::TestCase
+    class IdentitiesIndexTest < ActiveSupport::TestCase
       @@initial_setup = true
 
       setup do
-        index = ResourceTypeIndex.new
+        index = IdentitiesIndex.new
         if @@initial_setup || !index.index_exists?
           index.reset_index!
           @@initial_setup = false
@@ -15,17 +15,17 @@ module Search
       end
 
       test "#type_name" do
-        index = ResourceTypeIndex.new
-        assert_equal 'resource_type', index.type_name
+        index = IdentitiesIndex.new
+        assert_equal 'identity', index.type_name
       end
 
       test "#index_name is composed with type and environment" do
-        index = ResourceTypeIndex.new
-        assert_equal 'resource_types__test', index.index_name
+        index = IdentitiesIndex.new
+        assert_equal 'identities__test', index.index_name
       end
 
       test '#create_index! creates a new index' do
-        index = ResourceTypeIndex.new
+        index = IdentitiesIndex.new
         index.delete_index!
         refute index.index_exists?
 
@@ -34,7 +34,7 @@ module Search
       end
 
       test '#delete_index! deletes an index' do
-        index = ResourceTypeIndex.new
+        index = IdentitiesIndex.new
         index.create_index!
         assert index.index_exists?
 
@@ -43,7 +43,7 @@ module Search
       end
 
       test "defines mappings and settings" do
-        index = ResourceTypeIndex.new
+        index = IdentitiesIndex.new
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_mappings").get.body)
         assert_kind_of Hash, resp[index.index_name]['mappings'][index.type_name]
 
@@ -52,15 +52,15 @@ module Search
       end
 
       test "#serializer points to the corresponding model ActiveModel::Serializer" do
-        index = ResourceTypeIndex.new
-        assert_equal ResourceTypeSerializer, index.serializer
+        index = IdentitiesIndex.new
+        assert_equal IdentitySerializer, index.serializer
       end
 
       test '#save' do
-        index = ResourceTypeIndex.new
+        index = IdentitiesIndex.new
         name = SecureRandom.hex(8)
-        resource_type = ResourceType.create name: name
-        index.save(resource_type)
+        identity = Identity.create name: name
+        index.save(identity)
         refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -69,28 +69,28 @@ module Search
       end
 
       test '#after_save' do
-        index = ResourceTypeIndex.new
-        resource_type = resource_types(:lesson)
+        index = IdentitiesIndex.new
+        identity = identities(:khan)
 
         def index.after_save(obj, res)
           @after_save_called = true
         end
 
-        index.save(resource_type)
+        index.save(identity)
         assert index.instance_variable_get(:@after_save_called)
       end
 
       test '#delete' do
-        index = ResourceTypeIndex.new
+        index = IdentitiesIndex.new
         name = SecureRandom.hex(8)
-        resource_type = ResourceType.create name: name
-        index.save(resource_type)
+        identity = Identity.create name: name
+        index.save(identity)
         refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 1, resp['hits']['total']
 
-        assert index.delete(resource_type)
+        assert index.delete(identity)
         refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -98,10 +98,10 @@ module Search
       end
 
       test '#after_delete' do
-        index = ResourceTypeIndex.new
+        index = IdentitiesIndex.new
         name = SecureRandom.hex(8)
-        resource_type = ResourceType.create name: name
-        index.save(resource_type)
+        identity = Identity.create name: name
+        index.save(identity)
         refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
@@ -111,7 +111,7 @@ module Search
           @after_delete_called = true
         end
 
-        assert index.delete(resource_type)
+        assert index.delete(identity)
         assert index.instance_variable_get(:@after_delete_called)
       end
     end

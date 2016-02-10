@@ -39,7 +39,7 @@ module Indexable
     #    acts_as_indexed  Search::Indices::SomeOtherIndex
     #
     def self.acts_as_indexed(index_class=nil)
-      self.index_class = index_class || "Search::Indices::#{self.name}Index".constantize
+      self.index_class = index_class || "Search::Indices::#{self.name.pluralize}Index".constantize
     end
 
     # Points to proper index. If the instance has a repository, then starts
