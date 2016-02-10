@@ -15,7 +15,7 @@ module Search
     def index_objects
       objects = [:khan, :jason].map { |key| identities(key) }
       Indexes::IdentityIndex.new.bulk_index objects
-      sleep 1
+      refresh_indices
     end
 
     test "#index_name" do

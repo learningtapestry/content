@@ -14,7 +14,7 @@ module Search
 
     def index_objects
       Indexes::StandardIndex.new.index standards(:ccls_1_2)
-      sleep 1
+      refresh_indices
     end
 
     test "#index_name" do

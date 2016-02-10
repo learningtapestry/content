@@ -17,7 +17,7 @@ module Search
         Subject.create(name: name, review_status: ReviewStatus.reviewed)
       end
       Indexes::SubjectIndex.new.bulk_index objects
-      sleep 1
+      refresh_indices
     end
 
     test "#index_name" do

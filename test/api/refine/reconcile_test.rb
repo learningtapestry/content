@@ -37,8 +37,9 @@ class Refine::ReconcileTest < APITest
   end
 
   test 'POST /refine/reconcile for Grade' do
+    Grade.new.search_index.reset_index!
     [ :grade_1, :grade_2, :grade_K ].each {|key| grades(key).save }
-    sleep 1
+    refresh_indices
 
     post '/refine/reconcile', queries: query_for('Grade', 'grade 1')
     assert_equal 201, last_response.status
@@ -50,8 +51,9 @@ class Refine::ReconcileTest < APITest
   end
 
   test 'POST /refine/reconcile for Language' do
+    Language.new.search_index.reset_index!
     [ :en, :es ].each {|key| languages(key).save }
-    sleep 1
+    refresh_indices
 
     post '/refine/reconcile', queries: query_for('Language', 'en_US')
     assert_equal 201, last_response.status
@@ -62,8 +64,9 @@ class Refine::ReconcileTest < APITest
   end
 
   test 'POST /refine/reconcile for Identity' do
+    Identity.new.search_index.reset_index!
     [ :jason, :khan ].each {|key| identities(key).save }
-    sleep 1
+    refresh_indices
 
     post '/refine/reconcile', queries: query_for('Identity', 'KHAN acad')
     assert_equal 201, last_response.status
@@ -74,8 +77,9 @@ class Refine::ReconcileTest < APITest
   end
 
   test 'POST /refine/reconcile for Subject' do
+    Subject.new.search_index.reset_index!
     [ :history, :chemistry ].each {|key| subjects(key).save }
-    sleep 1
+    refresh_indices
 
     post '/refine/reconcile', queries: query_for('Subject', 'chem.')
     assert_equal 201, last_response.status
@@ -86,8 +90,9 @@ class Refine::ReconcileTest < APITest
   end
 
   test 'POST /refine/reconcile for Standard' do
+    Standard.new.search_index.reset_index!
     standards(:ccls_1_2).save
-    sleep 1
+    refresh_indices
 
     post '/refine/reconcile', queries: query_for('Standard', 'ccls')
     assert_equal 201, last_response.status
@@ -98,8 +103,9 @@ class Refine::ReconcileTest < APITest
   end
 
   test 'POST /refine/reconcile for ResourceType' do
+    ResourceType.new.search_index.reset_index!
     [ :lesson, :quiz ].each {|key| resource_types(key).save }
-    sleep 1
+    refresh_indices
 
     post '/refine/reconcile', queries: query_for('ResourceType', 'les.')
     assert_equal 201, last_response.status

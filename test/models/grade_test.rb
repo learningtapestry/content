@@ -46,7 +46,7 @@ class GradeTest < ActiveSupport::TestCase
     name = SecureRandom.hex(8)
     assert Grade.create name: name
 
-    sleep 1
+    refresh_indices
     res = Search::GradeSearch.new.search q: name
     assert_equal 1, res.total_hits
     assert_equal name, res.sources.first['name']
@@ -57,13 +57,13 @@ class GradeTest < ActiveSupport::TestCase
     name = SecureRandom.hex(8)
     grade = Grade.create name: name
 
-    sleep 1
+    refresh_indices
     res = Search::GradeSearch.new.search q: name
     assert_equal 1, res.total_hits
 
     grade.destroy
 
-    sleep 1
+    refresh_indices
     res = Search::GradeSearch.new.search q: name
     assert_equal 0, res.total_hits
   end

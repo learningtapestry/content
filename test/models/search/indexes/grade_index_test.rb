@@ -62,7 +62,7 @@ module Search
         grade = Grade.create name: name, review_status: ReviewStatus.reviewed
 
         index.save(grade)
-        sleep 1.0
+        refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 1, resp['hits']['total']
@@ -86,13 +86,13 @@ module Search
         name = SecureRandom.hex(8)
         grade = Grade.create name: name
         index.save(grade)
-        sleep 1.0
+        refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 1, resp['hits']['total']
 
         assert index.delete(grade)
-        sleep 1.0
+        refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 0, resp['hits']['total']
@@ -103,7 +103,7 @@ module Search
         name = SecureRandom.hex(8)
         grade = Grade.create name: name
         index.save(grade)
-        sleep 1.0
+        refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 1, resp['hits']['total']

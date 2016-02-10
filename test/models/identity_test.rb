@@ -45,7 +45,7 @@ class IdentityTest < ActiveSupport::TestCase
     name = SecureRandom.hex(8)
     assert Identity.create name: name
 
-    sleep 1
+    refresh_indices
     res = Search::IdentitySearch.new.search q: name
     assert_equal 1, res.total_hits
     assert_equal name, res.sources.first['name']
@@ -56,13 +56,13 @@ class IdentityTest < ActiveSupport::TestCase
     name = SecureRandom.hex(8)
     obj = Identity.create name: name
 
-    sleep 1
+    refresh_indices
     res = Search::IdentitySearch.new.search q: name
     assert_equal 1, res.total_hits
 
     obj.destroy
 
-    sleep 1
+    refresh_indices
     res = Search::IdentitySearch.new.search q: name
     assert_equal 0, res.total_hits
   end

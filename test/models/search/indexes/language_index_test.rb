@@ -61,7 +61,7 @@ module Search
         name = SecureRandom.hex(8)
         language = Language.create name: name
         index.save(language)
-        sleep 1.0
+        refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 1, resp['hits']['total']
@@ -85,13 +85,13 @@ module Search
         name = SecureRandom.hex(8)
         language = Language.create name: name
         index.save(language)
-        sleep 1.0
+        refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 1, resp['hits']['total']
 
         assert index.delete(language)
-        sleep 1.0
+        refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 0, resp['hits']['total']
@@ -102,7 +102,7 @@ module Search
         name = SecureRandom.hex(8)
         language = Language.create name: name
         index.save(language)
-        sleep 1.0
+        refresh_indices
 
         resp = JSON.parse(Faraday.new(:url => "#{es_url}/#{index.index_name}/_search?q=name:#{name}").get.body)
         assert_equal 1, resp['hits']['total']

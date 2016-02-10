@@ -15,7 +15,7 @@ module Search
     def index_objects
       objects = [:grade_1, :grade_2, :grade_K].map { |key| grades(key) }
       Indexes::GradeIndex.new.bulk_index objects
-      sleep 1
+      refresh_indices
     end
 
     test "#index_name" do

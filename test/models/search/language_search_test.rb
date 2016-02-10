@@ -15,7 +15,7 @@ module Search
     def index_objects
       objects = [:en, :es].map { |key| languages(key) }
       Indexes::LanguageIndex.new.bulk_index objects
-      sleep 1
+      refresh_indices
     end
 
     test "#index_name" do

@@ -11,10 +11,10 @@ module Search
     def setup_index
       index = Indexes::GradeIndex.new
       index.create_index!
-      sleep 0.5 # wait for ES to perform operation
+      refresh_indices
       objects = [:grade_1, :grade_2, :grade_K].map { |key| grades(key) }
       index.bulk_index objects
-      sleep 1 # wait for ES to perform operation
+      refresh_indices
     end
 
     test "#results" do

@@ -17,7 +17,7 @@ module Search
         ResourceType.create(name: name, review_status: ReviewStatus.reviewed)
       end
       Indexes::ResourceTypeIndex.new.bulk_index objects
-      sleep 1
+      refresh_indices
     end
 
     test "#index_name" do
