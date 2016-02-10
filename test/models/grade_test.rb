@@ -47,7 +47,7 @@ class GradeTest < ActiveSupport::TestCase
     assert Grade.create name: name
 
     refresh_indices
-    res = Search::GradeSearch.new.search q: name
+    res = Grade.search name
     assert_equal 1, res.total_hits
     assert_equal name, res.sources.first['name']
   end
@@ -58,13 +58,13 @@ class GradeTest < ActiveSupport::TestCase
     grade = Grade.create name: name
 
     refresh_indices
-    res = Search::GradeSearch.new.search q: name
+    res = Grade.search name
     assert_equal 1, res.total_hits
 
     grade.destroy
 
     refresh_indices
-    res = Search::GradeSearch.new.search q: name
+    res = Grade.search name
     assert_equal 0, res.total_hits
   end
 

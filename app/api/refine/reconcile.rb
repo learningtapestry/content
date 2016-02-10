@@ -52,10 +52,9 @@ class Refine::Reconcile < Grape::API
     end
 
     # Search for the most similar entries on our index
-    # We use the type to define the proper search , i.e: type='Grade' => Search::GradeSearch
     def search(query)
-      search_class = "Search::#{query[:type]}Search".constantize
-      search_class.new.search(q: query[:query], limit: query[:limit])
+      model = query[:type].constantize
+      model.search query[:query], limit: query[:limit]
     end
 
     # OpenRefine expectd results properly formatted

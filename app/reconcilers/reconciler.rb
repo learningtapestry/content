@@ -20,7 +20,7 @@ class Reconciler
   # default create method.
   # Can be overridden on the subclass to specify behavior
   def create(context)
-    false
+    model.create!(name: context[:value])
   end
 
   # encapsulates the `find`, `create` and `normalize` methods call to handle

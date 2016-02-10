@@ -11,7 +11,7 @@ module Indexable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :index_class
+    class_attribute :index_class, :search_class
     attr_accessor :skip_indexing
 
     after_commit :index_document, on: [:create, :update], unless: :skip_indexing?
@@ -40,12 +40,19 @@ module Indexable
     #
     def self.acts_as_indexed(index_class=nil)
       self.index_class = index_class || "Search::Indices::#{self.name.pluralize}Index".constantize
+      self.search_class ||= "Search::#{self.name}Search".constantize
     end
 
     # Points to proper index. If the instance has a repository, then starts
     # the index for that specific repo
     def search_index
       @search_index ||= self.class.index_class.new(repository: self.try(:repository))
+    end
+
+    # search
+    def self.search(term, options={})
+      params = options.merge q: term
+      self.search_class.new.search params
     end
 
     def skip_indexing?

@@ -46,7 +46,7 @@ class SubjectTest < ActiveSupport::TestCase
     assert Subject.create name: name
 
     refresh_indices
-    res = Search::SubjectSearch.new.search q: name
+    res = Subject.search name
     assert_equal 1, res.total_hits
     assert_equal name, res.sources.first['name']
   end
@@ -57,13 +57,13 @@ class SubjectTest < ActiveSupport::TestCase
     obj = Subject.create name: name
 
     refresh_indices
-    res = Search::SubjectSearch.new.search q: name
+    res = Subject.search name
     assert_equal 1, res.total_hits
 
     obj.destroy
 
     refresh_indices
-    res = Search::SubjectSearch.new.search q: name
+    res = Subject.search name
     assert_equal 0, res.total_hits
   end
 

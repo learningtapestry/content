@@ -18,7 +18,8 @@ class Organization < ActiveRecord::Base
     api_key
   end
 
-  def new_search
+  def search(options={})
     @search ||= Search::DocumentSearch.new(*repositories.map(&:search_index))
+    @search.search(options)
   end
 end

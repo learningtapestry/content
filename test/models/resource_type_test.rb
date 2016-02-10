@@ -45,7 +45,7 @@ class ResourceTypeTest < ActiveSupport::TestCase
     assert ResourceType.create name: name
 
     refresh_indices
-    res = Search::ResourceTypeSearch.new.search q: name
+    res = ResourceType.search name
     assert_equal 1, res.total_hits
     assert_equal name, res.sources.first['name']
   end
@@ -56,13 +56,13 @@ class ResourceTypeTest < ActiveSupport::TestCase
     obj = ResourceType.create name: name
 
     refresh_indices
-    res = Search::ResourceTypeSearch.new.search q: name
+    res = ResourceType.search name
     assert_equal 1, res.total_hits
 
     obj.destroy
 
     refresh_indices
-    res = Search::ResourceTypeSearch.new.search q: name
+    res = ResourceType.search name
     assert_equal 0, res.total_hits
   end
 
