@@ -9,6 +9,7 @@ gem 'dotenv', '~> 2.0', '>= 2.0.2'
 gem 'dotenv-rails', '~> 2.0', '>= 2.0.2', groups: [:development, :test]
 gem 'elasticsearch', '~> 1.0', '>= 1.0.15'
 gem 'elasticsearch-dsl', '~> 0.1.2'
+gem 'foreman', '~> 0.78.0'
 gem 'grape', '~> 0.14.0'
 gem 'grape-active_model_serializers', '~> 1.3', '>= 1.3.2'
 gem 'rack-contrib', '>= 1.4.0'
