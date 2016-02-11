@@ -30,7 +30,7 @@ class API::V1::RepositoriesTest < APITest
     set_api_key
     get '/api/v1/repositories'
     assert_equal 2, last_json.size
-    assert_match (/API Docs/i), last_json.first['name']
+    assert_same_elements ['API Docs', 'Testing repo'], last_json.map { |j| j['name'] }
   end
 
   test 'GET /api/repositories paginates repositories' do
