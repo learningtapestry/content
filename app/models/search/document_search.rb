@@ -1,7 +1,6 @@
 module Search
   class DocumentSearch
-    include Client
-    include Dsl
+    include SimpleSearch
 
     attr_accessor :indices
 
@@ -9,7 +8,11 @@ module Search
       self.indices = Array.wrap(indices)
     end
 
-    def search(options = {})
+    def index_name
+      indices.map(&:index_name).join(',')
+    end
+
+    def query(options = {})
       limit = options[:limit] || 100
       page = options[:page] || 1
 
@@ -38,7 +41,7 @@ module Search
       queries = query_paths.keys
         .select { |k| query_paths[k].any? { |(p,f)| options[p].present? } }
 
-      definition = dsl do
+      dsl do
         size limit
         from (page - 1) * limit
 
@@ -122,16 +125,6 @@ module Search
           end
         end
       end
-
-      parse_results client.search(index: index_names, body: definition, type: 'document')
-    end
-
-    def parse_results(res)
-      ::Search::Results.new res, Document
-    end
-
-    def index_names
-      indices.map(&:index_name).join(',')
     end
   end
 end
