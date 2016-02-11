@@ -53,8 +53,27 @@ sudo apt-get install -y postgresql-9.4 postgresql-server-dev-9.4 postgresql-cont
 sudo -u postgres createuser -r -s -d vagrant
 sudo -u postgres createdb vagrant -O vagrant
 sudo -u postgres createdb content_development -O vagrant
+sudo -u postgres createdb content_test -O vagrant
 sudo -u postgres psql -c "ALTER USER vagrant WITH PASSWORD 'vagrant';"
+sudo -u postgres psql -c "ALTER USER vagrant SUPERUSER;"
 
 echo "-- LINK PROJECT"
 cd /home/vagrant/
 ln -s /vagrant /home/vagrant/content
+
+echo "-- SETUP PROJECT"
+
+cat << EOF > /home/vagrant/content/.env
+ELASTICSEARCH_URL=http://localhost:9200
+POSTGRESQL_ADDRESS=localhost
+POSTGRESQL_USERNAME=vagrant
+POSTGRESQL_PASSWORD=vagrant
+API_CORS_ORIGINS=*
+EOF
+
+echo 'POSTGRESQL_DATABASE=content_development' > /home/vagrant/content/.env.development
+echo 'POSTGRESQL_DATABASE=content_test' > /home/vagrant/content/.env.test
+
+cd /home/vagrant/content
+bundle config --delete bin
+bundle
