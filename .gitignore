@@ -20,6 +20,7 @@
 
 *.sublime-*
 
+.env
 .env.*
 !.env.template
 
