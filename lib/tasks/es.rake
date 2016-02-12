@@ -1,4 +1,9 @@
 namespace :es do
+  desc 'Create all indices'
+  task :create_indices => :environment do
+    ESTasks.create_indices
+  end
+
   desc 'Reset an index (caution: this will wipe out everything previously indexed)'
   task :reset_index, [:model] => :environment do |t, args|
     ESTasks.reset_index args[:model]
