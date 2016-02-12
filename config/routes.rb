@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount API::LR::Root => '/api/lr'
   mount API::V1::Root => '/api/v1'
 
   devise_for :users

@@ -72,4 +72,14 @@ class APITest < ActiveSupport::TestCase
   def last_json
     JSON.parse(last_response.body)
   end
+
+  # Posts data in JSON format
+  def post(uri, params = {}, env = {}, &block)
+    env.merge!('CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json')
+    super(uri, params.to_json, env, &block)
+  end
+
+  def status
+    last_response.status
+  end
 end

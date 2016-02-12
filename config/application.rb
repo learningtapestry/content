@@ -27,5 +27,7 @@ module ContentSearch
     config.paths.add(File.join('app', 'api'), glob: File.join('**', '*.rb'))
     config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
     config.autoload_paths += Dir[Rails.root.join('app', 'tasks', '*')]
+
+    config.action_dispatch.perform_deep_munge = false
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106131811) do
+ActiveRecord::Schema.define(version: 20160120073641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,6 +160,44 @@ ActiveRecord::Schema.define(version: 20160106131811) do
   add_index "documents", ["repository_id", "url_id"], name: "index_documents_on_repository_id_and_url_id", unique: true, using: :btree
   add_index "documents", ["repository_id"], name: "index_documents_on_repository_id", using: :btree
   add_index "documents", ["url_id"], name: "index_documents_on_url_id", using: :btree
+
+  create_table "envelopes", force: :cascade do |t|
+    t.boolean  "active",                 default: true, null: false
+    t.string   "curator"
+    t.string   "do_not_distribute"
+    t.string   "doc_id",                                null: false
+    t.string   "doc_type",                              null: false
+    t.string   "doc_version",                           null: false
+    t.text     "keys",                   default: [],                array: true
+    t.string   "owner"
+    t.string   "payload_locator"
+    t.integer  "payload_placement",                     null: false
+    t.text     "payload_schema",         default: [],                array: true
+    t.string   "payload_schema_format"
+    t.string   "payload_schema_locator"
+    t.string   "publishing_node",                       null: false
+    t.json     "raw_data"
+    t.text     "replaces",               default: [],                array: true
+    t.text     "resource_data"
+    t.string   "resource_data_type",                    null: false
+    t.string   "resource_locator",                      null: false
+    t.integer  "resource_ttl"
+    t.string   "signature"
+    t.text     "signature_key_location", default: [],                array: true
+    t.string   "signer"
+    t.string   "signing_method"
+    t.string   "submission_attribution"
+    t.string   "submission_tos",                        null: false
+    t.string   "submitter",                             null: false
+    t.datetime "submitter_timestamp"
+    t.datetime "submitter_ttl"
+    t.integer  "submitter_type",                        null: false
+    t.integer  "weight"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "envelopes", ["doc_id"], name: "index_envelopes_on_doc_id", unique: true, using: :btree
 
   create_table "grade_hierarchies", id: false, force: :cascade do |t|
     t.integer "ancestor_id",   null: false
