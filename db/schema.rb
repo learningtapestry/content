@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160129140836) do
+ActiveRecord::Schema.define(version: 20160215162255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -289,12 +289,14 @@ ActiveRecord::Schema.define(version: 20160129140836) do
 
   create_table "standards", force: :cascade do |t|
     t.integer  "parent_id"
-    t.string   "name",                  null: false
+    t.string   "name",                               null: false
     t.integer  "standard_framework_id"
     t.string   "url"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.integer  "review_status_id",      null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "review_status_id",                   null: false
+    t.string   "description"
+    t.text     "definitions",           default: [],              array: true
   end
 
   add_index "standards", ["review_status_id"], name: "index_standards_on_review_status_id", using: :btree

@@ -13,9 +13,9 @@ module Search
 
         query do
           bool do
-            should { match 'name.full'    => { query: term, type: 'phrase' } }
-            should { match 'name.partial' => { query: term} }
-            should { match 'url'          => { query: term, type: 'phrase' } }
+            should { match 'name.full'    => { query: term, boost: 3, type: 'phrase' } }
+            should { match 'name.partial' => { query: term, boost: 1 } }
+            should { match 'definitions'  => { query: term, boost: 3 } }
           end
         end
       end

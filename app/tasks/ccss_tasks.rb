@@ -14,7 +14,7 @@ module CcssTasks
   end
 
   def parse_tree(root)
-    is_leaf = root.cls != 'folder'
+    is_leaf = root.leaf == 'true'
     if is_leaf
       data = extract_data root
       save_standard data
@@ -37,8 +37,11 @@ module CcssTasks
   end
 
   def save_standard(data)
-    puts "======"
-    puts data
+    if data[:name]
+      Standard.find_or_create_by(name: data[:name]) do |s|
+        s.assign_attributes **data
+      end
+    end
   end
 
 end

@@ -15,7 +15,9 @@ module Search
                   partial: {type: 'string', analyzer: 'partial_str'}
                 }
               },
-              url: {type: 'string', index: 'not_analyzed'}
+              url: {type: 'string', index: 'not_analyzed'},
+              definitions: {type: 'string'},
+              description: {type: 'string'},
             }
           }
         }
