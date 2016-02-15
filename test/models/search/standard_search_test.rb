@@ -38,5 +38,17 @@ module Search
       res = StandardSearch.new.search q: 'ccls'
       assert_kind_of ::Search::Results, res
     end
+
+    test "search by definitions" do
+      Standard.create name: 'CCSS.Math.BLA-1.2', definitions: ['B.1.2', '98765']
+      Standard.create name: 'CCSS.Math.BLA-1.3', definitions: ['B.1.3', '65632']
+      refresh_indices
+
+      res = StandardSearch.new.search q: 'b.1.2'
+      assert_equal 'CCSS.Math.BLA-1.2', res.sources.first['name']
+
+      res = StandardSearch.new.search q: '98765'
+      assert_equal 'CCSS.Math.BLA-1.2', res.sources.first['name']
+    end
   end
 end

@@ -5,6 +5,10 @@ class StandardTest < ActiveSupport::TestCase
     @repo = repositories(:khan)
   end
 
+  test 'has a list of definitions' do
+    assert_kind_of Array, Standard.new.definitions
+  end
+
   test '.reconciler' do
     assert_kind_of StandardReconciler, Standard.reconciler
   end
