@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   mount API::V1::Root => '/api/v1'
   mount Refine::Reconcile => '/refine/reconcile'
+  mount GrapeSwaggerRails::Engine => '/docs/api/v1'
 
   devise_for :users
 

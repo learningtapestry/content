@@ -1,3 +1,5 @@
+require 'base64'
+
 module API::V1::Helpers
   extend Grape::API::Helpers
 
@@ -26,12 +28,22 @@ module API::V1::Helpers
 
   def current_api_key
     @current_api_key ||= begin
-      headers['X-Api-Key'] && ApiKey.find_by(key: headers['X-Api-Key'])
+      ak_header = headers['X-Api-Key']
+
+      if ak_header && ak_header.start_with?('Basic ')
+        ak_header = Base64.decode64(ak_header.split('Basic ')[1])
+      end
+
+      ak_header && ApiKey.find_by(key: ak_header)
     end
   end
 
   def current_organization
     @current_organization = current_api_key.try(:organization)
+  end
+
+  def swagger_root?
+    request.path.start_with?('/api/v1/swagger_doc')
   end
 
   def unauthorized!
