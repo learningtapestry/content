@@ -1,3 +1,5 @@
+# DEPRECATED - THIS CODE BASE IS NO LONGER MAINTAINED
+
 # LearningTapestry - Content Services
 
 ## Overview
